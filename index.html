@@ -1,239 +1,49 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="en">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Home | BloomWell</title>
 
-    <!-- Google Fonts -->
+    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
 
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
 
-    <!-- Swiper CSS & JS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <!-- Swiper -->
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <!-- CSS -->
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/index.css" />
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-    <!-- HEADER -->
-    <header class="header">
-        <nav class="nav">
-            <!-- <div class="logo">
-                <div class="img-div">
-                    <img src="image/logo.png" alt="Logo BloomWell">
-                </div> -->
-                <div>
-                    <h2>BloomWell</h2>
-                </div>
-            </div>
-            <ul class="nav-links">
-                <li><a href="index.html" class="nav-link active">Home</a></li>
-                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
-                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
-                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
-                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
-            </ul>
-        </nav>
-    </header>
+   <header class="header">
+    <nav class="nav">
 
-    <!-- KONTEN HOME -->
-    <section>
-        <!-- Swiper Hero -->
-        <div class="swiper mySwiper hero-swiper lg:h-[90vh] h-[50vh]">
-            <div class="swiper-wrapper h-full">
-                <div class="swiper-slide">
-                    <div class="container">
-                        <div class="content-container">
-                            <div class="content">
-                                <h2>BloomWell</h2>
-                                <p class="lg:px-24 px-14 mt-5 text-xs md:text-base lg:text-base">
-                                    "Tingkatkan kesejahteraan mental Anda dengan BloomWell, tempat Anda menemukan gerbang menuju sumber daya tepercaya, bimbingan ahli, dan dukungan berkelanjutan. Biarkan kami membantu Anda mengendalikan perjalanan kesehatan mental Anda dengan percaya diri dan mudah."
-                                </p>
-                            </div>
-                        </div>
-                        <div class="img-div">
-                            <img src="image/slider1.jpg" alt="Kesehatan Mental" />
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="container">
-                        <div class="content-container">
-                            <div class="content">
-                                <h2>BloomWell</h2>
-                                <p class="lg:px-24 px-14 mt-5 text-xs md:text-base lg:text-base">
-                                    "Temukan berbagai alat perawatan diri yang dirancang untuk memandu Anda menuju pikiran yang lebih seimbang dan sehat. Mulai dari monitor suasana hati hingga meditasi terpandu, BloomWell menyediakan semua yang Anda butuhkan untuk memelihara kesejahteraan mental Anda."
-                                </p>
-                            </div>
-                        </div>
-                        <div class="img-div">
-                            <img src="image/slider2.png" alt="Perawatan Diri" />
-                        </div>
-                    </div>
-                </div>
-                <div class="swiper-slide">
-                    <div class="container">
-                        <div class="content-container">
-                            <div class="content">
-                                <h2>BloomWell</h2>
-                                <p class="lg:px-24 px-14 mt-5 text-xs md:text-base lg:text-base">
-                                    "Terhubunglah dengan para profesional kesehatan mental yang penuh kasih yang benar-benar memahami kebutuhan Anda dan berdedikasi untuk mendukung Anda di setiap langkah. Baik Anda mencari saran, terapi, atau sekadar seseorang untuk diajak bicara, BloomWell hadir untuk membantu Anda dalam perjalanan Anda."
-                                </p>
-                            </div>
-                        </div>
-                        <div class="img-div">
-                            <img src="image/slider3.jpg" alt="Dukungan Profesional" />
-                        </div>
-                    </div>
-                </div>
+        <div class="logo">
+            <div class="img-div">
+                <img src="images/logo.png" alt="">
             </div>
-            <!-- Tombol navigasi Swiper -->
-            <div class="absolute z-10 top-1/2 lg:right-5 right-0.5 border-2 border-white hover:bg-transparent hover:text-white text-black transit duration-300 ease-linear bg-white rounded-full px-2 py-[3px] hero-swiper-button-next">
-                <i class="fa-solid fa-arrow-right text-3xl"></i>
-            </div>
-            <div class="absolute z-10 top-1/2 lg:left-5 left-0.5 border-2 border-white hover:bg-transparent hover:text-white text-black transit duration-300 ease-linear bg-white rounded-full px-2 py-[3px] hero-swiper-button-prev">
-                <i class="fa-solid fa-arrow-left text-3xl"></i>
-            </div>
-            <div class="swiper-pagination hero-swiper-pagination"></div>
-        </div>
-    </section>
-
-    <div class="content">
-        <div class="resources-div">
-
-            <!-- Bagian Artikel -->
-            <div class="article-container">
-                <div class="main-title-div">
-                    <h2 class="title main-title">Artikel</h2>
-                </div>
-                <div class="container">
-                    <div class="card">
-                        <a href="articles/managing-anxiety.html">
-                            <div class="img-div"><img src="image/article/anxiety.jpg" alt="Kecemasan"></div>
-                            <h2 class="title">Mengelola Kecemasan: Tips Praktis untuk Menenangkan Pikiran Anda</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="articles/overcoming-depression.html">
-                            <div class="img-div"><img src="image/article/Depresi.jpg" alt="Depresi"></div>
-                            <h2 class="title">Mengatasi Depresi: Langkah-langkah untuk Menemukan Kembali Hidup Anda</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="articles/living-with-ocd.html">
-                            <div class="img-div"><img src="image/article/OCD.jpg" alt="OCD"></div>
-                            <h2 class="title">Hidup dengan OCD: Memahami dan Mengelola Gangguan Obsesif-Kompulsif</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="articles/understanding-ptsd.html">
-                            <div class="img-div"><img src="image/article/ptsd.jpg" alt="PTSD"></div>
-                            <h2 class="title">Memahami PTSD: Jalan Menuju Pemulihan Setelah Trauma</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="articles/managing-bipolar-disorder.html">
-                            <div class="img-div"><img src="image/article/Bipolar.jpg" alt="Bipolar"></div>
-                            <h2 class="title">Mengelola Gangguan Bipolar: Menemukan Keseimbangan dalam Perubahan Suasana Hati</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="articles/feeling-like-a-future.html">
-                            <div class="img-div"><img src="image/article/merasagagal.jpg" alt="Rasa Gagal"></div>
-                            <h2 class="title">Merasa Seperti Orang Gagal</h2>
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Bagian Podcast -->
-            <div class="podcast-container">
-                <div class="main-title-div">
-                    <h2 class="title main-title">Podcast</h2>
-                </div>
-                <div class="container">
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=0">
-                            <div class="img-div"><img src="podcast/assets/images/1.webp" alt="Podcast"></div>
-                            <h2 class="title">Nasihat Jordan Peterson untuk Orang dengan Depresi</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=1">
-                            <div class="img-div"><img src="podcast/assets/images/2.webp" alt="Podcast"></div>
-                            <h2 class="title">Kristen Bell tentang Hidup dengan Depresi dan Kecemasan - Cerita Tubuh - SELF</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=2">
-                            <div class="img-div"><img src="podcast/assets/images/3.webp" alt="Podcast"></div>
-                            <h2 class="title">Apakah Kamu Baik-Baik Saja?</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=3">
-                            <div class="img-div"><img src="podcast/assets/images/4.webp" alt="Podcast"></div>
-                            <h2 class="title">KETIKA KAMU MERASA INGIN MENYERAH - Pidato Inspiratif Terbaik tentang Kesehatan Mental</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=4">
-                            <div class="img-div"><img src="podcast/assets/images/5.webp" alt="Podcast"></div>
-                            <h2 class="title">PTSD Kompleks dalam 5 Menit</h2>
-                        </a>
-                    </div>
-                    <div class="card">
-                        <a href="podcast/podcast.html?index=5">
-                            <div class="img-div"><img src="podcast/assets/images/6.webp" alt="Podcast"></div>
-                            <h2 class="title">Apa Itu Depresi? - Helen M. Farrell</h2>
-                        </a>
-                    </div>
-                </div>
+            <div>
+                <h2>BloomWell</h2>
             </div>
         </div>
-    </div>
 
-    <!-- Script Swiper & Random Item (3 per kategori) -->
-    <script>
-        var swiper = new Swiper(".hero-swiper", {
-            spaceBetween: 30,
-            effect: "fade",
-            autoplay: { delay: 5000, disableOnInteraction: false },
-            navigation: {
-                nextEl: ".hero-swiper-button-next",
-                prevEl: ".hero-swiper-button-prev",
-            },
-            pagination: {
-                el: ".hero-swiper-pagination",
-                clickable: true,
-            },
-        });
+        <ul class="nav-links">
+            <li><a href="index.html" class="nav-link active">Home</a></li>
+            <li><a href="resourcelibrary.html" class="nav-link ">Resources Library</a></li>
+            <li><a href="interactiveTools.html" class="nav-link ">Interactive Tools</a></li>
+            <li><a href="professionalTools.html" class="nav-link ">Professional Service</a></li>
+            <li><a href="emergencyService.html" class="nav-link ">Emergency Service</a></li>
+        </ul>
 
-        // Menampilkan 3 item secara acak di setiap kategori (Video, Artikel, Podcast)
-        function getRandomItems(container, count) {
-            const items = Array.from(container.querySelectorAll('.card'));
-            const shuffledItems = items.sort(() => 0.5 - Math.random()).slice(0, count);
-            container.innerHTML = "";
-            shuffledItems.forEach(item => container.appendChild(item));
-        }
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const videoContainer = document.querySelector('.videos-container .container');
-            const articleContainer = document.querySelector('.article-container .container');
-            const podcastContainer = document.querySelector('.podcast-container .container');
-
-            if (videoContainer) getRandomItems(videoContainer, 3);
-            if (articleContainer) getRandomItems(articleContainer, 3);
-            if (podcastContainer) getRandomItems(podcastContainer, 3);
-        });
-    </script>
+    </nav>
+</header>
 </body>
 </html>
