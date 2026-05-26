@@ -1,201 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Tools | BloomWell</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-
-    <!-- Swiper -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
-    <!-- CSS -->
-    <link rel="stylesheet" href="css/interactivetools.css" />
+    <link rel="stylesheet" href="css/interactivetools.css">
 </head>
-
 <body>
-    <!-- HEADER -->
+
     <header class="header">
         <nav class="nav">
             <div class="logo">
-                <div>
-                    <h2>BloomWell</h2>
-                </div>
+                <img src="images/logo.png" alt="BloomWell Logo">
+                <h2>BloomWell</h2>
             </div>
             <ul class="nav-links">
-                <li><a href="index.html" class="nav-link">Home</a></li>
-                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
-                <li><a href="interactiveTools.html" class="nav-link active">Interactive Tools</a></li>
-                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
-                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="active">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- MAIN CONTENT -->
-    <div class="interactive-tools-container">
-        <h1 class="section-title">
-            <i class="fas fa-tools" style="color: #667eea; margin-right: 15px;"></i>
-            Alat Interaktif untuk Kesehatan Mental
-        </h1>
+    <div class="container">
+        <h1 class="title">🧠 Alat Interaktif</h1>
 
         <div class="tools-grid">
-            <!-- AI MOOD TRACKER -->
-            <div class="tool-card">
-                <div class="badge ai">✨ POWERED BY AI</div>
-                <div class="tool-icon ai">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <div class="tool-name">AI Mood Tracker</div>
-                <p class="tool-description">
-                    Pantau suasana hati harian Anda dengan analisis AI yang cerdas dan mendapatkan prediksi serta solusi
-                </p>
-                <ul class="tool-features">
-                    <li>Pencatatan harian otomatis</li>
-                    <li>Analisis AI real-time</li>
-                    <li>Prediksi mood masa depan</li>
-                    <li>Deteksi masalah potensial</li>
-                    <li>Saran solusi personal</li>
-                    <li>Tracking trend emosi</li>
-                </ul>
-                <a href="moodTracker.html" class="tool-btn">
-                    Mulai Sekarang <i class="fas fa-arrow-right" style="margin-left: 8px;"></i>
-                </a>
-            </div>
 
-            <!-- BREATHING EXERCISE -->
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <i class="fas fa-wind"></i>
-                </div>
-                <div class="tool-name">Breathing Exercise</div>
-                <p class="tool-description">
-                    Latihan pernapasan terpandu untuk menenangkan pikiran dan mengurangi stres
-                </p>
+            <!-- Mood Meter -->
+            <a href="mood-meter.html" class="tool-card">
+                <div class="tool-icon">🧪</div>
+                <div class="tool-name">Mood Meter</div>
+                <div class="tool-desc">Pantau mood harian dengan visualisasi botol warna-warni</div>
                 <ul class="tool-features">
-                    <li>Teknik pernapasan 4-7-8</li>
-                    <li>Mode relaksasi</li>
-                    <li>Timer yang dapat disesuaikan</li>
-                    <li>Musik ambient</li>
-                    <li>Statistik latihan</li>
-                    <li>Panduan visual</li>
+                    <li>Catat mood berkali-kali sehari</li>
+                    <li>Botol cairan warna-warni</li>
+                    <li>Sertakan jurnal perasaan</li>
                 </ul>
-                <button class="tool-btn" onclick="alert('Coming Soon!')">
-                    Segera Hadir <i class="fas fa-lock" style="margin-left: 8px;"></i>
-                </button>
-            </div>
+                <div class="tool-btn">Mulai →</div>
+            </a>
 
-            <!-- MOOD JOURNAL -->
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <i class="fas fa-book"></i>
-                </div>
-                <div class="tool-name">Mood Journal</div>
-                <p class="tool-description">
-                    Jurnal digital untuk mencatat pikiran dan perasaan dengan mudah dan aman
-                </p>
+            <!-- Kalender Mood -->
+            <a href="kalender.html" class="tool-card">
+                <div class="tool-icon">📅</div>
+                <div class="tool-name">Kalender Mood</div>
+                <div class="tool-desc">Lihat riwayat mood dalam kalender interaktif</div>
                 <ul class="tool-features">
-                    <li>Interface yang intuitif</li>
-                    <li>Kategori emosi lengkap</li>
-                    <li>Lampirkan foto dan audio</li>
-                    <li>Privasi terjamin</li>
-                    <li>Pencarian mudah</li>
-                    <li>Ekspor data</li>
+                    <li>Tanggal berwarna sesuai mood</li>
+                    <li>Klik tanggal lihat jurnal</li>
+                    <li>Lacak pola mood bulanan</li>
                 </ul>
-                <button class="tool-btn" onclick="alert('Coming Soon!')">
-                    Segera Hadir <i class="fas fa-lock" style="margin-left: 8px;"></i>
-                </button>
-            </div>
+                <div class="tool-btn">Lihat →</div>
+            </a>
 
-            <!-- STRESS TEST -->
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <i class="fas fa-heartbeat"></i>
-                </div>
-                <div class="tool-name">Stress Level Test</div>
-                <p class="tool-description">
-                    Tes komprehensif untuk mengukur level stres Anda dan mendapat rekomendasi
-                </p>
+            <!-- Chat AI -->
+            <a href="chat-ai.html" class="tool-card">
+                <div class="tool-icon">💬</div>
+                <div class="tool-name">Chat AI</div>
+                <div class="tool-desc">Berbicara dengan AI untuk kesehatan mental</div>
                 <ul class="tool-features">
-                    <li>Kuis berdasarkan penelitian</li>
-                    <li>Hasil instan</li>
-                    <li>Analisis mendalam</li>
-                    <li>Saran penanganan</li>
-                    <li>Tracking riwayat</li>
-                    <li>Laporan bulanan</li>
+                    <li>Konsultasi mood & stres</li>
+                    <li>Rekomendasi video & jurnal</li>
+                    <li>Tips relaksasi instan</li>
                 </ul>
-                <button class="tool-btn" onclick="alert('Coming Soon!')">
-                    Segera Hadir <i class="fas fa-lock" style="margin-left: 8px;"></i>
-                </button>
-            </div>
+                <div class="tool-btn">Mulai Chat →</div>
+            </a>
 
-            <!-- MEDITATION GUIDE -->
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <i class="fas fa-spa"></i>
-                </div>
-                <div class="tool-name">Meditasi Terpandu</div>
-                <p class="tool-description">
-                    Sesi meditasi dengan berbagai durasi dan tujuan untuk keseimbangan emosional
-                </p>
+            <!-- Jurnal Harian -->
+            <a href="jurnal.html" class="tool-card">
+                <div class="tool-icon">📝</div>
+                <div class="tool-name">Jurnal Harian</div>
+                <div class="tool-desc">Tulis dan simpan jurnal perasaanmu setiap hari</div>
                 <ul class="tool-features">
-                    <li>Berbagai sesi meditasi</li>
-                    <li>Suara penyembuh profesional</li>
-                    <li>Durasi 5-30 menit</li>
-                    <li>Musik relaksasi</li>
-                    <li>Statistik mingguan</li>
-                    <li>Streak tracking</li>
+                    <li>Catatan pribadi</li>
+                    <li>Riwayat lengkap</li>
+                    <li>Prompt jurnal dari AI</li>
                 </ul>
-                <button class="tool-btn" onclick="alert('Coming Soon!')">
-                    Segera Hadir <i class="fas fa-lock" style="margin-left: 8px;"></i>
-                </button>
-            </div>
+                <div class="tool-btn">Tulis →</div>
+            </a>
 
-            <!-- GOAL PLANNER -->
-            <div class="tool-card">
-                <div class="tool-icon">
-                    <i class="fas fa-bullseye"></i>
-                </div>
-                <div class="tool-name">Goal Planner</div>
-                <p class="tool-description">
-                    Rencanakan dan lacak tujuan kesehatan mental Anda dengan sistem berbasis bukti
-                </p>
+            <!-- Analisis AI -->
+            <a href="analisis.html" class="tool-card">
+                <div class="tool-icon">📊</div>
+                <div class="tool-name">Analisis AI</div>
+                <div class="tool-desc">Analisis mood dan prediksi 7 hari ke depan</div>
                 <ul class="tool-features">
-                    <li>Penetapan tujuan SMART</li>
-                    <li>Rencana aksi terstruktur</li>
-                    <li>Pengingat otomatis</li>
-                    <li>Tracking kemajuan</li>
-                    <li>Selebrasi milestone</li>
-                    <li>Komunitas support</li>
+                    <li>Analisis tren mood</li>
+                    <li>Deteksi dini stres</li>
+                    <li>Prediksi akurat</li>
                 </ul>
-                <button class="tool-btn" onclick="alert('Coming Soon!')">
-                    Segera Hadir <i class="fas fa-lock" style="margin-left: 8px;"></i>
-                </button>
-            </div>
+                <div class="tool-btn">Analisis →</div>
+            </a>
+
+            <!-- Kuis Prediksi Mood -->
+            <a href="kuis.html" class="tool-card">
+                <div class="tool-icon">📋</div>
+                <div class="tool-name">Kuis Prediksi Mood</div>
+                <div class="tool-desc">Prediksi mood berdasarkan kebiasaan harian</div>
+                <ul class="tool-features">
+                    <li>Analisis sleep & screen time</li>
+                    <li>Rekomendasi personal</li>
+                    <li>Berdasarkan dataset</li>
+                </ul>
+                <div class="tool-btn">Ikuti Kuis →</div>
+            </a>
+
+            <!-- Rangkuman Bulanan -->
+            <a href="rangkuman.html" class="tool-card">
+                <div class="tool-icon">📈</div>
+                <div class="tool-name">Rangkuman Bulanan</div>
+                <div class="tool-desc">Lihat rangkuman mood dan stres bulanan</div>
+                <ul class="tool-features">
+                    <li>Statistik mood per bulan</li>
+                    <li>Status stres</li>
+                    <li>Rekomendasi personal</li>
+                </ul>
+                <div class="tool-btn">Lihat →</div>
+            </a>
+
         </div>
     </div>
 
-    <script>
-        // Add smooth scrolling and animations
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) {
-                    target.scrollIntoView({
-                        behavior: 'smooth'
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 </html>
