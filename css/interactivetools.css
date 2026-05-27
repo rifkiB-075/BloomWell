@@ -9,7 +9,7 @@ body {
     background-color: #f5f7fa;
 }
 
-/* ========== HEADER / NAVBAR ========== */
+/* ========== HEADER / NAVBAR ==========
 .header {
     background-color: white;
     padding: 15px 40px;
@@ -60,7 +60,7 @@ body {
 
 .nav-links a:hover {
     color: #6C63FF;
-}
+} */
 
 /* ========== MAIN CONTENT ========== */
 .container {
