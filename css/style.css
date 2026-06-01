@@ -1,11 +1,17 @@
-*{
+/* ===========================
+   NAVBAR FIX — konsisten di semua halaman
+   =========================== */
+
+/* Pastikan font Poppins ter-load dan dipakai di seluruh halaman */
+* {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: "Poppins", sans-serif;
+    font-size: 16px;
 }
 
 /* HEADER */
@@ -14,67 +20,62 @@ body{
     background-color: #ffffff;
     padding: 15px 30px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
 }
+
 /* NAVBAR */
-.nav{
+.nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #ffffff;
 }
 
 /* LOGO */
-.logo{
+.logo {
     display: flex;
     align-items: center;
     gap: 10px;
 }
 
-.logo img{
-    width: 50px;
+.logo .img-div img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
 }
 
-.logo h2{
-    font-size: 24px;
-    color: #333;
+.logo h2 {
+    font-family: "Poppins", sans-serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a1a;
+    white-space: nowrap;
 }
 
-/* BUTTON MENU */
-.mobile-nav-btn button{
-    border: none;
-    background: none;
-    cursor: pointer;
-}
-
-.mobile-nav-btn img{
-    width: 35px;
-}
+/* NAV LINKS */
 .nav-links {
     list-style: none;
     display: flex;
-    gap: 25px;
+    gap: 30px;
     align-items: center;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-links li a {
+    font-family: "Poppins", sans-serif;
+    font-size: 15px;
+    font-weight: 500;
     text-decoration: none;
     color: #333;
-    font-weight: 500;
-}
-
-.nav-links li a.active {
-    color: #0077ff;
-}
-
-.nav-links li a {
-    text-decoration: none;
-    color: #333;
-    font-weight: 500;
-    padding-bottom: 5px;
+    padding-bottom: 4px;
     position: relative;
+    white-space: nowrap;
 }
 
-/* Garis bawah */
+/* Garis bawah animasi */
 .nav-links li a::after {
     content: '';
     position: absolute;
@@ -87,12 +88,18 @@ body{
     transition: width 0.3s ease;
 }
 
-/* Muncul saat hover */
+.nav-links li a:hover {
+    color: #0077ff;
+}
+
 .nav-links li a:hover::after {
     width: 100%;
 }
 
-/* Tetap muncul di halaman aktif */
+.nav-links li a.active {
+    color: #0077ff;
+}
+
 .nav-links li a.active::after {
     width: 100%;
 }
