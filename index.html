@@ -32,6 +32,7 @@
                 <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
                 <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
                 <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link">Akun</a></li>
             </ul>
         </nav>
     </header>
@@ -95,18 +96,15 @@
         <div class="dashboard-section">
             <div class="dashboard-grid">
                 <div class="welcome-card">
-                    <span class="label">Selamat Datang</span>
+                    <div class="welcome-card-top">
+                        <span class="label">Selamat Datang</span>
+                        <div class="badge-group">
+                            <span class="streak-badge"><i class="fa-solid fa-fire"></i> Streak 0 Hari</span>
+                            <span class="account-status">Akun Aktif</span>
+                        </div>
+                    </div>
                     <span class="account-name">NAMA AKUN</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></span>
-                    <span class="stat-label">TOTAL Login</span>
-                    <span class="stat-value">0</span>
-                </div>
-                <div class="stat-card">
-                    <span class="stat-icon"><i class="fa-solid fa-fire"></i></span>
-                    <span class="stat-label">STREAK</span>
-                    <span class="stat-value">0</span>
+                    <p class="welcome-text">Selamat datang kembali! Lihat ringkasan aktivitas dan kemajuan kesehatan mental Anda di sini, agar setiap hari terasa lebih seimbang.</p>
                 </div>
             </div>
         </div>
@@ -257,6 +255,15 @@
             slidesPerView: 1.3,
             spaceBetween: 16,
             grabCursor: true,
+            allowTouchMove: true,
+            simulateTouch: true,
+            touchRatio: 1,
+            touchAngle: 45,
+            touchStartPreventDefault: false,
+            touchMoveStopPropagation: false,
+            preventClicks: false,
+            preventClicksPropagation: false,
+            slideToClickedSlide: true,
             breakpoints: {
                 480:  { slidesPerView: 2.2, spaceBetween: 16 },
                 768:  { slidesPerView: 3.2, spaceBetween: 18 },
@@ -274,6 +281,15 @@
             slidesPerView: 1.3,
             spaceBetween: 16,
             grabCursor: true,
+            allowTouchMove: true,
+            simulateTouch: true,
+            touchRatio: 1,
+            touchAngle: 45,
+            touchStartPreventDefault: false,
+            touchMoveStopPropagation: false,
+            preventClicks: false,
+            preventClicksPropagation: false,
+            slideToClickedSlide: true,
             breakpoints: {
                 480:  { slidesPerView: 2.2, spaceBetween: 16 },
                 768:  { slidesPerView: 3.2, spaceBetween: 18 },

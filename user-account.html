@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Akun Saya | BloomWell</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo.png" alt="BloomWell Logo" />
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link active">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="home-wrapper account-page">
+        <section class="account-hero">
+            <div class="account-hero-card">
+                <span class="label">Profil Pengguna</span>
+                <h1>Akun Saya</h1>
+                <p>Kelola informasi akun dan pengaturan pribadi Anda agar pengalaman BloomWell tetap nyaman dan aman.</p>
+            </div>
+            <div class="account-hero-top">
+                <span class="label">Profil Pengguna</span>
+                <div class="streak-badge">
+                    <i class="fa-solid fa-fire"></i>
+                    <span>Streak 5 Hari</span>
+                </div>
+            </div>
+            <div class="account-stats-grid">
+                <div class="account-stat">
+                    <span class="stat-title">Artikel Favorit</span>
+                    <span class="stat-value">8</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="account-body-grid">
+            <div class="profile-card">
+                <div class="profile-header">
+                    <div class="profile-avatar">BW</div>
+                    <div>
+                        <span class="profile-name">Nama Akun</span>
+                        <span class="profile-role">Pengguna BloomWell</span>
+                    </div>
+                </div>
+                <div class="profile-details">
+                    <div class="detail-row"><span>Email</span><strong>user@example.com</strong></div>
+                    <div class="detail-row"><span>Telepon</span><strong>+62 812 3456 7890</strong></div>
+                    <div class="detail-row"><span>Keanggotaan</span><strong>Premium</strong></div>
+                </div>
+                <div class="profile-actions">
+                    <button class="btn-secondary">Edit Profil</button>
+                    <button class="btn-secondary">Keluar</button>
+                </div>
+            </div>
+
+            <div class="account-form-card">
+                <div class="section-header">
+                    <h2 class="section-title">Pengaturan Akun</h2>
+                </div>
+                <form class="account-form">
+                    <div class="form-group">
+                        <label for="fullName">Nama Lengkap</label>
+                        <input id="fullName" type="text" value="Nama Akun" />
+                    </div>
+                    <div class="form-group">
+                        <label for="emailAddress">Email</label>
+                        <input id="emailAddress" type="email" value="user@example.com" />
+                    </div>
+                    <div class="form-group">
+                        <label for="phoneNumber">Nomor Telepon</label>
+                        <input id="phoneNumber" type="tel" value="+62 812 3456 7890" />
+                    </div>
+                    <div class="form-group">
+                        <label for="aboutMe">Tentang Saya</label>
+                        <textarea id="aboutMe" rows="4">Saya ingin menjaga kesehatan mental dengan lebih baik setiap hari.</textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn-primary">Simpan Perubahan</button>
+                        <button type="button" class="btn-secondary">Ubah Kata Sandi</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="account-note">
+            <h3>Keamanan & Privasi</h3>
+            <p>Untuk menjaga keamanan akun Anda, pastikan kata sandi Anda kuat dan jangan bagikan informasi login kepada orang lain.</p>
+        </section>
+    </main>
+</body>
+</html>
