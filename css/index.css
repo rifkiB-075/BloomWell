@@ -360,14 +360,9 @@ body > .swiper,
 
 .cards-scroll-wrapper {
     overflow-x: auto;
-    overflow-y: hidden;
-    padding-bottom: 18px;
+    padding-bottom: 12px;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    scroll-snap-type: x mandatory;
-    -webkit-overflow-scrolling: touch;
-    touch-action: pan-y;
-    scroll-behavior: smooth;
 }
 
 .cards-scroll-wrapper::-webkit-scrollbar {
@@ -376,32 +371,12 @@ body > .swiper,
 
 .cards-scroll-row {
     display: flex;
-    gap: 18px;
+    gap: 16px;
     width: max-content;
 }
 
-.cards-scroll-row .scroll-card {
-    min-width: 260px;
-    width: 260px;
-    scroll-snap-align: start;
-}
-
-.cards-scroll-wrapper {
-    cursor: grab;
-}
-
-.cards-scroll-wrapper:active {
-    cursor: grabbing;
-}
-
-.cards-scroll-wrapper .scroll-card {
-    user-select: none;
-    -webkit-user-drag: none;
-}
-
 .scroll-card {
-    min-width: 260px;
-    width: 260px;
+    width: 180px;
     border-radius: 14px;
     overflow: hidden;
     background-color: #c9956a;
