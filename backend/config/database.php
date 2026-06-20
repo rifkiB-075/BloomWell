@@ -1,7 +1,7 @@
 <?php
 $host = 'localhost';
 $user = 'root';
-$password = 'root';  // biarkan kosong
+$password = '';  // biarkan kosong atau  password default Laragon "root"
 $dbname = 'bloomwell_db';
 
 // Pakai mysqli dengan cara ini

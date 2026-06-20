@@ -32,7 +32,7 @@
                 <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
                 <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
                 <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
-                <li><a href="user-account.html" class="nav-link">Akun</a></li>
+                <li><a href="auth.html" class="nav-link">Akun</a></li>
             </ul>
         </nav>
     </header>
@@ -97,14 +97,14 @@
             <div class="dashboard-grid">
                 <div class="welcome-card">
                     <div class="welcome-card-top">
-                        <span class="label">Selamat Datang</span>
+                        <span class="label" id="wc-label">Selamat Datang</span>
                         <div class="badge-group">
-                            <span class="streak-badge"><i class="fa-solid fa-fire"></i> Streak 0 Hari</span>
-                            <span class="account-status">Akun Aktif</span>
+                            <span class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="wc-streak">Streak 0 Hari</span></span>
+                            <span class="account-status" id="wc-status">Akun Aktif</span>
                         </div>
                     </div>
-                    <span class="account-name">NAMA AKUN</span>
-                    <p class="welcome-text">Selamat datang kembali! Lihat ringkasan aktivitas dan kemajuan kesehatan mental Anda di sini, agar setiap hari terasa lebih seimbang.</p>
+                    <span class="account-name" id="wc-name">NAMA AKUN</span>
+                    <p class="welcome-text" id="wc-text">Selamat datang kembali! Lihat ringkasan aktivitas dan kemajuan kesehatan mental Anda di sini, agar setiap hari terasa lebih seimbang.</p>
                 </div>
             </div>
         </div>
@@ -301,6 +301,59 @@
                 clickable: true,
             },
         });
+    </script>
+
+    <script>
+        // ── Welcome Card — isi data dari session ──────────────
+        function loadWelcomeCard() {
+            let session = null;
+            try {
+                const raw = localStorage.getItem('bw_session');
+                session   = raw ? JSON.parse(raw) : null;
+            } catch(e) { session = null; }
+
+            const elName   = document.getElementById('wc-name');
+            const elLabel  = document.getElementById('wc-label');
+            const elStreak = document.getElementById('wc-streak');
+            const elStatus = document.getElementById('wc-status');
+            const elText   = document.getElementById('wc-text');
+
+            // Ambil nama dari berbagai kemungkinan field
+            const nama = (session && (session.name || session.full_name || session.username)) || null;
+
+            if (nama) {
+                const firstName = nama.split(' ')[0];
+                elName.textContent   = nama.toUpperCase();
+                elLabel.textContent  = 'Selamat Datang,';
+                elText.textContent   = `Halo, ${firstName}! Lihat ringkasan aktivitas dan kemajuan kesehatan mental kamu di sini, agar setiap hari terasa lebih seimbang.`;
+                elStatus.textContent = 'Akun Aktif';
+                elStatus.style.background = 'rgba(255,255,255,0.2)';
+
+                // Streak
+                const streakKey  = 'bw_streak_' + (session.id || 'guest');
+                const streakData = JSON.parse(localStorage.getItem(streakKey) || '{"count":0,"lastDate":""}');
+                const today      = new Date().toISOString().slice(0, 10);
+                const yesterday  = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+                const streak     = (streakData.lastDate === today || streakData.lastDate === yesterday) ? streakData.count : 0;
+                elStreak.textContent = `Streak ${streak} Hari`;
+
+            } else {
+                // Belum login — tampilkan state tamu
+                elName.textContent   = 'Halo, Tamu!';
+                elLabel.textContent  = 'Selamat Datang';
+                elText.innerHTML     = 'Mulai perjalanan kesehatan mentalmu. <a href="auth.html?tab=signup" style="color:#fff;font-weight:700;text-decoration:underline;">Daftar gratis</a> atau <a href="auth.html" style="color:#fff;font-weight:700;text-decoration:underline;">masuk</a> untuk melacak perkembanganmu.';
+                elStatus.textContent = 'Tamu';
+                elStatus.style.background = 'rgba(255,255,255,0.12)';
+                elStreak.textContent = 'Streak 0 Hari';
+            }
+        }
+
+        // Jalankan saat DOM siap
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadWelcomeCard);
+        } else {
+            loadWelcomeCard();
+        }
     </script>
 </body>
 </html>
