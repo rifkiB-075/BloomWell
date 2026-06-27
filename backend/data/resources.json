@@ -1,0 +1,35 @@
+[
+  {
+    "id": 1,
+    "title": "Menemukan Ketenangan di Tengah Stres",
+    "category": "mindfulness",
+    "category_label": "Mindfulness",
+    "description": "Buku pendek tentang latihan napas, fokus, dan mengurangi rasa terburu-buru dalam hidup sehari-hari.",
+    "read_time": "7 menit baca",
+    "type": "pdf",
+    "status": "published",
+    "file_path": ""
+  },
+  {
+    "id": 2,
+    "title": "Memahami Kecemasan Tanpa Membenci Diri",
+    "category": "anxiety",
+    "category_label": "Kecemasan",
+    "description": "Menjelaskan bagaimana rasa cemas muncul dan langkah sederhana untuk menghadapinya dengan lebih lembut.",
+    "read_time": "10 menit baca",
+    "type": "pdf",
+    "status": "published",
+    "file_path": ""
+  },
+  {
+    "id": 3,
+    "title": "Berkomunikasi dengan Hangat dan Jujur",
+    "category": "relationship",
+    "category_label": "Hubungan",
+    "description": "Menolong kamu membangun komunikasi yang sehat di rumah, kerja, dan hubungan personal.",
+    "read_time": "8 menit baca",
+    "type": "pdf",
+    "status": "published",
+    "file_path": ""
+  }
+]

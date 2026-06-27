@@ -205,70 +205,53 @@
 
         <section class="library-section">
             <h2 class="section-title">Rak buku berdasarkan topik</h2>
-            <div class="resource-grid">
-                <article class="resource-card" data-category="mindfulness">
-                    <div class="resource-meta"><span>Mindfulness</span><span>7 menit baca</span></div>
-                    <h3>Menemukan Ketenangan di Tengah Stres</h3>
-                    <p>Buku pendek tentang latihan napas, fokus, dan mengurangi rasa terburu-buru dalam hidup sehari-hari.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-
-                <article class="resource-card" data-category="anxiety">
-                    <div class="resource-meta"><span>Kecemasan</span><span>10 menit baca</span></div>
-                    <h3>Memahami Kecemasan Tanpa Membenci Diri</h3>
-                    <p>Menjelaskan bagaimana rasa cemas muncul dan langkah sederhana untuk menghadapinya dengan lebih lembut.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-
-                <article class="resource-card" data-category="relationship">
-                    <div class="resource-meta"><span>Hubungan</span><span>8 menit baca</span></div>
-                    <h3>Berkomunikasi dengan Hangat dan Jujur</h3>
-                    <p>Menolong kamu membangun komunikasi yang sehat di rumah, kerja, dan hubungan personal.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-
-                <article class="resource-card" data-category="selfcare">
-                    <div class="resource-meta"><span>Self-Care</span><span>6 menit baca</span></div>
-                    <h3>Rutinitas Harian yang Menenangkan</h3>
-                    <p>Berisi ide sederhana untuk menjaga energi, tidur, dan suasana hati agar lebih stabil.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-
-                <article class="resource-card" data-category="productivity">
-                    <div class="resource-meta"><span>Produktivitas</span><span>9 menit baca</span></div>
-                    <h3>Fokus Tanpa Membuat Diri Sendiri Lelah</h3>
-                    <p>Tips bekerja dengan tenang, tidak terlalu keras pada diri sendiri, dan tetap realistis.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-
-                <article class="resource-card" data-category="selfcare">
-                    <div class="resource-meta"><span>Self-Care</span><span>5 menit baca</span></div>
-                    <h3>Hari yang Baik Dimulai dari Diri Sendiri</h3>
-                    <p>Kumpulan praktik kecil yang bisa dilakukan pagi hari untuk memberi rasa aman dan nyaman.</p>
-                    <a href="#" class="btn">Baca sekarang</a>
-                </article>
-            </div>
+            <div class="resource-grid" id="resourceGrid"></div>
         </section>
     </main>
 
     <script>
         const buttons = document.querySelectorAll('.filter-btn');
-        const cards = document.querySelectorAll('.resource-card');
+        const resourceGrid = document.getElementById('resourceGrid');
+
+        async function loadResources() {
+            try {
+                const res = await fetch('backend/api/resources.php');
+                const data = await res.json();
+                const resources = data.resources || [];
+
+                if (!resources.length) {
+                    resourceGrid.innerHTML = '<p>Belum ada buku PDF yang dipublikasikan.</p>';
+                    return;
+                }
+
+                resourceGrid.innerHTML = resources.map(item => `
+                    <article class="resource-card" data-category="${item.category}">
+                        <div class="resource-meta"><span>${item.category_label || item.category}</span><span>${item.read_time || '5 menit baca'}</span></div>
+                        <h3>${item.title}</h3>
+                        <p>${item.description}</p>
+                        <a href="${item.file_path ? item.file_path : '#'}" class="btn" target="_blank" rel="noopener noreferrer">${item.file_path ? 'Baca PDF' : 'Segera tersedia'}</a>
+                    </article>
+                `).join('');
+            } catch (err) {
+                resourceGrid.innerHTML = '<p>Gagal memuat koleksi buku.</p>';
+            }
+        }
 
         buttons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const filter = btn.dataset.filter;
-
                 buttons.forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
 
-                cards.forEach(card => {
+                document.querySelectorAll('.resource-card').forEach(card => {
                     const category = card.dataset.category;
                     const show = filter === 'all' || category === filter;
                     card.classList.toggle('hidden', !show);
                 });
             });
         });
+
+        loadResources();
     </script>
 </body>
 </html>
