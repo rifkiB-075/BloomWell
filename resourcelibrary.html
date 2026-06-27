@@ -1,51 +1,274 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Resources Library | BloomWell</title>
 
-    <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-
-    <!-- Font Awesome -->
-    <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
-
-    <!-- Swiper -->
-    <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
-
-    <!-- CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
     <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f6fbff 0%, #fef7f2 100%);
+            color: #1f2937;
+        }
+
+        .library-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px 80px;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .hero-card h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #2b6cb0;
+        }
+
+        .hero-card p {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats span {
+            background: #eef6ff;
+            color: #2563eb;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 24px 0 18px;
+        }
+
+        .filter-btn {
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 10px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-weight: 600;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #2b6cb0;
+            color: white;
+        }
+
+        .library-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+            color: #1e293b;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .resource-card h3 {
+            margin: 8px 0 8px;
+            font-size: 1rem;
+        }
+
+        .resource-card p {
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .resource-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .resource-meta span {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.8rem;
+            padding: 5px 8px;
+            border-radius: 999px;
+        }
+
+        .resource-card .btn {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: #fef3c7;
+            color: #92400e;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .resource-card.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 22px;
+            }
+
+            .hero-card h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
 </head>
 
 <body>
-
-   <header class="header">
-    <nav class="nav">
-
-        <div class="logo">
-            <div class="img-div">
-                <!-- <img src="images/logo.png" alt=""> -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div"></div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
             </div>
-            <div>
-                <h2>BloomWell</h2>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link active">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="library-page">
+        <section class="hero-card">
+            <h1>Perpustakaan BloomWell</h1>
+            <p>Tempat untuk menjelajah buku, bacaan, dan sumber belajar yang membantu kamu memahami diri sendiri, mengelola emosi, dan menjaga kesehatan mental dengan lebih baik.</p>
+            <div class="hero-stats">
+                <span>📚 24 Koleksi</span>
+                <span>🗂️ 6 Topik</span>
+                <span>🌿 Cocok untuk Belajar Mandiri</span>
             </div>
+        </section>
+
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-filter="all">Semua</button>
+            <button class="filter-btn" data-filter="mindfulness">Mindfulness</button>
+            <button class="filter-btn" data-filter="anxiety">Kecemasan</button>
+            <button class="filter-btn" data-filter="relationship">Hubungan</button>
+            <button class="filter-btn" data-filter="selfcare">Self-Care</button>
+            <button class="filter-btn" data-filter="productivity">Produktivitas</button>
         </div>
 
-        <ul class="nav-links">
-            <li><a href="index.html" class="nav-link ">Home</a></li>
-            <li><a href="resourcelibrary.html" class="nav-link active">Resources Library</a></li>
-            <li><a href="interactiveTools.html" class="nav-link ">Interactive Tools</a></li>
-            <li><a href="professionalTools.html" class="nav-link ">Professional Service</a></li>
-            <li><a href="emergencyService.html" class="nav-link ">Emergency Service</a></li>
-            <li><a href="user-account.html" class="nav-link">Akun</a></li>
-        </ul>
+        <section class="library-section">
+            <h2 class="section-title">Rak buku berdasarkan topik</h2>
+            <div class="resource-grid">
+                <article class="resource-card" data-category="mindfulness">
+                    <div class="resource-meta"><span>Mindfulness</span><span>7 menit baca</span></div>
+                    <h3>Menemukan Ketenangan di Tengah Stres</h3>
+                    <p>Buku pendek tentang latihan napas, fokus, dan mengurangi rasa terburu-buru dalam hidup sehari-hari.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
 
-    </nav>
-</header>
+                <article class="resource-card" data-category="anxiety">
+                    <div class="resource-meta"><span>Kecemasan</span><span>10 menit baca</span></div>
+                    <h3>Memahami Kecemasan Tanpa Membenci Diri</h3>
+                    <p>Menjelaskan bagaimana rasa cemas muncul dan langkah sederhana untuk menghadapinya dengan lebih lembut.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
+
+                <article class="resource-card" data-category="relationship">
+                    <div class="resource-meta"><span>Hubungan</span><span>8 menit baca</span></div>
+                    <h3>Berkomunikasi dengan Hangat dan Jujur</h3>
+                    <p>Menolong kamu membangun komunikasi yang sehat di rumah, kerja, dan hubungan personal.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
+
+                <article class="resource-card" data-category="selfcare">
+                    <div class="resource-meta"><span>Self-Care</span><span>6 menit baca</span></div>
+                    <h3>Rutinitas Harian yang Menenangkan</h3>
+                    <p>Berisi ide sederhana untuk menjaga energi, tidur, dan suasana hati agar lebih stabil.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
+
+                <article class="resource-card" data-category="productivity">
+                    <div class="resource-meta"><span>Produktivitas</span><span>9 menit baca</span></div>
+                    <h3>Fokus Tanpa Membuat Diri Sendiri Lelah</h3>
+                    <p>Tips bekerja dengan tenang, tidak terlalu keras pada diri sendiri, dan tetap realistis.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
+
+                <article class="resource-card" data-category="selfcare">
+                    <div class="resource-meta"><span>Self-Care</span><span>5 menit baca</span></div>
+                    <h3>Hari yang Baik Dimulai dari Diri Sendiri</h3>
+                    <p>Kumpulan praktik kecil yang bisa dilakukan pagi hari untuk memberi rasa aman dan nyaman.</p>
+                    <a href="#" class="btn">Baca sekarang</a>
+                </article>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        const buttons = document.querySelectorAll('.filter-btn');
+        const cards = document.querySelectorAll('.resource-card');
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                cards.forEach(card => {
+                    const category = card.dataset.category;
+                    const show = filter === 'all' || category === filter;
+                    card.classList.toggle('hidden', !show);
+                });
+            });
+        });
+    </script>
 </body>
 </html>
