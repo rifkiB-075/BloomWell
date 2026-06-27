@@ -7,7 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <style>
         body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; padding: 40px; color: #1f2937; }
-        .box { max-width: 700px; margin: 0 auto; background: white; border-radius: 20px; padding: 28px; box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
+        .box { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; padding: 28px; box-shadow: 0 12px 30px rgba(0,0,0,0.08); }
         h1 { margin-top: 0; color: #2563eb; }
         label { display: block; margin-top: 14px; font-weight: 600; }
         input, select, textarea { width: 100%; margin-top: 6px; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 10px; font-size: 1rem; }
@@ -15,6 +15,12 @@
         .message { margin-top: 16px; padding: 10px 12px; border-radius: 10px; }
         .success { background: #dcfce7; color: #166534; }
         .error { background: #fee2e2; color: #b91c1c; }
+        .list { margin-top: 24px; display: grid; gap: 12px; }
+        .item { border: 1px solid #e2e8f0; border-radius: 14px; padding: 14px; }
+        .actions button { margin: 6px 6px 0 0; padding: 8px 12px; font-size: 0.9rem; }
+        .actions .delete { background: #dc2626; }
+        .actions .edit { background: #ea580c; }
+        .preview-frame { width: 100%; height: 500px; margin-top: 16px; border: 1px solid #ddd; border-radius: 12px; }
     </style>
 </head>
 <body>
@@ -23,11 +29,14 @@
         <p>Halaman ini untuk admin/developer mengunggah buku PDF yang nanti tampil di Resource Library.</p>
 
         <form id="uploadForm" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="upload" />
+            <input type="hidden" name="resource_id" id="resourceId" />
+
             <label>Judul buku</label>
-            <input type="text" name="title" required />
+            <input type="text" name="title" id="title" required />
 
             <label>Kategori</label>
-            <select name="category">
+            <select name="category" id="category">
                 <option value="mindfulness">Mindfulness</option>
                 <option value="anxiety">Kecemasan</option>
                 <option value="relationship">Hubungan</option>
@@ -36,31 +45,96 @@
             </select>
 
             <label>Label kategori</label>
-            <input type="text" name="category_label" placeholder="Contoh: Mindfulness" />
+            <input type="text" name="category_label" id="categoryLabel" placeholder="Contoh: Mindfulness" />
 
             <label>Deskripsi</label>
-            <textarea name="description" rows="4" required></textarea>
+            <textarea name="description" id="description" rows="4" required></textarea>
 
             <label>Durasi baca</label>
-            <input type="text" name="read_time" placeholder="Contoh: 7 menit baca" />
+            <input type="text" name="read_time" id="readTime" placeholder="Contoh: 7 menit baca" />
 
-            <label>Pilih file PDF</label>
-            <input type="file" name="pdf_file" accept="application/pdf" required />
+            <label id="fileLabel">Pilih file PDF</label>
+            <input type="file" name="pdf_file" id="pdfFile" accept="application/pdf" />
 
-            <button type="submit">Upload PDF</button>
+            <button type="submit" id="submitBtn">Upload PDF</button>
         </form>
 
         <div id="messageBox"></div>
+
+        <h2 style="margin-top: 28px;">Daftar Buku</h2>
+        <div id="resourceList" class="list"></div>
+
+        <h2 style="margin-top: 28px;">Preview PDF</h2>
+        <div id="previewArea"></div>
     </div>
 
     <script>
-        document.getElementById('uploadForm').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            const form = e.target;
-            const data = new FormData(form);
-            const messageBox = document.getElementById('messageBox');
+        const form = document.getElementById('uploadForm');
+        const messageBox = document.getElementById('messageBox');
+        const resourceList = document.getElementById('resourceList');
+        const previewArea = document.getElementById('previewArea');
+        const submitBtn = document.getElementById('submitBtn');
+        const fileLabel = document.getElementById('fileLabel');
+        const actionInput = form.querySelector('input[name="action"]');
+        const idInput = document.getElementById('resourceId');
 
-            messageBox.innerHTML = '<div class="message">Mengunggah...</div>';
+        async function loadResources() {
+            const res = await fetch('backend/api/resources.php');
+            const data = await res.json();
+            const resources = data.resources || [];
+
+            resourceList.innerHTML = resources.map(item => `
+                <div class="item">
+                    <strong>${item.title}</strong><br>
+                    <small>${item.category_label || item.category}</small>
+                    <p>${item.description}</p>
+                    <div class="actions">
+                        <button class="edit" onclick="prepareEdit(${item.id}, '${item.title.replace(/'/g, "\\'")}', '${item.category}', '${(item.category_label || item.category).replace(/'/g, "\\'")}', '${item.description.replace(/'/g, "\\'")}', '${(item.read_time || '').replace(/'/g, "\\'")}')">Edit</button>
+                        <button class="delete" onclick="deleteResource(${item.id})">Hapus</button>
+                        <button onclick="previewPdf('${item.file_path || ''}')">Preview</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function prepareEdit(id, title, category, categoryLabel, description, readTime) {
+            document.getElementById('resourceId').value = id;
+            document.getElementById('title').value = title;
+            document.getElementById('category').value = category;
+            document.getElementById('categoryLabel').value = categoryLabel;
+            document.getElementById('description').value = description;
+            document.getElementById('readTime').value = readTime;
+            document.getElementById('pdfFile').required = false;
+            fileLabel.textContent = 'Pilih file PDF (opsional saat edit)';
+            actionInput.value = 'edit';
+            submitBtn.textContent = 'Simpan Perubahan';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function previewPdf(path) {
+            if (!path) {
+                previewArea.innerHTML = '<p style="color:#b91c1c;">Belum ada file PDF untuk ditampilkan.</p>';
+                return;
+            }
+            previewArea.innerHTML = `<iframe class="preview-frame" src="${path}"></iframe>`;
+        }
+
+        async function deleteResource(id) {
+            if (!confirm('Yakin ingin menghapus buku ini?')) return;
+            const res = await fetch('backend/api/resources.php', {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id })
+            });
+            const result = await res.json();
+            messageBox.innerHTML = `<div class="message ${result.success ? 'success' : 'error'}">${result.message}</div>`;
+            if (result.success) loadResources();
+        }
+
+        form.addEventListener('submit', async function (e) {
+            e.preventDefault();
+            const data = new FormData(form);
+            messageBox.innerHTML = '<div class="message">Memproses...</div>';
 
             try {
                 const res = await fetch('backend/api/resources.php', {
@@ -72,13 +146,21 @@
                 if (result.success) {
                     messageBox.innerHTML = `<div class="message success">${result.message}</div>`;
                     form.reset();
+                    actionInput.value = 'upload';
+                    idInput.value = '';
+                    document.getElementById('pdfFile').required = true;
+                    fileLabel.textContent = 'Pilih file PDF';
+                    submitBtn.textContent = 'Upload PDF';
+                    loadResources();
                 } else {
                     messageBox.innerHTML = `<div class="message error">${result.message}</div>`;
                 }
             } catch (err) {
-                messageBox.innerHTML = `<div class="message error">Terjadi kesalahan saat upload.</div>`;
+                messageBox.innerHTML = `<div class="message error">Terjadi kesalahan saat memproses.</div>`;
             }
         });
+
+        loadResources();
     </script>
 </body>
 </html>
