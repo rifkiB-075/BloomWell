@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Mood Meter | BloomWell</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #5a52d9;
+            --sangat-buruk: #FF4444;
+            --buruk: #FF8C42;
+            --biasa: #FFD166;
+            --baik: #4CAF50;
+            --sangat-baik: #2196F3;
+        }
+
+        body {
+            padding-top: 90px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .card {
+            background: white;
+            border-radius: 20px;
+            padding: 1.5rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 1.5rem;
+        }
+
+        .card h2 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+            border-left: 4px solid var(--primary);
+            padding-left: 1rem;
+        }
+
+        .bottle-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .bottle {
+            width: 200px;
+            height: 300px;
+            background: #e8e8e8;
+            border-radius: 0 0 50px 50px;
+            position: relative;
+            overflow: hidden;
+            border: 3px solid #333;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .bottle-layers {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column-reverse;
+        }
+
+        .liquid-layer {
+            position: relative;
+            width: 100%;
+            transition: height 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .liquid-layer span {
+            color: white;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            font-size: 0.8rem;
+        }
+
+        .bottle-cap {
+            width: 100px;
+            height: 30px;
+            background: #c0c0c0;
+            border-radius: 15px 15px 0 0;
+            margin: 0 auto 5px auto;
+        }
+
+        .mood-selector {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 1rem 0;
+        }
+
+        .mood-option {
+            padding: 0.7rem 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.2s;
+        }
+
+        .mood-option.selected {
+            transform: scale(1.05);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+            outline: 2px solid var(--primary);
+        }
+
+        .mood-stats {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            background: #f0f0f0;
+        }
+
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+
+        textarea {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-family: inherit;
+            margin: 0.5rem 0;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo.png" alt="">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link active">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        <a href="interactiveTools.html" class="back-link">← Kembali ke Interactive Tools</a>
+
+        <div class="card">
+            <h2>🧪 Mood Meter Harian</h2>
+            <div class="bottle-container">
+                <div class="bottle-cap"></div>
+                <div class="bottle" id="moodBottle">
+                    <div class="bottle-layers" id="bottleLayers"></div>
+                </div>
+            </div>
+            
+            <div class="mood-selector" id="moodSelector">
+                <button class="mood-option" data-mood="sangat-buruk" style="background:#FF4444; color:white;">😭 Sangat Buruk</button>
+                <button class="mood-option" data-mood="buruk" style="background:#FF8C42; color:white;">😟 Buruk</button>
+                <button class="mood-option" data-mood="biasa" style="background:#FFD166; color:#333;">😐 Biasa</button>
+                <button class="mood-option" data-mood="baik" style="background:#4CAF50; color:white;">🙂 Baik</button>
+                <button class="mood-option" data-mood="sangat-baik" style="background:#2196F3; color:white;">😍 Sangat Baik</button>
+            </div>
+            
+            <textarea id="journalInput" rows="2" placeholder="Tulis jurnal perasaan Anda hari ini..."></textarea>
+            <button id="saveMoodBtn">💾 Simpan Mood & Jurnal</button>
+            <div id="saveFeedback" style="margin-top: 0.5rem; font-size: 0.8rem; text-align: center;"></div>
+            
+            <div class="mood-stats" id="moodStats"></div>
+        </div>
+    </div>
+
+    <script>
+        let moodEntries = [];
+        
+        const moodConfig = {
+            'sangat-buruk': { emoji: '😭', name: 'Sangat Buruk', color: '#FF4444', score: 1 },
+            'buruk': { emoji: '😟', name: 'Buruk', color: '#FF8C42', score: 2 },
+            'biasa': { emoji: '😐', name: 'Biasa', color: '#FFD166', score: 3 },
+            'baik': { emoji: '🙂', name: 'Baik', color: '#4CAF50', score: 4 },
+            'sangat-baik': { emoji: '😍', name: 'Sangat Baik', color: '#2196F3', score: 5 }
+        };
+
+        function loadData() {
+            const stored = localStorage.getItem('bloomwell_mood_journal');
+            if (stored) moodEntries = JSON.parse(stored);
+            updateBottleLayers();
+        }
+
+        function saveData() {
+            localStorage.setItem('bloomwell_mood_journal', JSON.stringify(moodEntries));
+            updateBottleLayers();
+        }
+
+        function getTodayStr() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getTimeStr() {
+            return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        }
+
+        function updateBottleLayers() {
+            let todayStr = getTodayStr();
+            let todayEntries = moodEntries.filter(e => e.dateStr === todayStr);
+            let layersContainer = document.getElementById('bottleLayers');
+            
+            if (todayEntries.length === 0) {
+                layersContainer.innerHTML = '<div style="height:100%; background:#ccc; display:flex; align-items:center; justify-content:center;"><span style="color:#666;">Belum diisi</span></div>';
+                document.getElementById('moodStats').innerHTML = '<div class="stat-badge">Belum ada data hari ini</div>';
+                return;
+            }
+            
+            let moodCount = {};
+            todayEntries.forEach(e => { moodCount[e.mood] = (moodCount[e.mood] || 0) + 1; });
+            let sortedMoods = Object.keys(moodCount).sort((a,b) => moodConfig[b].score - moodConfig[a].score);
+            let totalEntries = todayEntries.length;
+            
+            let layersHtml = '';
+            for (let mood of sortedMoods) {
+                let count = moodCount[mood];
+                let percentage = (count / totalEntries) * 100;
+                let cfg = moodConfig[mood];
+                layersHtml += `<div class="liquid-layer" style="height: ${percentage}%; background: ${cfg.color};"><span>${cfg.emoji} ${Math.round(percentage)}%</span></div>`;
+            }
+            layersContainer.innerHTML = layersHtml;
+            
+            let totalScore = todayEntries.reduce((sum, e) => sum + moodConfig[e.mood].score, 0);
+            let avgScore = totalScore / totalEntries;
+            
+            document.getElementById('moodStats').innerHTML = `
+                <div class="stat-badge">📊 Hari ini: ${avgScore.toFixed(1)}/5 (${totalEntries} entry)</div>
+            `;
+        }
+
+        let selectedMood = null;
+        
+        document.querySelectorAll('#moodSelector .mood-option').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('#moodSelector .mood-option').forEach(b => b.classList.remove('selected'));
+                btn.classList.add('selected');
+                selectedMood = btn.dataset.mood;
+            });
+        });
+        
+        document.getElementById('saveMoodBtn').addEventListener('click', () => {
+            if (!selectedMood) {
+                document.getElementById('saveFeedback').innerHTML = '⚠️ Pilih mood terlebih dahulu!';
+                return;
+            }
+            let journal = document.getElementById('journalInput').value;
+            moodEntries.push({
+                timestamp: Date.now(),
+                dateStr: getTodayStr(),
+                timeStr: getTimeStr(),
+                mood: selectedMood,
+                journalText: journal || ""
+            });
+            saveData();
+            document.getElementById('saveFeedback').innerHTML = `✅ ${moodConfig[selectedMood].emoji} Mood tersimpan!`;
+            document.getElementById('journalInput').value = '';
+            selectedMood = null;
+            document.querySelectorAll('#moodSelector .mood-option').forEach(b => b.classList.remove('selected'));
+            setTimeout(() => { document.getElementById('saveFeedback').innerHTML = ''; }, 2000);
+        });
+        
+        loadData();
+    </script>
+</body>
+</html>
