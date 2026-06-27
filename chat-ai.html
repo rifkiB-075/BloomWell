@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no">
+    <title>Chat AI | BloomWell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/chat-ai.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div"></div>
+                <div><h2>BloomWell</h2></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
+                <li><a href="user-account.html">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="chat-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
+            <nav class="sidebar-nav">
+                <a href="interactiveTools.html" class="sidebar-item" title="Mood Meter">
+                    <span class="sidebar-icon">🧪</span>
+                    <span class="sidebar-label">Mood Meter</span>
+                </a>
+                <a href="kalender.html" class="sidebar-item" title="Kalender Mood">
+                    <span class="sidebar-icon">📅</span>
+                    <span class="sidebar-label">Kalender Mood</span>
+                </a>
+                <a href="chat-ai.html" class="sidebar-item active" title="Chat AI">
+                    <span class="sidebar-icon">💬</span>
+                    <span class="sidebar-label">Chat AI</span>
+                </a>
+                <a href="jurnal.html" class="sidebar-item" title="Jurnal Harian">
+                    <span class="sidebar-icon">📝</span>
+                    <span class="sidebar-label">Jurnal Harian</span>
+                </a>
+                <a href="analisis.html" class="sidebar-item" title="Analisis AI">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Analisis AI</span>
+                </a>
+                <a href="kuis.html" class="sidebar-item" title="Kuis Prediksi Mood">
+                    <span class="sidebar-icon">📋</span>
+                    <span class="sidebar-label">Kuis Prediksi</span>
+                </a>
+                <a href="rangkuman.html" class="sidebar-item" title="Rangkuman Bulanan">
+                    <span class="sidebar-icon">📈</span>
+                    <span class="sidebar-label">Rangkuman Bulanan</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Chat Area -->
+        <main class="chat-main">
+            <div class="chat-container">
+
+                <!-- Chat Header -->
+                <div class="chat-header">
+                    <div class="chat-avatar">
+                        <span>🤖</span>
+                    </div>
+                    <div class="chat-header-info">
+                        <h2>BloomWell AI</h2>
+                        <p class="chat-status">🟢 Online · Siap membantu</p>
+                    </div>
+                    <button class="chat-clear-btn" onclick="clearChat()" title="Hapus percakapan">
+                        🗑️
+                    </button>
+                </div>
+
+                <!-- Chat Messages -->
+                <div class="chat-messages" id="chatMessages">
+                    <div class="message bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble">
+                            <p>Halo! 👋 Saya BloomWell AI, asisten kesehatan mentalmu. Ada yang bisa saya bantu hari ini? 😊</p>
+                            <span class="message-time">Sekarang</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chat Input -->
+                <div class="chat-input-area">
+                    <div class="chat-input-wrapper">
+                        <textarea id="chatInput" rows="1" placeholder="Ketik pesanmu di sini..." onkeydown="handleKeyPress(event)"></textarea>
+                        <button class="chat-send-btn" onclick="sendMessage()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"/>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <p class="chat-hint">Tekan Enter untuk mengirim · Shift+Enter untuk baris baru</p>
+                </div>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script>
+        // ===== CHAT AI LOGIC =====
+
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+
+        // Daftar respons AI berdasarkan kata kunci
+        const aiResponses = [
+            {
+                keywords: ['halo', 'hai', 'hey', 'hi', 'selamat', 'pagi', 'siang', 'sore', 'malam'],
+                response: "Halo juga! 😊 Ada yang bisa saya bantu? Ceritakan apa yang sedang kamu rasakan hari ini."
+            },
+            {
+                keywords: ['sedih', 'kecewa', 'galau', 'hancur', 'putus', 'kehilangan', 'menangis'],
+                response: "Saya turut berempati dengan perasaanmu. 🫂 Menangis itu tidak apa-apa, itu cara tubuhmu melepaskan emosi. Ingin kamu ceritakan lebih lanjut? Saya siap mendengarkan dengan penuh perhatian."
+            },
+            {
+                keywords: ['stress', 'stres', 'tekanan', 'beban', 'kewalahan', 'lelah', 'capek'],
+                response: "Saya mengerti, hidup memang bisa terasa berat. 🫂 Coba ambil napas dalam-dalam, dan ingat bahwa kamu tidak sendirian. Mau kita coba teknik pernapasan sederhana bersama?"
+            },
+            {
+                keywords: ['cemas', 'khawatir', 'takut', 'gelisah', 'panik', 'resah'],
+                response: "Kecemasan adalah hal yang wajar, tapi tidak perlu mengendalikanmu. 🧘 Coba sebutkan 3 hal yang bisa kamu lihat, 2 hal yang bisa kamu dengar, dan 1 hal yang bisa kamu rasakan. Ini teknik grounding yang membantumu kembali ke saat ini."
+            },
+            {
+                keywords: ['marah', 'kesal', 'jengkel', 'sebel', 'geram', 'emosi'],
+                response: "Marah adalah emosi yang valid. 💢 Daripada meledak, coba tulis apa yang membuatmu marah di secarik kertas, lalu remas dan buang. Seringkali itu membantu menyalurkan energi negatif. Ingin kita bahas bersama?"
+            },
+            {
+                keywords: ['senang', 'bahagia', 'gembira', 'suka', 'happy', 'good', 'baik'],
+                response: "Senang mendengarnya! 😊 Semoga kebahagiaan ini terus menyertaimu. Jangan ragu untuk berbagi kebahagiaanmu dengan orang-orang terdekat ya!"
+            },
+            {
+                keywords: ['terima kasih', 'makasih', 'thank', 'thanks'],
+                response: "Sama-sama! 🙏 Senang bisa membantu. Ingat, kamu selalu berharga dan layak mendapatkan kebahagiaan. Jaga dirimu ya! 💜"
+            },
+            {
+                keywords: ['butuh bantuan', 'tolong', 'help', 'bantu'],
+                response: "Saya di sini untuk membantu! 💪 Sebutkan apa yang kamu butuhkan, dan kita akan cari solusi bersama. Kamu tidak sendirian dalam perjalanan ini."
+            },
+            {
+                keywords: ['capek', 'lelah', 'ngantuk', 'tired', 'exhausted'],
+                response: "Istirahat itu penting, lho! 😴 Tubuh dan pikiranmu butuh waktu untuk memulihkan diri. Coba luangkan waktu untuk melakukan hal yang kamu nikmati, atau sekadar tidur siang sebentar."
+            },
+            {
+                keywords: ['bingung', 'tidak tahu', 'buntu', 'kebingungan'],
+                response: "Tidak apa-apa untuk merasa bingung. 🧠 Terkadang kita perlu jeda untuk melihat situasi dari sudut pandang yang berbeda. Coba tulis semua pilihan yang ada di depanmu, lalu pilih satu yang paling terasa benar."
+            }
+        ];
+
+        // Respons default jika tidak ada kata kunci yang cocok
+        const defaultResponses = [
+            "Terima kasih sudah berbagi dengan saya. 🫂 Apa yang kamu rasakan itu valid dan penting. Ingin cerita lebih lanjut?",
+            "Saya mendengarkanmu. 🧡 Terkadang berbicara dengan seseorang bisa membuat beban terasa lebih ringan. Apa lagi yang ingin kamu sampaikan?",
+            "Kamu berani sekali berbagi perasaanmu. 🌟 Setiap langkah kecil adalah bagian dari perjalanan penyembuhanmu. Ada yang bisa saya bantu lagi?",
+            "Saya di sini untuk mendukungmu. 💜 Apa pun yang kamu rasakan, itu adalah bagian dari dirimu yang berharga. Lanjutkan ceritanya, saya siap mendengar.",
+            "Kamu luar biasa karena sudah mau bercerita. 🌈 Kesehatan mental adalah hal yang penting, dan kamu sedang melangkah ke arah yang benar. Semangat!"
+        ];
+
+        // Fungsi untuk mendapatkan respons AI
+        function getAIResponse(userMessage) {
+            const lowerMsg = userMessage.toLowerCase();
+            
+            // Cek kata kunci
+            for (let item of aiResponses) {
+                for (let keyword of item.keywords) {
+                    if (lowerMsg.includes(keyword)) {
+                        return item.response;
+                    }
+                }
+            }
+
+            // Jika tidak ada yang cocok, ambil random dari default
+            return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+        }
+
+        // Fungsi menambah pesan ke chat
+        function addMessage(type, text) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${type}`;
+            
+            const avatar = document.createElement('div');
+            avatar.className = 'message-avatar';
+            avatar.textContent = type === 'user' ? '👤' : '🤖';
+            
+            const bubble = document.createElement('div');
+            bubble.className = 'message-bubble';
+            
+            const p = document.createElement('p');
+            p.textContent = text;
+            
+            const time = document.createElement('span');
+            time.className = 'message-time';
+            const now = new Date();
+            time.textContent = now.getHours().toString().padStart(2, '0') + ':' + 
+                               now.getMinutes().toString().padStart(2, '0');
+            
+            bubble.appendChild(p);
+            bubble.appendChild(time);
+            messageDiv.appendChild(avatar);
+            messageDiv.appendChild(bubble);
+            
+            chatMessages.appendChild(messageDiv);
+            
+            // Scroll ke bawah
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Fungsi untuk mengirim pesan
+        function sendMessage() {
+            const message = chatInput.value.trim();
+            if (message === '') return;
+
+            // Tambahkan pesan user
+            addMessage('user', message);
+            chatInput.value = '';
+            chatInput.style.height = 'auto';
+
+            // Simulasi jeda sebelum respons AI (seperti sedang mengetik)
+            const typingIndicator = document.createElement('div');
+            typingIndicator.className = 'message bot typing';
+            typingIndicator.innerHTML = `
+                <div class="message-avatar">🤖</div>
+                <div class="message-bubble">
+                    <div class="typing-dots">
+                        <span></span><span></span><span></span>
+                    </div>
+                </div>
+            `;
+            chatMessages.appendChild(typingIndicator);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+
+            // Tunggu 0.8-1.5 detik (seperti AI sedang berpikir)
+            const delay = 800 + Math.random() * 700;
+            setTimeout(() => {
+                // Hapus indikator mengetik
+                typingIndicator.remove();
+
+                // Dapatkan respons AI
+                const response = getAIResponse(message);
+                addMessage('bot', response);
+            }, delay);
+        }
+
+        // Fungsi untuk menangani tombol Enter
+        function handleKeyPress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+
+        // Fungsi untuk membersihkan chat
+        function clearChat() {
+            if (confirm('Hapus semua percakapan?')) {
+                chatMessages.innerHTML = `
+                    <div class="message bot">
+                        <div class="message-avatar">🤖</div>
+                        <div class="message-bubble">
+                            <p>Halo! 👋 Saya BloomWell AI, asisten kesehatan mentalmu. Ada yang bisa saya bantu hari ini? 😊</p>
+                            <span class="message-time">Sekarang</span>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        // Auto-resize textarea
+        chatInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 120) + 'px';
+        });
+
+        // Toggle sidebar
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // Inisialisasi
+        // (sudah ada pesan awal di HTML)
+    </script>
+
+</body>
+</html>
