@@ -31,5 +31,27 @@
     "type": "pdf",
     "status": "published",
     "file_path": ""
+  },
+  {
+    "id": 4,
+    "title": "Test Upload PDF",
+    "category": "mindfulness",
+    "category_label": "Mindfulness",
+    "description": "PDF uji yang ditambahkan secara manual untuk menguji fitur upload.",
+    "read_time": "1 menit baca",
+    "type": "pdf",
+    "status": "published",
+    "file_path": "backend/uploads/pdfs/test_upload.pdf"
+  },
+  {
+    "id": 1783049923,
+    "title": "Living with Anxiety",
+    "category": "anxiety",
+    "category_label": "Anxiety",
+    "description": "-",
+    "read_time": "5 menit baca",
+    "type": "pdf",
+    "status": "published",
+    "file_path": "backend/uploads/pdfs/01._Living_with_Anxiety_Author_Paul_Swift_Eva_Cyhlarova_Isabella_Goldie-1783049923.pdf"
   }
 ]

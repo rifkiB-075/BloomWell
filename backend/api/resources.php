@@ -9,6 +9,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit();
 }
 
+// Debug mode: tambahkan ?debug=1 ke URL untuk menampilkan pesan error mentah (sementara)
+$debug = (isset($_GET['debug']) && $_GET['debug'] === '1');
+if ($debug) {
+    ini_set('display_errors', 1);
+    ini_set('display_startup_errors', 1);
+    error_reporting(E_ALL);
+}
+
+// Tangkap error fatal di shutdown dan kembalikan sebagai JSON saat debug aktif
+register_shutdown_function(function () use ($debug) {
+    $err = error_get_last();
+    if ($err && $debug) {
+        http_response_code(500);
+        header('Content-Type: text/plain');
+        echo "FATAL ERROR: {$err['message']} in {$err['file']} on line {$err['line']}";
+    }
+});
+
 $rootDir = dirname(__DIR__, 2);
 $storageDir = $rootDir . '/backend/uploads/pdfs';
 if (!is_dir($storageDir)) {

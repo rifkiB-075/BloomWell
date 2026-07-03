@@ -192,6 +192,29 @@
                 <span>🗂️ 6 Topik</span>
                 <span>🌿 Cocok untuk Belajar Mandiri</span>
             </div>
+            
+            <!-- Admin upload: tampilkan hanya jika ?admin=1 di URL -->
+            <div id="adminUpload" style="margin-top:18px; display:none;">
+                <h3>Admin Upload</h3>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <input type="text" name="title" placeholder="Judul" required style="flex:1;padding:8px;border-radius:8px;border:1px solid #d1d5db;" />
+                        <select name="category" required style="padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+                            <option value="mindfulness">Mindfulness</option>
+                            <option value="anxiety">Kecemasan</option>
+                            <option value="relationship">Hubungan</option>
+                            <option value="selfcare">Self-Care</option>
+                            <option value="productivity">Produktivitas</option>
+                        </select>
+                    </div>
+                    <textarea name="description" placeholder="Deskripsi singkat" rows="2" style="width:100%;margin-top:8px;padding:8px;border-radius:8px;border:1px solid #d1d5db;"></textarea>
+                    <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+                        <input type="file" name="pdf_file" accept="application/pdf" required />
+                        <button type="submit" style="padding:8px 12px;border-radius:8px;background:#2b6cb0;color:#fff;border:none;cursor:pointer;">Upload</button>
+                        <span id="uploadMsg" style="color:#475569;margin-left:8px;"></span>
+                    </div>
+                </form>
+            </div>
         </section>
 
         <div class="filter-bar" id="filterBar">
@@ -213,28 +236,86 @@
         const buttons = document.querySelectorAll('.filter-btn');
         const resourceGrid = document.getElementById('resourceGrid');
 
-        async function loadResources() {
-            try {
-                const res = await fetch('backend/api/resources.php');
-                const data = await res.json();
-                const resources = data.resources || [];
+        // tampilkan admin upload jika ?admin=1
+        function isAdminMode() {
+            return new URLSearchParams(window.location.search).get('admin') === '1';
+        }
 
-                if (!resources.length) {
-                    resourceGrid.innerHTML = '<p>Belum ada buku PDF yang dipublikasikan.</p>';
+        // API endpoint; tambahkan debug flag otomatis ketika admin mode aktif
+        const apiEndpoint = 'backend/api/resources.php' + (isAdminMode() ? '?debug=1' : '');
+
+        // client-side fallback mode when PHP backend is unavailable
+        let clientMode = false;
+        const LOCAL_KEY = 'bw_local_resources';
+
+        function loadLocalResources() {
+            try {
+                const raw = sessionStorage.getItem(LOCAL_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveLocalResources(list) {
+            sessionStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+        }
+
+        function renderResources(list) {
+            if (!list || !list.length) {
+                resourceGrid.innerHTML = '<p>Belum ada buku PDF yang dipublikasikan.</p>';
+                return;
+            }
+
+            resourceGrid.innerHTML = list.map(item => `
+                <article class="resource-card" data-category="${item.category}">
+                    <div class="resource-meta"><span>${item.category_label || item.category}</span><span>${item.read_time || '5 menit baca'}</span></div>
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <a href="${item.file_path ? item.file_path : '#'}" class="btn" target="_blank" rel="noopener noreferrer">${item.file_path ? 'Baca PDF' : 'Segera tersedia'}</a>
+                </article>
+            `).join('');
+        }
+
+        async function loadResources() {
+            // Try server endpoint first
+            try {
+                const res = await fetch(apiEndpoint);
+                const text = await res.text();
+                let json = null;
+                try { json = JSON.parse(text); } catch(e) { json = null; }
+
+                if (res.ok && json && Array.isArray(json.resources)) {
+                    const serverResources = json.resources;
+                    // merge with any local session resources
+                    const local = loadLocalResources();
+                    const merged = serverResources.concat(local);
+                    renderResources(merged);
                     return;
                 }
 
-                resourceGrid.innerHTML = resources.map(item => `
-                    <article class="resource-card" data-category="${item.category}">
-                        <div class="resource-meta"><span>${item.category_label || item.category}</span><span>${item.read_time || '5 menit baca'}</span></div>
-                        <h3>${item.title}</h3>
-                        <p>${item.description}</p>
-                        <a href="${item.file_path ? item.file_path : '#'}" class="btn" target="_blank" rel="noopener noreferrer">${item.file_path ? 'Baca PDF' : 'Segera tersedia'}</a>
-                    </article>
-                `).join('');
+                // If server returned non-JSON (e.g., PHP error HTML), fallthrough to local/static
+                clientMode = true;
             } catch (err) {
-                resourceGrid.innerHTML = '<p>Gagal memuat koleksi buku.</p>';
+                clientMode = true;
             }
+
+            // Try loading static JSON file as fallback
+            try {
+                const res2 = await fetch('backend/data/resources.json');
+                if (res2.ok) {
+                    const staticList = await res2.json();
+                    const local = loadLocalResources();
+                    renderResources(staticList.concat(local));
+                    return;
+                }
+            } catch (e) {
+                // ignore
+            }
+
+            // Final fallback: only local session items
+            const localOnly = loadLocalResources();
+            renderResources(localOnly);
         }
 
         buttons.forEach(btn => {
@@ -252,6 +333,114 @@
         });
 
         loadResources();
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminDiv = document.getElementById('adminUpload');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadMsg = document.getElementById('uploadMsg');
+
+            if (isAdminMode()) {
+                adminDiv.style.display = 'block';
+            }
+
+            if (uploadForm) {
+                const submitBtn = uploadForm.querySelector('button[type=submit]');
+                uploadForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    uploadMsg.style.color = '#475569';
+                    uploadMsg.textContent = 'Mengunggah...';
+                    const formData = new FormData(uploadForm);
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // If backend unavailable, operate in clientMode: create object URL and save metadata to sessionStorage
+                    if (clientMode) {
+                        try {
+                            const file = formData.get('pdf_file');
+                            const title = formData.get('title') || 'Untitled';
+                            const category = formData.get('category') || 'misc';
+                            const description = formData.get('description') || '';
+
+                            // read file as data URL so it persists in sessionStorage across reloads
+                            let dataUrl = '';
+                            if (file && file.size && file.type === 'application/pdf') {
+                                dataUrl = await new Promise((resolve, reject) => {
+                                    const reader = new FileReader();
+                                    reader.onload = () => resolve(reader.result);
+                                    reader.onerror = () => reject(new Error('Gagal membaca file'));
+                                    reader.readAsDataURL(file);
+                                });
+                            }
+
+                            const newItem = {
+                                id: Date.now(),
+                                title,
+                                category,
+                                category_label: (category && category[0]) ? category.charAt(0).toUpperCase() + category.slice(1) : category,
+                                description,
+                                read_time: '1 menit baca',
+                                type: 'pdf',
+                                status: 'published',
+                                file_path: dataUrl
+                            };
+
+                            const local = loadLocalResources();
+                            local.push(newItem);
+                            saveLocalResources(local);
+                            uploadMsg.style.color = 'green';
+                            uploadMsg.textContent = 'Berhasil (lokal, hanya di browser ini).';
+                        }
+                        catch (err) {
+                            uploadMsg.style.color = 'crimson';
+                            uploadMsg.textContent = 'Gagal membuat resource lokal.';
+                            console.error('Local upload error', err);
+                        } finally {
+                            if (submitBtn) submitBtn.disabled = false;
+                            uploadForm.reset();
+                            loadResources();
+                        }
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch(apiEndpoint, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const text = await res.text();
+                        let json = null;
+                        try {
+                            json = JSON.parse(text);
+                        } catch (parseErr) {
+                            // non-JSON response (PHP error/notice), surface raw text
+                        }
+
+                        if (res.ok && json && json.success) {
+                            uploadMsg.style.color = 'green';
+                            uploadMsg.textContent = 'Berhasil diupload.';
+                            uploadForm.reset();
+                            loadResources();
+                        } else {
+                            uploadMsg.style.color = 'crimson';
+                            uploadMsg.textContent = (json && json.message) ? json.message : (text || 'Upload gagal.');
+                            console.error('Upload failed:', res.status, text);
+                            // if server returned HTML error, enable client fallback
+                            if (!json) {
+                                clientMode = true;
+                                uploadMsg.textContent += ' — beralih ke mode lokal.';
+                            }
+                        }
+                    } catch (err) {
+                        uploadMsg.style.color = 'crimson';
+                        uploadMsg.textContent = 'Terjadi kesalahan jaringan atau server. Beralih ke mode lokal.';
+                        console.error('Upload error', err);
+                        clientMode = true;
+                    } finally {
+                        if (submitBtn) submitBtn.disabled = false;
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
