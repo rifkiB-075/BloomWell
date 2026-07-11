@@ -20,6 +20,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/professionaltools.css">
 </head>
 
 <body>
@@ -46,5 +47,305 @@
 
     </nav>
 </header>
+
+<main class="pt-wrap">
+
+    <!-- ============ HERO ============ -->
+    <section class="pt-hero">
+        <h1>Layanan Profesional</h1>
+        <p>Terhubung dengan psikolog berlisensi yang siap mendengarkan. Pilih profesional yang sesuai kebutuhanmu, lalu kirim pesan langsung untuk mulai konsultasi.</p>
+    </section>
+
+    <!-- ============ SEARCH & FILTER ============ -->
+    <section class="pt-controls">
+        <div class="pt-search">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input type="text" id="pt-search-input" placeholder="Cari nama psikolog atau spesialisasi...">
+        </div>
+        <div class="pt-filters" id="pt-filters">
+            <button class="pt-filter-btn active" data-filter="Semua">Semua</button>
+            <button class="pt-filter-btn" data-filter="Kecemasan">Kecemasan</button>
+            <button class="pt-filter-btn" data-filter="Depresi">Depresi</button>
+            <button class="pt-filter-btn" data-filter="Trauma">Trauma</button>
+            <button class="pt-filter-btn" data-filter="Remaja">Remaja</button>
+            <button class="pt-filter-btn" data-filter="Pasangan">Pasangan &amp; Keluarga</button>
+            <button class="pt-filter-btn" data-filter="Stres Kerja">Stres Kerja</button>
+        </div>
+    </section>
+
+    <!-- ============ GRID DOKTER (di-render via JS) ============ -->
+    <section class="pt-grid" id="pt-grid"></section>
+
+</main>
+
+<!-- ============ MODAL PESAN ============ -->
+<div class="pt-modal-overlay" id="pt-modal-overlay">
+    <div class="pt-modal">
+        <div class="pt-modal-header">
+            <img id="pt-modal-avatar" src="" alt="">
+            <div class="pt-modal-header-info">
+                <h4 id="pt-modal-name"></h4>
+                <p id="pt-modal-status"></p>
+            </div>
+            <button class="pt-modal-close" id="pt-modal-close"><i class="fa-solid fa-xmark"></i></button>
+        </div>
+        <div class="pt-modal-body" id="pt-modal-body">
+            <!-- pesan akan dirender di sini -->
+        </div>
+        <div class="pt-typing" id="pt-typing">Psikolog sedang mengetik...</div>
+        <div class="pt-modal-footer">
+            <input type="text" id="pt-message-input" placeholder="Tulis pesan...">
+            <button class="pt-send-btn" id="pt-send-btn"><i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* ==========================================================
+   DATA DAFTAR PSIKOLOG
+   Avatar memakai layanan DiceBear (ilustrasi kartun, bukan
+   foto orang sungguhan) supaya aman dipakai sebagai placeholder.
+   Ganti field "avatar" dengan URL foto asli dokter saat data
+   real sudah tersedia dari backend/database.
+   ========================================================== */
+const doctors = [
+    {
+        id: "dr-01",
+        name: "Dr. Amira Putri, M.Psi., Psikolog",
+        title: "Psikolog Klinis",
+        tags: ["Kecemasan", "Stres Kerja"],
+        rating: 4.9,
+        reviews: 128,
+        experience: 8,
+        status: "online",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Amira&backgroundColor=b6e3f4"
+    },
+    {
+        id: "dr-02",
+        name: "Dr. Bagas Wirawan, M.Psi., Psikolog",
+        title: "Psikolog Klinis Dewasa",
+        tags: ["Depresi", "Trauma"],
+        rating: 4.8,
+        reviews: 96,
+        experience: 11,
+        status: "online",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Bagas&backgroundColor=d1d4f9"
+    },
+    {
+        id: "dr-03",
+        name: "Dr. Citra Lestari, M.Psi., Psikolog",
+        title: "Psikolog Anak & Remaja",
+        tags: ["Remaja", "Kecemasan"],
+        rating: 4.9,
+        reviews: 152,
+        experience: 6,
+        status: "away",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Citra&backgroundColor=ffd5dc"
+    },
+    {
+        id: "dr-04",
+        name: "Dr. Dimas Nugraha, M.Psi., Psikolog",
+        title: "Psikolog Keluarga",
+        tags: ["Pasangan", "Trauma"],
+        rating: 4.7,
+        reviews: 74,
+        experience: 9,
+        status: "offline",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Dimas&backgroundColor=c0f2c0"
+    },
+    {
+        id: "dr-05",
+        name: "Dr. Erika Salsabila, M.Psi., Psikolog",
+        title: "Psikolog Klinis",
+        tags: ["Depresi", "Stres Kerja"],
+        rating: 4.85,
+        reviews: 110,
+        experience: 7,
+        status: "online",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Erika&backgroundColor=ffe3b3"
+    },
+    {
+        id: "dr-06",
+        name: "Dr. Fajar Ramadhan, M.Psi., Psikolog",
+        title: "Psikolog Organisasi",
+        tags: ["Stres Kerja", "Kecemasan"],
+        rating: 4.75,
+        reviews: 63,
+        experience: 5,
+        status: "away",
+        avatar: "https://api.dicebear.com/7.x/personas/svg?seed=Fajar&backgroundColor=e0d4fc"
+    }
+];
+
+const statusLabel = { online: "Online sekarang", away: "Sedang sibuk", offline: "Sedang offline" };
+
+const grid = document.getElementById("pt-grid");
+const searchInput = document.getElementById("pt-search-input");
+const filterBar = document.getElementById("pt-filters");
+let activeFilter = "Semua";
+
+/* ---------- RENDER KARTU DOKTER ---------- */
+function renderDoctors() {
+    const keyword = searchInput.value.trim().toLowerCase();
+
+    const filtered = doctors.filter(doc => {
+        const matchFilter = activeFilter === "Semua" || doc.tags.includes(activeFilter);
+        const matchSearch = !keyword ||
+            doc.name.toLowerCase().includes(keyword) ||
+            doc.tags.some(t => t.toLowerCase().includes(keyword));
+        return matchFilter && matchSearch;
+    });
+
+    if (filtered.length === 0) {
+        grid.innerHTML = `<div class="pt-empty">Tidak ada psikolog yang cocok dengan pencarianmu.</div>`;
+        return;
+    }
+
+    grid.innerHTML = filtered.map(doc => `
+        <div class="pt-card">
+            <div class="pt-avatar-wrap">
+                <img src="${doc.avatar}" alt="${doc.name}">
+                <span class="pt-status-dot ${doc.status}"></span>
+            </div>
+            <div class="pt-name">${doc.name}</div>
+            <div class="pt-title">${doc.title} &bull; ${doc.experience} th pengalaman</div>
+            <div class="pt-tags">
+                ${doc.tags.map(t => `<span class="pt-tag">${t}</span>`).join("")}
+            </div>
+            <div class="pt-meta">
+                <span><i class="fa-solid fa-star"></i> ${doc.rating}</span>
+                <span><i class="fa-regular fa-comment"></i> ${doc.reviews} ulasan</span>
+            </div>
+            <button class="pt-btn-message" data-id="${doc.id}">
+                <i class="fa-regular fa-paper-plane"></i> Kirim Pesan
+            </button>
+        </div>
+    `).join("");
+
+    grid.querySelectorAll(".pt-btn-message").forEach(btn => {
+        btn.addEventListener("click", () => openChat(btn.dataset.id));
+    });
+}
+
+filterBar.querySelectorAll(".pt-filter-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+        filterBar.querySelector(".active").classList.remove("active");
+        btn.classList.add("active");
+        activeFilter = btn.dataset.filter;
+        renderDoctors();
+    });
+});
+
+searchInput.addEventListener("input", renderDoctors);
+
+/* ==========================================================
+   MODAL CHAT
+   Riwayat pesan per dokter disimpan di localStorage browser
+   (khusus demo front-end). Untuk produksi, ganti fungsi
+   loadHistory/saveHistory agar memanggil endpoint backend
+   (mis. server.js atau backend/api) supaya pesan benar-benar
+   tersimpan dan diteruskan ke dokter terkait.
+   ========================================================== */
+const overlay = document.getElementById("pt-modal-overlay");
+const modalAvatar = document.getElementById("pt-modal-avatar");
+const modalName = document.getElementById("pt-modal-name");
+const modalStatus = document.getElementById("pt-modal-status");
+const modalBody = document.getElementById("pt-modal-body");
+const typingIndicator = document.getElementById("pt-typing");
+const messageInput = document.getElementById("pt-message-input");
+const sendBtn = document.getElementById("pt-send-btn");
+let currentDoctor = null;
+
+function storageKey(id) { return `bloomwell_chat_${id}`; }
+
+function loadHistory(id) {
+    try {
+        const raw = localStorage.getItem(storageKey(id));
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        return [];
+    }
+}
+
+function saveHistory(id, history) {
+    try {
+        localStorage.setItem(storageKey(id), JSON.stringify(history));
+    } catch (e) { /* storage penuh / tidak tersedia, abaikan */ }
+}
+
+function renderMessages(history) {
+    if (history.length === 0) {
+        modalBody.innerHTML = `<div class="pt-msg system-note">Mulai percakapan dengan ${currentDoctor.name.split(",")[0]}. Ceritakan apa yang ingin kamu diskusikan.</div>`;
+        return;
+    }
+    modalBody.innerHTML = history.map(m =>
+        `<div class="pt-msg ${m.from}">${m.text}</div>`
+    ).join("");
+    modalBody.scrollTop = modalBody.scrollHeight;
+}
+
+function openChat(id) {
+    currentDoctor = doctors.find(d => d.id === id);
+    if (!currentDoctor) return;
+
+    modalAvatar.src = currentDoctor.avatar;
+    modalName.textContent = currentDoctor.name;
+    modalStatus.textContent = statusLabel[currentDoctor.status];
+
+    renderMessages(loadHistory(id));
+    overlay.classList.add("show");
+    messageInput.value = "";
+    messageInput.focus();
+}
+
+function closeChat() {
+    overlay.classList.remove("show");
+    currentDoctor = null;
+}
+
+document.getElementById("pt-modal-close").addEventListener("click", closeChat);
+overlay.addEventListener("click", (e) => {
+    if (e.target === overlay) closeChat();
+});
+
+function sendMessage() {
+    const text = messageInput.value.trim();
+    if (!text || !currentDoctor) return;
+
+    const history = loadHistory(currentDoctor.id);
+    history.push({ from: "from-user", text });
+    saveHistory(currentDoctor.id, history);
+    renderMessages(history);
+    messageInput.value = "";
+
+    // Simulasi balasan otomatis (placeholder demo).
+    // Di produksi, hapus bagian ini dan gantikan dengan pesan
+    // real dari dokter melalui backend/notifikasi.
+    if (currentDoctor.status !== "offline") {
+        typingIndicator.classList.add("show");
+        setTimeout(() => {
+            typingIndicator.classList.remove("show");
+            const updated = loadHistory(currentDoctor.id);
+            updated.push({
+                from: "from-doctor",
+                text: "Terima kasih sudah menghubungi saya. Pesanmu sudah saya terima dan akan saya balas secepatnya."
+            });
+            saveHistory(currentDoctor.id, updated);
+            if (currentDoctor && overlay.classList.contains("show")) {
+                renderMessages(updated);
+            }
+        }, 1400);
+    }
+}
+
+sendBtn.addEventListener("click", sendMessage);
+messageInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") sendMessage();
+});
+
+/* ---------- INIT ---------- */
+renderDoctors();
+</script>
+
 </body>
 </html>
