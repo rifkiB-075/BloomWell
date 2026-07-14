@@ -186,6 +186,78 @@
             color: #8f7aa3;
         }
 
+        .detail-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(45, 31, 70, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .detail-modal-overlay.show {
+            display: flex;
+        }
+
+        .detail-modal {
+            width: min(480px, 100%);
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+            padding: 22px;
+            position: relative;
+        }
+
+        .detail-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border: none;
+            background: #f3ebfb;
+            color: #6d4a95;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .detail-modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3d2c5e;
+            margin-bottom: 8px;
+        }
+
+        .detail-modal-subtitle {
+            font-size: 13px;
+            color: #8a7a99;
+            margin-bottom: 14px;
+        }
+
+        .detail-entry {
+            background: #faf6ff;
+            border: 1px solid #eadff8;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        .detail-entry strong {
+            display: block;
+            color: #3d2c5e;
+            margin-bottom: 4px;
+        }
+
+        .detail-entry .note {
+            color: #6c5b7f;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 6px;
+        }
+
         /* Legend Mood Colors */
         .mood-legend {
             display: flex;
@@ -327,6 +399,13 @@
                 </div>
             </div>
         </main>
+    </div>
+
+    <div class="detail-modal-overlay" id="detailModalOverlay">
+        <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+            <button class="detail-modal-close" id="detailModalClose" aria-label="Tutup detail">✕</button>
+            <div id="detailModalContent"></div>
+        </div>
     </div>
 
     <script>
@@ -572,26 +651,37 @@
 
         function showDateDetail(dateStr) {
             const recordsForDate = moodRecords.filter(r => r.date === dateStr);
+            const modal = document.getElementById('detailModalOverlay');
+            const content = document.getElementById('detailModalContent');
+
             if (recordsForDate.length === 0) {
-                alert(`📅 ${formatDateDisplay(dateStr)}\nTidak ada catatan mood untuk hari ini.`);
+                content.innerHTML = `
+                    <h3 class="detail-modal-title">📅 ${formatDateDisplay(dateStr)}</h3>
+                    <p class="detail-modal-subtitle">Belum ada catatan mood di tanggal ini.</p>
+                `;
+                modal.classList.add('show');
                 return;
             }
 
             const dateDisplay = formatDateDisplay(dateStr);
-            let message = `📅 ${dateDisplay}\n`;
-            message += `📊 ${recordsForDate.length} catatan mood:\n\n`;
-            
-            recordsForDate.forEach((r, i) => {
+            const entriesHtml = recordsForDate.map((r, i) => {
                 const info = moodMap[r.mood];
                 const emoji = info ? info.emoji : '📌';
-                message += `${i+1}. ${emoji} ${r.mood}`;
-                if (r.note && r.note.trim()) {
-                    message += `\n   📝 "${r.note.trim()}"`;
-                }
-                message += '\n';
-            });
-            
-            alert(message);
+                const note = r.note && r.note.trim() ? r.note.trim() : 'Tidak ada catatan tambahan.';
+                return `
+                    <div class="detail-entry">
+                        <strong>${i + 1}. ${emoji} ${r.mood}</strong>
+                        <div class="note">📝 ${note}</div>
+                    </div>
+                `;
+            }).join('');
+
+            content.innerHTML = `
+                <h3 class="detail-modal-title">📅 ${dateDisplay}</h3>
+                <p class="detail-modal-subtitle">${recordsForDate.length} catatan mood tersimpan</p>
+                ${entriesHtml}
+            `;
+            modal.classList.add('show');
         }
 
         function formatDateDisplay(dateStr) {
@@ -623,6 +713,22 @@
         function toggleSidebar() {
             document.getElementById('sidebar').classList.toggle('collapsed');
         }
+
+        function closeDetailModal() {
+            document.getElementById('detailModalOverlay').classList.remove('show');
+        }
+
+        document.getElementById('detailModalClose').addEventListener('click', closeDetailModal);
+        document.getElementById('detailModalOverlay').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeDetailModal();
+            }
+        });
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeDetailModal();
+            }
+        });
 
         // ============================================
         // INISIALISASI

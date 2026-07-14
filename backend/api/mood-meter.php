@@ -52,10 +52,13 @@ mysqli_query($conn, "CREATE TABLE IF NOT EXISTS mood_meter_logs (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
     mood_value TINYINT UNSIGNED NOT NULL COMMENT '0–100 skala mood meter',
+    note TEXT NULL,
     logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_time (user_id, logged_at)
 ) ENGINE=InnoDB");
+
+mysqli_query($conn, "ALTER TABLE mood_meter_logs ADD COLUMN IF NOT EXISTS note TEXT NULL");
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $userId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;
@@ -63,7 +66,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
         $userId = ensureUserId($conn);
     }
 
-    $stmt = mysqli_prepare($conn, 'SELECT id, mood_value, logged_at FROM mood_meter_logs WHERE user_id = ? ORDER BY logged_at DESC');
+    $stmt = mysqli_prepare($conn, 'SELECT id, mood_value, note, logged_at FROM mood_meter_logs WHERE user_id = ? ORDER BY logged_at DESC');
     mysqli_stmt_bind_param($stmt, 'i', $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -74,6 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
             'id' => (int)$row['id'],
             'mood_value' => (int)$row['mood_value'],
             'mood_label' => getMoodLabelFromValue((int)$row['mood_value']),
+            'note' => $row['note'] ?? '',
             'logged_at' => $row['logged_at'],
             'entry_date' => date('Y-m-d', strtotime($row['logged_at']))
         ];
@@ -95,6 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $moodValue = isset($data['mood_value']) ? (int)$data['mood_value'] : 0;
     $moodLabel = trim($data['mood_label'] ?? '');
+    $note = trim($data['note'] ?? '');
 
     if ($moodValue < 0 || $moodValue > 100) {
         http_response_code(400);
@@ -107,8 +112,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $moodLabel = getMoodLabelFromValue($moodValue);
     }
 
-    $stmt = mysqli_prepare($conn, 'INSERT INTO mood_meter_logs (user_id, mood_value) VALUES (?, ?)');
-    mysqli_stmt_bind_param($stmt, 'ii', $userId, $moodValue);
+    $stmt = mysqli_prepare($conn, 'INSERT INTO mood_meter_logs (user_id, mood_value, note) VALUES (?, ?, ?)');
+    mysqli_stmt_bind_param($stmt, 'iis', $userId, $moodValue, $note);
 
     if (!mysqli_stmt_execute($stmt)) {
         http_response_code(500);
@@ -120,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     mysqli_stmt_close($stmt);
 
-    $stmt = mysqli_prepare($conn, 'SELECT id, mood_value, logged_at FROM mood_meter_logs WHERE user_id = ? ORDER BY logged_at DESC');
+    $stmt = mysqli_prepare($conn, 'SELECT id, mood_value, note, logged_at FROM mood_meter_logs WHERE user_id = ? ORDER BY logged_at DESC');
     mysqli_stmt_bind_param($stmt, 'i', $userId);
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
@@ -131,6 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'id' => (int)$row['id'],
             'mood_value' => (int)$row['mood_value'],
             'mood_label' => getMoodLabelFromValue((int)$row['mood_value']),
+            'note' => $row['note'] ?? '',
             'logged_at' => $row['logged_at'],
             'entry_date' => date('Y-m-d', strtotime($row['logged_at']))
         ];
