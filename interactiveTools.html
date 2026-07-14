@@ -606,7 +606,7 @@
             updateFaceExpression(moods[i].label);
         }
 
-        function saveMood() {
+        async function saveMood() {
             if (selectedMood === null) { alert('Pilih mood dulu yaa~ ✨'); return; }
             if (records.length >= MAX) { 
                 alert('🎉 Botol sudah penuh! Kamu hebat! Ayo lanjutkan esok hari ya~ 🎉'); 
@@ -614,22 +614,45 @@
             }
             
             const selectedMoodObj = moods[selectedMood];
-            records.push({ mood: selectedMoodObj.label, note: document.getElementById('journal-input').value.trim() });
-            
-            // Update face expression based on the mood just added
-            updateFaceExpression(selectedMoodObj.label);
-            
-            document.getElementById('journal-input').value = '';
-            selectedMood = null;
-            renderMoodBtns();
-            renderBottle();
-            renderLegend();
-            animateBottle();
-            showBubble();
-            
-            const t = document.getElementById('save-toast');
-            t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
+            const note = document.getElementById('journal-input').value.trim();
+            const moodValue = Math.max(10, Math.min(100, 100 - (selectedMood * 15)));
+
+            try {
+                const response = await fetch('backend/api/mood-meter.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: 1,
+                        mood_value: moodValue,
+                        mood_label: selectedMoodObj.label,
+                        note: note
+                    })
+                });
+
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menyimpan data mood');
+                }
+
+                records.push({ mood: selectedMoodObj.label, note, date: new Date().toISOString().split('T')[0] });
+                updateFaceExpression(selectedMoodObj.label);
+                
+                document.getElementById('journal-input').value = '';
+                selectedMood = null;
+                renderMoodBtns();
+                renderBottle();
+                renderLegend();
+                animateBottle();
+                showBubble();
+                
+                const t = document.getElementById('save-toast');
+                t.textContent = '🎉 Mood tersimpan ke database! 🎉';
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2200);
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan mood: ' + error.message);
+            }
         }
 
         function toggleSidebar() {

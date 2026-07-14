@@ -331,30 +331,24 @@
 
     <script>
         // ============================================
-        // AMBIL DATA DARI LOCAL STORAGE (dari interactiveTools)
+        // AMBIL DATA DARI DATABASE VIA API
         // ============================================
-        function getMoodRecords() {
+        async function getMoodRecords() {
             try {
-                const stored = localStorage.getItem('bloomwell_mood_records');
-                if (stored) {
-                    return JSON.parse(stored);
+                const response = await fetch('backend/api/mood-meter.php?user_id=1');
+                const result = await response.json();
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal mengambil data mood');
                 }
-            } catch (e) {
-                console.warn('Gagal baca localStorage:', e);
-            }
-            
-            // Data default jika belum ada (contoh)
-            return [
-                { mood: 'Senang', note: 'Hari yang cerah!', date: getTodayString() },
-                { mood: 'Tenang', note: 'Meditasi pagi', date: getYesterdayString() },
-            ];
-        }
 
-        function saveMoodRecords(records) {
-            try {
-                localStorage.setItem('bloomwell_mood_records', JSON.stringify(records));
+                return (result.entries || []).map(entry => ({
+                    mood: entry.mood_label || 'Netral',
+                    note: entry.note || '',
+                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
+                }));
             } catch (e) {
-                console.warn('Gagal simpan ke localStorage:', e);
+                console.warn('Gagal ambil data dari database:', e);
+                return [];
             }
         }
 
@@ -376,7 +370,7 @@
         // ============================================
         // DATA & STATE
         // ============================================
-        let moodRecords = getMoodRecords();
+        let moodRecords = [];
         let currentDate = new Date();
         let selectedDate = null;
 
@@ -633,12 +627,17 @@
         // ============================================
         // INISIALISASI
         // ============================================
-        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        renderLegend();
+        async function loadMoodData() {
+            moodRecords = await getMoodRecords();
+            renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+            renderLegend();
+        }
+
+        loadMoodData();
 
         // Auto-refresh data setiap 5 detik (jika ada perubahan dari halaman lain)
-        setInterval(() => {
-            const newRecords = getMoodRecords();
+        setInterval(async () => {
+            const newRecords = await getMoodRecords();
             if (JSON.stringify(newRecords) !== JSON.stringify(moodRecords)) {
                 moodRecords = newRecords;
                 renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
