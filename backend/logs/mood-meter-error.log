@@ -1,0 +1,128 @@
+[2026-07-14 02:24:45] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:24:50] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:34] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:35] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:40] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:45] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:50] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:53] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:25:58] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:26:03] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:26:08] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:26:13] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:26:18] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:26:55] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:29:01] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 C:\laragon\www\BloomWell\tmp-mooddebug.php(18): require('C:\\laragon\\www\\...')
+#5 {main}
+[2026-07-14 02:29:02] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 {main}
+[2026-07-14 02:29:54] mysqli_real_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php:30
+Stack trace:
+#0 [internal function]: {closure}(2, 'mysqli_real_con...', 'C:\\laragon\\www\\...', 30)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(30): mysqli_real_connect(Object(mysqli), 'localhost', 'root', Object(SensitiveParameterValue), 'bloomwell_db')
+#2 C:\laragon\www\BloomWell\backend\config\database.php(41): tryDatabaseConnection('localhost', 'root', '', 'bloomwell_db')
+#3 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#4 C:\laragon\www\BloomWell\tmp-mooddebug.php(18): require('C:\\laragon\\www\\...')
+#5 {main}
+[2026-07-14 02:37:46] Cannot modify header information - headers already sent by (output started at C:\laragon\www\BloomWell\tmp-cli-wrapper.php:2) in C:\laragon\www\BloomWell\backend\config\database.php:49
+Stack trace:
+#0 [internal function]: {closure}(2, 'Cannot modify h...', 'C:\\laragon\\www\\...', 49)
+#1 C:\laragon\www\BloomWell\backend\config\database.php(49): header('Content-Type: a...')
+#2 C:\laragon\www\BloomWell\backend\api\mood-meter.php(46): require('C:\\laragon\\www\\...')
+#3 C:\laragon\www\BloomWell\tmp-cli-wrapper.php(2): require('C:\\laragon\\www\\...')
+#4 {main}

@@ -258,6 +258,84 @@
             margin-top: 6px;
         }
 
+        .detail-entry-score {
+            font-size: 12px;
+            color: #8b6aa8;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .detail-entry-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .detail-action-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .detail-action-btn.edit {
+            background: #f0e7ff;
+            color: #6d4a95;
+        }
+
+        .detail-action-btn.delete {
+            background: #ffe6e6;
+            color: #a94b4b;
+        }
+
+        .detail-edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .detail-edit-form select,
+        .detail-edit-form textarea {
+            border: 1px solid #e4d9f2;
+            border-radius: 12px;
+            padding: 8px 10px;
+            font: inherit;
+            color: #4d3f63;
+            background: white;
+        }
+
+        .detail-edit-form textarea {
+            min-height: 72px;
+            resize: vertical;
+        }
+
+        .detail-edit-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .detail-edit-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .detail-edit-actions .save {
+            background: #8f6db3;
+            color: white;
+        }
+
+        .detail-edit-actions .cancel {
+            background: #f3ebfb;
+            color: #6d4a95;
+        }
+
         /* Legend Mood Colors */
         .mood-legend {
             display: flex;
@@ -412,16 +490,49 @@
         // ============================================
         // AMBIL DATA DARI DATABASE VIA API
         // ============================================
+        async function fetchMoodApi(url, options = {}) {
+            const candidates = [
+                url,
+                url.replace(/^backend\//, 'http://127.0.0.1:8000/backend/'),
+                url.replace(/^backend\//, 'http://localhost:8000/backend/')
+            ];
+
+            let lastError = 'Tidak ada respons dari server mood';
+            for (const candidate of candidates) {
+                try {
+                    const response = await fetch(candidate, options);
+                    const text = await response.text();
+                    let payload = null;
+                    try {
+                        payload = text ? JSON.parse(text) : null;
+                    } catch (err) {
+                        payload = { success: false, message: text.slice(0, 220) };
+                    }
+
+                    if (response.ok && payload) {
+                        return { payload, response, candidate };
+                    }
+
+                    lastError = payload?.message || `HTTP ${response.status}`;
+                } catch (error) {
+                    lastError = error.message;
+                }
+            }
+
+            throw new Error(lastError);
+        }
+
         async function getMoodRecords() {
             try {
-                const response = await fetch('backend/api/mood-meter.php?user_id=1');
-                const result = await response.json();
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php?user_id=1');
                 if (!result.success) {
                     throw new Error(result.message || 'Gagal mengambil data mood');
                 }
 
                 return (result.entries || []).map(entry => ({
+                    id: entry.id,
                     mood: entry.mood_label || 'Netral',
+                    moodValue: entry.mood_value || 50,
                     note: entry.note || '',
                     date: entry.entry_date || entry.logged_at?.split(' ')[0]
                 }));
@@ -649,6 +760,79 @@
             moodLegendEl.innerHTML = html || '<span style="color:#aaa; font-size:12px;">Belum ada mood tercatat</span>';
         }
 
+        function getMoodValueFromLabel(label) {
+            const moodValues = {
+                'Senang': 85,
+                'Tenang': 72,
+                'Netral': 55,
+                'Sedih': 34,
+                'Marah': 24,
+                'Cemas': 28,
+                'Lelah': 22
+            };
+            return moodValues[label] || 50;
+        }
+
+        async function updateMoodEntry(entryId, moodLabel, note) {
+            try {
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: 1,
+                        id: entryId,
+                        mood_value: getMoodValueFromLabel(moodLabel),
+                        note
+                    })
+                });
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal memperbarui mood');
+                }
+                moodRecords = (result.entries || []).map(entry => ({
+                    id: entry.id,
+                    mood: entry.mood_label || 'Netral',
+                    moodValue: entry.mood_value || 50,
+                    note: entry.note || '',
+                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
+                }));
+                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+                renderLegend();
+                return true;
+            } catch (error) {
+                console.error(error);
+                alert('Gagal mengedit mood: ' + error.message);
+                return false;
+            }
+        }
+
+        async function deleteMoodEntry(entryId) {
+            if (!confirm('Hapus catatan mood ini?')) return;
+            try {
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ user_id: 1, id: entryId })
+                });
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menghapus mood');
+                }
+                moodRecords = (result.entries || []).map(entry => ({
+                    id: entry.id,
+                    mood: entry.mood_label || 'Netral',
+                    moodValue: entry.mood_value || 50,
+                    note: entry.note || '',
+                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
+                }));
+                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+                renderLegend();
+                return true;
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menghapus mood: ' + error.message);
+                return false;
+            }
+        }
+
         function showDateDetail(dateStr) {
             const recordsForDate = moodRecords.filter(r => r.date === dateStr);
             const modal = document.getElementById('detailModalOverlay');
@@ -664,6 +848,9 @@
             }
 
             const dateDisplay = formatDateDisplay(dateStr);
+            const averageScore = Math.round(
+                recordsForDate.reduce((sum, item) => sum + (item.moodValue || 0), 0) / recordsForDate.length
+            );
             const entriesHtml = recordsForDate.map((r, i) => {
                 const info = moodMap[r.mood];
                 const emoji = info ? info.emoji : '📌';
@@ -671,16 +858,67 @@
                 return `
                     <div class="detail-entry">
                         <strong>${i + 1}. ${emoji} ${r.mood}</strong>
+                        <div class="detail-entry-score">📈 Skor: ${r.moodValue || 0}/100</div>
                         <div class="note">📝 ${note}</div>
+                        <div class="detail-entry-actions">
+                            <button class="detail-action-btn edit" data-action="edit" data-entry-id="${r.id}">✏️ Edit</button>
+                            <button class="detail-action-btn delete" data-action="delete" data-entry-id="${r.id}">🗑️ Hapus</button>
+                        </div>
                     </div>
                 `;
             }).join('');
 
             content.innerHTML = `
                 <h3 class="detail-modal-title">📅 ${dateDisplay}</h3>
-                <p class="detail-modal-subtitle">${recordsForDate.length} catatan mood tersimpan</p>
+                <p class="detail-modal-subtitle">${recordsForDate.length} catatan mood tersimpan • Skor rata-rata ${averageScore}/100</p>
                 ${entriesHtml}
             `;
+
+            content.querySelectorAll('[data-action="edit"]').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const entryId = parseInt(button.getAttribute('data-entry-id'), 10);
+                    const entry = moodRecords.find(item => item.id === entryId);
+                    if (!entry) return;
+                    content.innerHTML = `
+                        <h3 class="detail-modal-title">✏️ Edit Mood</h3>
+                        <p class="detail-modal-subtitle">${dateDisplay}</p>
+                        <div class="detail-edit-form">
+                            <label for="editMoodSelect">Mood</label>
+                            <select id="editMoodSelect">
+                                ${Object.keys(moodMap).map(label => `<option value="${label}" ${entry.mood === label ? 'selected' : ''}>${label}</option>`).join('')}
+                            </select>
+                            <label for="editMoodNote">Catatan</label>
+                            <textarea id="editMoodNote">${entry.note || ''}</textarea>
+                            <div class="detail-edit-actions">
+                                <button class="save" id="saveEditBtn">💾 Simpan</button>
+                                <button class="cancel" id="cancelEditBtn">Batal</button>
+                            </div>
+                        </div>
+                    `;
+                    document.getElementById('saveEditBtn').addEventListener('click', async () => {
+                        const moodLabel = document.getElementById('editMoodSelect').value;
+                        const note = document.getElementById('editMoodNote').value.trim();
+                        const ok = await updateMoodEntry(entryId, moodLabel, note);
+                        if (ok) {
+                            showDateDetail(dateStr);
+                        }
+                    });
+                    document.getElementById('cancelEditBtn').addEventListener('click', () => {
+                        showDateDetail(dateStr);
+                    });
+                });
+            });
+
+            content.querySelectorAll('[data-action="delete"]').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const entryId = parseInt(button.getAttribute('data-entry-id'), 10);
+                    const ok = await deleteMoodEntry(entryId);
+                    if (ok) {
+                        showDateDetail(dateStr);
+                    }
+                });
+            });
+
             modal.classList.add('show');
         }
 

@@ -1,24 +1,12 @@
 <?php
 $host = 'localhost';
-$user = 'root';
-$password = '';  // biarkan kosong atau  password default Laragon "root"
 $dbname = 'bloomwell_db';
+$dbUser = 'root';
+$dbPassword = 'root';
 
-// Pakai mysqli dengan cara ini
-$conn = mysqli_connect($host, $user, $password, $dbname);
-
-// Cek koneksi
-if (!$conn) {
-    die(json_encode(["error" => "Koneksi gagal: " . mysqli_connect_error()]));
-}
-
-// Setting CORS
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
-header("Access-Control-Allow-Headers: Content-Type");
-
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+mysqli_report(MYSQLI_REPORT_OFF);
+$conn = @mysqli_connect($host, $dbUser, $dbPassword, $dbname);
+if ($conn instanceof mysqli) {
+    @mysqli_set_charset($conn, 'utf8mb4');
 }
 ?>

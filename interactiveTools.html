@@ -307,6 +307,38 @@
         let currentExpression = 'neutral';
         const MAX = 10;
 
+        async function fetchMoodApi(url, options = {}) {
+            const candidates = [
+                url,
+                url.replace(/^backend\//, 'http://127.0.0.1:8000/backend/'),
+                url.replace(/^backend\//, 'http://localhost:8000/backend/')
+            ];
+
+            let lastError = 'Tidak ada respons dari server mood';
+            for (const candidate of candidates) {
+                try {
+                    const response = await fetch(candidate, options);
+                    const text = await response.text();
+                    let payload = null;
+                    try {
+                        payload = text ? JSON.parse(text) : null;
+                    } catch (err) {
+                        payload = { success: false, message: text.slice(0, 220) };
+                    }
+
+                    if (response.ok && payload) {
+                        return { payload, response, candidate };
+                    }
+
+                    lastError = payload?.message || `HTTP ${response.status}`;
+                } catch (error) {
+                    lastError = error.message;
+                }
+            }
+
+            throw new Error(lastError);
+        }
+
         // Bottle body coordinates (circle: cx=80, cy=170, r=65)
         const BODY_TOP_Y = 105;
         const BODY_BOTTOM_Y = 235;
@@ -618,7 +650,7 @@
             const moodValue = Math.max(10, Math.min(100, 100 - (selectedMood * 15)));
 
             try {
-                const response = await fetch('backend/api/mood-meter.php', {
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -629,7 +661,6 @@
                     })
                 });
 
-                const result = await response.json();
                 if (!result.success) {
                     throw new Error(result.message || 'Gagal menyimpan data mood');
                 }
