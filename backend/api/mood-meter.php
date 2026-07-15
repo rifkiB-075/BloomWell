@@ -28,8 +28,18 @@ $originalErrorHandler = set_error_handler(function ($severity, $message, $file, 
 });
 restore_error_handler();
 
+function sendCorsHeaders()
+{
+    if (!headers_sent()) {
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS');
+        header('Access-Control-Allow-Headers: Content-Type, Accept');
+    }
+}
+
 function sendJsonResponse(array $data, int $status = 200)
 {
+    sendCorsHeaders();
     if (!headers_sent()) {
         header('Content-Type: application/json; charset=utf-8');
     }
@@ -63,11 +73,35 @@ function logMoodMeterError(Throwable $e)
     @file_put_contents($logDir . '/mood-meter-error.log', $message, FILE_APPEND);
 }
 
+function prepareStmt($conn, $sql)
+{
+    $stmt = mysqli_prepare($conn, $sql);
+    if (!$stmt) {
+        sendJsonResponse(['success' => false, 'message' => 'Query prepare failed: ' . mysqli_error($conn) . ' SQL: ' . $sql], 500);
+    }
+    return $stmt;
+}
+
 try {
+    if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+        sendCorsHeaders();
+        http_response_code(204);
+        exit();
+    }
+
     require __DIR__ . '/../config/database.php';
     if (empty($conn) || !($conn instanceof mysqli)) {
         sendJsonResponse(['success' => false, 'message' => 'Koneksi database gagal.'], 500);
     }
+
+    mysqli_query($conn, "CREATE TABLE IF NOT EXISTS users (
+        id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+        username VARCHAR(100) NOT NULL UNIQUE,
+        email VARCHAR(150) NOT NULL UNIQUE,
+        password VARCHAR(255) NOT NULL,
+        full_name VARCHAR(150) NOT NULL DEFAULT 'Guest User',
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
+    ) ENGINE=InnoDB");
 } catch (Throwable $e) {
     logMoodMeterError($e);
     sendJsonResponse(['success' => false, 'message' => 'Kesalahan server internal.', 'error' => $e->getMessage()], 500);
@@ -75,7 +109,7 @@ try {
 
 function ensureUserId($conn)
 {
-    $stmt = mysqli_prepare($conn, 'SELECT id FROM users ORDER BY id LIMIT 1');
+    $stmt = prepareStmt($conn, 'SELECT id FROM users ORDER BY id LIMIT 1');
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
     $row = mysqli_fetch_assoc($result);
@@ -90,7 +124,7 @@ function ensureUserId($conn)
     $password = password_hash('guest1234', PASSWORD_DEFAULT);
     $fullName = 'Guest User';
 
-    $stmt = mysqli_prepare($conn, 'INSERT INTO users (username, email, password, full_name) VALUES (?, ?, ?, ?)');
+    $stmt = prepareStmt($conn, 'INSERT INTO users (username, email, password, full_name) VALUES (?, ?, ?, ?)');
     mysqli_stmt_bind_param($stmt, 'ssss', $username, $email, $password, $fullName);
     mysqli_stmt_execute($stmt);
     mysqli_stmt_close($stmt);
@@ -118,17 +152,50 @@ function getMoodLabelFromValue($value)
     return 'Lelah';
 }
 
-mysqli_query($conn, "CREATE TABLE IF NOT EXISTS mood_meter_logs (
+// Catatan: foreign key constraint butuh tipe kolom yang kompatibel.
+// Di beberapa setup, definisi users.id bisa beda (SIGNED vs UNSIGNED) atau charset/collation/engine berbeda.
+// Agar tool tetap jalan tanpa gagal saat CREATE TABLE, foreign key dibuat tanpa constraint.
+$createMoodTableSql = "CREATE TABLE IF NOT EXISTS mood_meter_logs (
     id INT UNSIGNED AUTO_INCREMENT PRIMARY KEY,
     user_id INT UNSIGNED NOT NULL,
     mood_value TINYINT UNSIGNED NOT NULL COMMENT '0–100 skala mood meter',
     note TEXT NULL,
     logged_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     INDEX idx_user_time (user_id, logged_at)
-) ENGINE=InnoDB");
+) ENGINE=InnoDB";
 
-mysqli_query($conn, "ALTER TABLE mood_meter_logs ADD COLUMN IF NOT EXISTS note TEXT NULL");
+$createOk = @mysqli_query($conn, $createMoodTableSql);
+if (!$createOk) {
+    sendJsonResponse([
+        'success' => false,
+        'message' => 'Gagal membuat tabel mood_meter_logs',
+        'sql' => $createMoodTableSql,
+        'db_error' => mysqli_error($conn)
+    ], 500);
+}
+
+// MySQL versi lama tidak mendukung: ADD COLUMN IF NOT EXISTS
+// Jadi kita cek keberadaan kolom dulu.
+$columnExistsSql = "SHOW COLUMNS FROM mood_meter_logs LIKE 'note'";
+$colRes = @mysqli_query($conn, $columnExistsSql);
+$hasNoteCol = false;
+if ($colRes) {
+    $hasNoteCol = mysqli_num_rows($colRes) > 0;
+}
+
+if (!$hasNoteCol) {
+    $alterSql = "ALTER TABLE mood_meter_logs ADD COLUMN note TEXT NULL";
+    $alterOk = @mysqli_query($conn, $alterSql);
+    if (!$alterOk) {
+        sendJsonResponse([
+            'success' => false,
+            'message' => 'Gagal alter tabel mood_meter_logs',
+            'sql' => $alterSql,
+            'db_error' => mysqli_error($conn)
+        ], 500);
+    }
+}
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $userId = isset($_GET['user_id']) ? (int)$_GET['user_id'] : 0;
@@ -182,15 +249,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $moodLabel = getMoodLabelFromValue($moodValue);
     }
 
-    $stmt = mysqli_prepare($conn, 'INSERT INTO mood_meter_logs (user_id, mood_value, note) VALUES (?, ?, ?)');
+    $stmt = prepareStmt($conn, 'INSERT INTO mood_meter_logs (user_id, mood_value, note) VALUES (?, ?, ?)');
     mysqli_stmt_bind_param($stmt, 'iis', $userId, $moodValue, $note);
 
     if (!mysqli_stmt_execute($stmt)) {
-        http_response_code(500);
-        echo json_encode(['success' => false, 'message' => 'Gagal menyimpan mood: ' . mysqli_error($conn)]);
         mysqli_stmt_close($stmt);
         mysqli_close($conn);
-        exit();
+        sendJsonResponse(['success' => false, 'message' => 'Gagal menyimpan mood: ' . mysqli_error($conn)], 500);
     }
 
     mysqli_stmt_close($stmt);
@@ -227,18 +292,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
     $data = json_decode(file_get_contents('php://input'), true);
     $userId = isset($data['user_id']) ? (int)$data['user_id'] : 0;
+    if (!$userId) {
+        $userId = ensureUserId($conn);
+    }
     $entryId = isset($data['id']) ? (int)$data['id'] : 0;
     $moodValue = isset($data['mood_value']) ? (int)$data['mood_value'] : 0;
     $note = trim($data['note'] ?? '');
 
-    if (!$userId || !$entryId || $moodValue < 0 || $moodValue > 100) {
+    if (!$entryId || $moodValue < 0 || $moodValue > 100) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'user_id, id, dan mood_value wajib valid.']);
+        echo json_encode(['success' => false, 'message' => 'id dan mood_value wajib valid.']);
         mysqli_close($conn);
         exit();
     }
 
-    $stmt = mysqli_prepare($conn, 'UPDATE mood_meter_logs SET mood_value = ?, note = ? WHERE id = ? AND user_id = ?');
+    $stmt = prepareStmt($conn, 'UPDATE mood_meter_logs SET mood_value = ?, note = ? WHERE id = ? AND user_id = ?');
     mysqli_stmt_bind_param($stmt, 'isii', $moodValue, $note, $entryId, $userId);
 
     if (!mysqli_stmt_execute($stmt)) {
@@ -278,16 +346,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'PUT') {
 if ($_SERVER['REQUEST_METHOD'] === 'DELETE') {
     $data = json_decode(file_get_contents('php://input'), true);
     $userId = isset($data['user_id']) ? (int)$data['user_id'] : 0;
+    if (!$userId) {
+        $userId = ensureUserId($conn);
+    }
     $entryId = isset($data['id']) ? (int)$data['id'] : 0;
 
-    if (!$userId || !$entryId) {
+    if (!$entryId) {
         http_response_code(400);
-        echo json_encode(['success' => false, 'message' => 'user_id dan id wajib valid.']);
+        echo json_encode(['success' => false, 'message' => 'id wajib valid.']);
         mysqli_close($conn);
         exit();
     }
 
-    $stmt = mysqli_prepare($conn, 'DELETE FROM mood_meter_logs WHERE id = ? AND user_id = ?');
+    $stmt = prepareStmt($conn, 'DELETE FROM mood_meter_logs WHERE id = ? AND user_id = ?');
     mysqli_stmt_bind_param($stmt, 'ii', $entryId, $userId);
 
     if (!mysqli_stmt_execute($stmt)) {

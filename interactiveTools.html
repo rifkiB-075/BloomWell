@@ -308,17 +308,32 @@
         const MAX = 10;
 
         async function fetchMoodApi(url, options = {}) {
-            const candidates = [
-                url,
-                url.replace(/^backend\//, 'http://127.0.0.1:8000/backend/'),
-                url.replace(/^backend\//, 'http://localhost:8000/backend/')
-            ];
+            const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'http://localhost';
+            const baseCandidates = [];
+
+            // Candidate yang paling "aman" untuk kasus static page + Laragon root
+            baseCandidates.push(url);
+            baseCandidates.push(`./${url}`);
+
+            // Jika url diawali backend/, buat versi absolute
+            if (url.startsWith('backend/')) {
+                baseCandidates.push(`${origin}/${url}`);
+                baseCandidates.push(`/${url}`);
+            }
+
+            // Jika url tidak diawali backend/, coba tetap pasangkan dengan root umum
+            baseCandidates.push(`${origin}/backend/api/mood-meter.php`);
+            baseCandidates.push(`/${url}`);
+
+            // Unikkan + buang yang kosong
+            const candidates = [...new Set(baseCandidates)].filter(Boolean);
 
             let lastError = 'Tidak ada respons dari server mood';
             for (const candidate of candidates) {
                 try {
                     const response = await fetch(candidate, options);
                     const text = await response.text();
+
                     let payload = null;
                     try {
                         payload = text ? JSON.parse(text) : null;
@@ -332,8 +347,12 @@
 
                     lastError = payload?.message || `HTTP ${response.status}`;
                 } catch (error) {
-                    lastError = error.message;
+                    // Biarkan lastError menunjukkan error fetch yang benar
+                    lastError = error?.message || String(error);
                 }
+
+                // Debug untuk tahu candidate mana yang gagal
+                console.warn('[mood-meter] fetch failed candidate:', candidate, 'lastError:', lastError);
             }
 
             throw new Error(lastError);
@@ -654,7 +673,6 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_id: 1,
                         mood_value: moodValue,
                         mood_label: selectedMoodObj.label,
                         note: note

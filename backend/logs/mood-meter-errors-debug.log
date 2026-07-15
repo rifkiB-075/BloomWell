@@ -1,0 +1,172 @@
+[2026-07-15 14:25:38] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:25:41] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:25:42] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:25:48] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:25:53] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:25:58] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:03] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:08] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:12] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:14] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:17] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:140
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(140): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 140
+[2026-07-15 14:26:22] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:23] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:23] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:23] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:24] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:24] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:24] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:24] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:26:24] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:31:45] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:186
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(186): mysqli_stmt_bind_param(false, 'iis', 1, 25, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 186
+[2026-07-15 14:33:53] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:40:41] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:42:22] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:42:30] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:42:35] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:42:40] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 14:42:46] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: NO) in C:\laragon\www\BloomWell\backend\config\database.php on line 8
+[2026-07-15 15:44:14] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:198
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(198): mysqli_stmt_bind_param(false, 'iis', 1, 85, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 198
+[2026-07-15 15:44:14] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:198
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(198): mysqli_stmt_bind_param(false, 'iis', 1, 85, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 198
+[2026-07-15 15:44:14] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:198
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(198): mysqli_stmt_bind_param(false, 'iis', 1, 85, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 198
+[2026-07-15 15:48:25] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:25] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:26] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:26] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:41] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:168
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(168): mysqli_stmt_bind_param(false, 'i', 1)
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 168
+[2026-07-15 15:48:48] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:48] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:48] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+[2026-07-15 15:48:48] SHUTDOWN ERROR: Uncaught TypeError: mysqli_stmt_bind_param(): Argument #1 ($statement) must be of type mysqli_stmt, false given in C:\laragon\www\BloomWell\backend\api\mood-meter.php:214
+Stack trace:
+#0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
+#1 {main}
+  thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214

@@ -491,10 +491,13 @@
         // AMBIL DATA DARI DATABASE VIA API
         // ============================================
         async function fetchMoodApi(url, options = {}) {
+            const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'http://localhost';
+            const normalizedUrl = url.startsWith('http') ? url : `${origin}/${url}`.replace(/([^:]\/\/)\/+/, '$1');
             const candidates = [
+                normalizedUrl,
                 url,
-                url.replace(/^backend\//, 'http://127.0.0.1:8000/backend/'),
-                url.replace(/^backend\//, 'http://localhost:8000/backend/')
+                url.replace(/^backend\//, `${origin}/backend/`),
+                url.replace(/^backend\//, `/${url}`)
             ];
 
             let lastError = 'Tidak ada respons dari server mood';
@@ -524,7 +527,7 @@
 
         async function getMoodRecords() {
             try {
-                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php?user_id=1');
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php');
                 if (!result.success) {
                     throw new Error(result.message || 'Gagal mengambil data mood');
                 }
@@ -779,7 +782,6 @@
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
-                        user_id: 1,
                         id: entryId,
                         mood_value: getMoodValueFromLabel(moodLabel),
                         note
@@ -811,7 +813,7 @@
                 const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
                     method: 'DELETE',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ user_id: 1, id: entryId })
+                    body: JSON.stringify({ id: entryId })
                 });
                 if (!result.success) {
                     throw new Error(result.message || 'Gagal menghapus mood');
