@@ -66,6 +66,9 @@
       <div class="sidebar">
         <button id="tab-resources" class="active" onclick="openTab('resources')">🗂️ Resources (Buku PDF)</button>
         <button id="tab-moods" onclick="openTab('moods')">😊 Mood Meter</button>
+        
+        <div style="height: 10px;"></div>
+        <button class="secondary" style="background:transparent;" onclick="window.location.href='index.html'">🏠 Kembali ke Home</button>
       </div>
 
       <div class="panel" id="panel-resources">
@@ -252,6 +255,7 @@
             </tr>
           `;
         }).join('');
+
 
         setStatus('resourcesStatus', true, `Memuat ${resources.length} resource.`);
       }catch(e){
