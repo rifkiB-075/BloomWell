@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Dashboard | BloomWell</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body { font-family: 'Poppins', sans-serif; background: #f8fafc; margin: 0; color: #111827; }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 28px 18px; }
+    .topbar { display:flex; justify-content:space-between; align-items:center; gap:16px; flex-wrap:wrap; margin-bottom: 18px; }
+    .brand { display:flex; align-items:center; gap:12px; }
+    .brand .logo { width:44px; height:44px; border-radius:14px; background:#2563eb; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
+    .brand h1 { margin:0; font-size: 20px; }
+    .badge { background:#111827; color:white; padding:8px 12px; border-radius: 999px; font-size: 12px; }
+
+    .grid { display:grid; grid-template-columns: 280px 1fr; gap: 16px; }
+    @media (max-width: 900px){ .grid { grid-template-columns: 1fr; } }
+
+    .sidebar { background:white; border:1px solid #e5e7eb; border-radius: 18px; padding: 14px; position: sticky; top: 16px; height: fit-content; }
+    .sidebar button { width:100%; text-align:left; padding: 10px 12px; border-radius: 12px; border:1px solid transparent; background: transparent; cursor:pointer; font-weight:700; color:#111827; margin-bottom: 8px; }
+    .sidebar button.active { background:#2563eb; color:white; border-color:#2563eb; }
+
+    .panel { background:white; border:1px solid #e5e7eb; border-radius: 18px; padding: 16px; }
+
+    .row { display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-bottom: 12px; }
+    .row .spacer { flex:1; }
+
+    .status { padding: 10px 12px; border-radius: 12px; border: 1px solid #e5e7eb; }
+    .status.ok { background:#ecfdf5; border-color:#10b981; color:#065f46; }
+    .status.err { background:#fef2f2; border-color:#ef4444; color:#991b1b; }
+
+    label { display:block; margin-top: 10px; font-weight: 700; font-size: 13px; }
+    input, textarea, select { width:100%; padding:10px 12px; margin-top: 6px; border:1px solid #d1d5db; border-radius:12px; font-family: inherit; }
+    textarea { resize: vertical; }
+    button.primary { background:#2563eb; color:white; border:none; border-radius: 12px; padding: 10px 14px; font-weight:800; cursor:pointer; }
+    button.secondary { background:#e5e7eb; color:#111827; border:none; border-radius: 12px; padding: 10px 14px; font-weight:800; cursor:pointer; }
+
+    .table { width:100%; border-collapse: collapse; margin-top: 10px; }
+    .table th, .table td { border-bottom: 1px solid #e5e7eb; padding: 10px 8px; text-align:left; font-size: 13px; vertical-align: top; }
+    .table th { font-size: 12px; color:#6b7280; text-transform: uppercase; letter-spacing: .02em; }
+
+    .muted { color:#6b7280; font-size: 12px; }
+
+    /* Simple modal */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.4); display:none; align-items:center; justify-content:center; z-index: 9999; }
+    .modal-backdrop.show { display:flex; }
+    .modal { width: min(780px, 94vw); background:white; border-radius:18px; padding: 16px; border:1px solid #e5e7eb; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <div class="brand">
+        <div class="logo">A</div>
+        <div>
+          <h1>Admin Dashboard</h1>
+          <div class="muted">Kelola Resources, Mood Entries, dan Data terkait</div>
+        </div>
+      </div>
+      <div class="badge" id="adminBadge">Status: Menunggu...
+      </div>
+    </div>
+
+    <div class="grid">
+      <div class="sidebar">
+        <button id="tab-resources" class="active" onclick="openTab('resources')">🗂️ Resources (Buku PDF)</button>
+        <button id="tab-moods" onclick="openTab('moods')">😊 Mood Meter</button>
+      </div>
+
+      <div class="panel" id="panel-resources">
+        <h2 style="margin-top:0;">Resources Library (PDF)</h2>
+        <div class="row">
+          <div class="status ok" id="resourcesStatus">Siap mengelola data buku.</div>
+          <div class="spacer"></div>
+          <button class="secondary" onclick="resourcesLoad()">Refresh</button>
+        </div>
+
+        <form id="resourceForm">
+          <input type="hidden" name="action" value="upload" />
+          <input type="hidden" name="resource_id" value="" />
+
+          <label>Judul</label>
+          <input name="title" required />
+
+          <label>Kategori</label>
+          <select name="category" required>
+            <option value="mindfulness">Mindfulness</option>
+            <option value="anxiety">Kecemasan</option>
+            <option value="relationship">Hubungan</option>
+            <option value="selfcare">Self-Care</option>
+            <option value="productivity">Produktivitas</option>
+          </select>
+
+          <label>Label kategori (opsional)</label>
+          <input name="category_label" placeholder="Contoh: Mindfulness" />
+
+          <label>Deskripsi</label>
+          <textarea name="description" rows="4" required></textarea>
+
+          <label>Durasi baca (opsional)</label>
+          <input name="read_time" placeholder="Contoh: 7 menit baca" />
+
+          <label>Pilih file PDF</label>
+          <input type="file" name="pdf_file" accept="application/pdf" required />
+
+          <div class="row" style="margin-top: 14px;">
+            <button type="submit" class="primary">Upload / Simpan</button>
+            <button type="button" class="secondary" onclick="resourceFormReset()">Reset</button>
+          </div>
+          <div class="muted">Catatan: Untuk edit, PDF bersifat opsional (satu kali upload awal cukup).</div>
+        </form>
+
+        <div style="margin-top: 18px;">
+          <h3>Daftar Buku</h3>
+          <table class="table" id="resourcesTable">
+            <thead>
+              <tr>
+                <th>Judul</th>
+                <th>Kategori</th>
+                <th>Deskripsi</th>
+                <th>File</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="panel-moods" style="display:none;">
+        <h2 style="margin-top:0;">Mood Meter</h2>
+        <div class="row">
+          <div class="status ok" id="moodsStatus">Siap memuat data mood.</div>
+          <div class="spacer"></div>
+          <button class="secondary" onclick="moodsLoad()">Refresh</button>
+        </div>
+
+        <div class="muted">Endpoint mood-meter saat ini menyimpan data dengan user_id otomatis (guest). Untuk keperluan admin, gunakan user_id bila diperlukan.</div>
+
+        <label>user_id (opsional)</label>
+        <input id="moodsUserId" placeholder="kosong = auto/guest" />
+
+        <div class="row" style="margin-top: 10px;">
+          <button class="primary" onclick="moodsLoad(true)">Muat</button>
+        </div>
+
+        <div style="margin-top: 18px;">
+          <table class="table" id="moodsTable">
+            <thead>
+              <tr>
+                <th>Tanggal</th>
+                <th>Mood</th>
+                <th>Nilai</th>
+                <th>Catatan</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="confirmModal">
+    <div class="modal">
+      <h3 style="margin-top:0;">Konfirmasi</h3>
+      <div class="muted" id="confirmText">Apakah anda yakin?</div>
+      <div class="row" style="margin-top: 14px;">
+        <button class="secondary" type="button" onclick="closeConfirm()">Batal</button>
+        <button class="primary" type="button" id="confirmYesBtn">Ya, lanjutkan</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(tab){
+      const resourcesBtn = document.getElementById('tab-resources');
+      const moodsBtn = document.getElementById('tab-moods');
+      const panelResources = document.getElementById('panel-resources');
+      const panelMoods = document.getElementById('panel-moods');
+
+      resourcesBtn.classList.toggle('active', tab==='resources');
+      moodsBtn.classList.toggle('active', tab==='moods');
+
+      panelResources.style.display = (tab==='resources') ? 'block' : 'none';
+      panelMoods.style.display = (tab==='moods') ? 'block' : 'none';
+    }
+
+    function setStatus(elId, ok, text){
+      const el = document.getElementById(elId);
+      el.classList.remove('ok','err');
+      el.classList.add(ok?'ok':'err');
+      el.textContent = text;
+    }
+
+    function getHostUrl(){
+      const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'http://localhost';
+      return origin;
+    }
+
+    // ===== Resources =====
+    let confirmState = { resolver: null };
+
+    function openConfirm(text, onYes){
+      document.getElementById('confirmText').textContent = text;
+      document.getElementById('confirmYesBtn').onclick = () => {
+        closeConfirm();
+        onYes();
+      };
+      document.getElementById('confirmModal').classList.add('show');
+    }
+
+    function closeConfirm(){
+      document.getElementById('confirmModal').classList.remove('show');
+    }
+
+    function resourceFormReset(){
+      const f = document.getElementById('resourceForm');
+      f.reset();
+      f.querySelector('input[name="action"]').value = 'upload';
+      f.querySelector('input[name="resource_id"]').value = '';
+      // re-enable file required
+      const file = f.querySelector('input[name="pdf_file"]');
+      file.required = true;
+    }
+
+    async function resourcesLoad(){
+      const tbody = document.querySelector('#resourcesTable tbody');
+      setStatus('resourcesStatus', true, 'Memuat resources...');
+      try{
+        const res = await fetch('backend/api/resources.php');
+        const data = await res.json();
+        const resources = data.resources || data || [];
+
+        tbody.innerHTML = resources.map(item => {
+          const title = (item.title||'').replace(/</g,'<');
+          const desc = (item.description||'').replace(/</g,'<');
+          const cat = item.category_label || item.category || '';
+          const file = item.file_path || '';
+          return `
+            <tr>
+              <td>${title}</td>
+              <td>${cat}</td>
+              <td>${desc}</td>
+              <td>${file ? `<a target="_blank" href="${file}">Lihat</a>` : '-'}</td>
+              <td>
+                <button class="secondary" style="padding:8px 10px;" onclick="resourcesEdit(${item.id}, ${JSON.stringify(item.title||'')}, ${JSON.stringify(item.category||'')}, ${JSON.stringify(item.category_label||'')}, ${JSON.stringify(item.description||'')}, ${JSON.stringify(item.read_time||'')})">Edit</button>
+                <button class="secondary" style="padding:8px 10px; background:#dc2626; color:white; border:none;" onclick="resourcesDelete(${item.id})">Hapus</button>
+              </td>
+            </tr>
+          `;
+        }).join('');
+
+        setStatus('resourcesStatus', true, `Memuat ${resources.length} resource.`);
+      }catch(e){
+        console.error(e);
+        setStatus('resourcesStatus', false, 'Gagal memuat resources. Lihat console.');
+      }
+    }
+
+    function resourcesEdit(id, title, category, categoryLabel, description, readTime){
+      const f = document.getElementById('resourceForm');
+      f.querySelector('input[name="action"]').value = 'edit';
+      f.querySelector('input[name="resource_id"]').value = id;
+
+      f.querySelector('input[name="title"]').value = title;
+      f.querySelector('select[name="category"]').value = category;
+      f.querySelector('input[name="category_label"]').value = categoryLabel;
+      f.querySelector('textarea[name="description"]').value = description;
+      f.querySelector('input[name="read_time"]').value = readTime;
+
+      // PDF optional saat edit
+      const file = f.querySelector('input[name="pdf_file"]');
+      file.required = false;
+    }
+
+    async function resourcesDelete(id){
+      openConfirm('Hapus buku ini? Tindakan tidak bisa dibatalkan.', async () => {
+        try{
+          const res = await fetch('backend/api/resources.php', {
+            method:'DELETE',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({id})
+          });
+          const data = await res.json();
+          if(!data.success) throw new Error(data.message || 'Gagal hapus');
+          await resourcesLoad();
+        }catch(e){
+          console.error(e);
+          alert('Gagal hapus: ' + (e.message||e));
+        }
+      });
+    }
+
+    document.getElementById('resourceForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const f = e.target;
+      const formData = new FormData(f);
+
+      // ensure action/resource_id
+      const action = f.querySelector('input[name="action"]').value;
+      formData.set('action', action);
+
+      const resourceId = f.querySelector('input[name="resource_id"]').value;
+      if(resourceId) formData.set('resource_id', resourceId);
+
+      const fileInput = f.querySelector('input[name="pdf_file"]');
+      // jika edit dan tidak ada file dipilih, hapus dari formData
+      if(action==='edit' && (!fileInput.files || fileInput.files.length===0)){
+        formData.delete('pdf_file');
+      }
+
+      try{
+        setStatus('resourcesStatus', true, 'Mengirim...');
+        const res = await fetch('backend/api/resources.php', { method:'POST', body: formData });
+        const data = await res.json();
+        if(!data.success) throw new Error(data.message||'Gagal menyimpan');
+        await resourcesLoad();
+        resourceFormReset();
+        setStatus('resourcesStatus', true, data.message || 'Berhasil');
+      }catch(err){
+        console.error(err);
+        setStatus('resourcesStatus', false, err.message || 'Gagal');
+      }
+    });
+
+    // ===== Moods =====
+    async function moodsLoad(forceUserId=false){
+      const tbody = document.querySelector('#moodsTable tbody');
+      const userIdInput = document.getElementById('moodsUserId');
+      const userId = forceUserId ? (userIdInput.value.trim() || '') : (userIdInput.value.trim() || '');
+
+      setStatus('moodsStatus', true, 'Memuat mood entries...');
+      try{
+        let url = 'backend/api/mood-meter.php';
+        if(userId){
+          url += '?user_id=' + encodeURIComponent(userId);
+        }
+        const res = await fetch(url);
+        const data = await res.json();
+        const entries = data.entries || [];
+
+        tbody.innerHTML = entries.map(en => {
+          return `
+            <tr>
+              <td>${en.entry_date || ''}</td>
+              <td>${en.mood_label || ''}</td>
+              <td>${en.mood_value ?? ''}</td>
+              <td>${(en.note||'').replace(/</g,'<')}</td>
+            </tr>
+          `;
+        }).join('');
+
+        setStatus('moodsStatus', true, `Memuat ${entries.length} entri mood.`);
+      }catch(e){
+        console.error(e);
+        setStatus('moodsStatus', false, 'Gagal memuat mood. Lihat console.');
+      }
+    }
+
+    // init
+    document.getElementById('adminBadge').textContent = 'Status: siap';
+    resourcesLoad();
+    moodsLoad(false);
+  </script>
+</body>
+</html>
+
