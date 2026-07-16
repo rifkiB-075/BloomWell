@@ -1,0 +1,909 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #f5f0ff 0%, #f0e8ff 100%);
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+}
+
+/* ========== LAYOUT FULL SCREEN ========== */
+.tools-layout {
+    display: flex;
+    min-height: calc(100vh - 70px);
+    min-height: calc(100dvh - 70px);
+    width: 100%;
+}
+
+/* ========== SIDEBAR ========== */
+.sidebar {
+    width: 200px;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(10px);
+    border-right: 1px solid #eaddff;
+    display: flex;
+    flex-direction: column;
+    padding: 16px 0;
+    transition: width 0.25s ease;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+    height: calc(100vh - 70px);
+    height: calc(100dvh - 70px);
+}
+
+.sidebar.collapsed {
+    width: 56px;
+}
+
+.sidebar-toggle {
+    background: none;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 6px 16px 12px;
+    color: #a855f7;
+    text-align: left;
+    width: 100%;
+}
+
+.sidebar-toggle:hover { color: #c084fc; }
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 0 10px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.sidebar-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    text-decoration: none;
+    color: #7c5a9e;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.2s;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.sidebar-item:hover {
+    background: #f3e8ff;
+    color: #c084fc;
+    transform: translateX(2px);
+}
+
+.sidebar-item.active {
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    color: white;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.sidebar-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+    width: 24px;
+    text-align: center;
+}
+
+.sidebar-label {
+    overflow: hidden;
+    transition: opacity 0.2s;
+}
+
+.sidebar.collapsed .sidebar-label {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* ========== MAIN CONTENT ========== */
+.tools-main {
+    flex: 1;
+    padding: 36px 40px;
+    overflow-y: auto;
+    overflow-x: visible;
+    width: 100%;
+    min-width: 0;
+}
+
+.tool-content {
+    display: none;
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
+}
+
+.tool-content.show {
+    display: block;
+    animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.title {
+    font-size: 28px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a855f7, #e879f9);
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 28px;
+    text-align: center;
+}
+
+/* ========== MOOD METER - ROUND AQUARIUM STYLE ========== */
+.moodmeter-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding-top: 10px;
+    width: 100%;
+}
+
+/* Bottle Section */
+.bottle-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    flex-shrink: 0;
+    padding-top: 8px;
+}
+
+.bottle-section svg {
+    max-width: 100%;
+    height: auto;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    filter: drop-shadow(0 12px 20px rgba(168, 85, 247, 0.2));
+}
+
+.bottle-pct {
+    font-size: 14px;
+    color: #a855f7;
+    font-weight: 600;
+    background: white;
+    padding: 6px 18px;
+    border-radius: 40px;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.1);
+    border: 1px solid #f0d9ff;
+}
+
+/* Controls below bottle */
+.meter-bottom {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Legend Box */
+.legend-box {
+    background: white;
+    border: 1px solid #eaddff;
+    border-radius: 24px;
+    padding: 14px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 14px 22px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.legend-dot {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.legend-name {
+    color: #5a4a6e;
+    font-weight: 500;
+}
+
+.legend-count {
+    font-weight: 700;
+    font-size: 12px;
+}
+
+/* Meter controls */
+.meter-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Mood section */
+.section-label {
+    font-size: 14px;
+    color: #8b6baa;
+    margin-bottom: 12px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.mood-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.mood-btn {
+    padding: 8px 20px;
+    border-radius: 40px;
+    border: 2px solid;
+    background: transparent;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.mood-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 14px rgba(168, 85, 247, 0.15);
+}
+
+.mood-btn:active {
+    transform: translateY(0);
+}
+
+/* Journal */
+.journal-section textarea {
+    width: 100%;
+    border: 1px solid #eaddff;
+    border-radius: 20px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-family: 'Poppins', sans-serif;
+    color: #4a3a5e;
+    background: #fefbff;
+    resize: vertical;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.journal-section textarea:focus {
+    border-color: #c084fc;
+    box-shadow: 0 0 0 3px rgba(192, 132, 252, 0.15);
+}
+
+.journal-section textarea::placeholder {
+    color: #c4b5d4;
+}
+
+/* Save button */
+.save-btn {
+    padding: 12px 32px;
+    border-radius: 40px;
+    border: none;
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    font-family: 'Poppins', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    width: 100%;
+    max-width: 220px;
+    margin: 0 auto;
+    display: block;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+}
+
+.save-btn:hover { 
+    background: linear-gradient(135deg, #a855f7, #9333ea);
+    transform: scale(1.02);
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.4);
+}
+
+.save-btn:active { 
+    transform: scale(0.98);
+}
+
+.save-toast {
+    font-size: 13px;
+    color: #d946ef;
+    font-weight: 600;
+    text-align: center;
+    opacity: 0;
+    transition: opacity 0.3s;
+    height: 20px;
+    margin-top: 8px;
+}
+
+.save-toast.show { 
+    opacity: 1;
+}
+
+/* ========== RESPONSIVE DESIGN ========== */
+
+/* Tablet */
+@media (max-width: 768px) {
+    .tools-main {
+        padding: 28px 24px;
+    }
+    
+    .title {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+    
+    .meter-bottom {
+        max-width: 500px;
+    }
+    
+    .legend-box {
+        padding: 12px 16px;
+        gap: 12px 16px;
+    }
+    
+    .mood-btn {
+        padding: 7px 16px;
+        font-size: 12px;
+    }
+}
+
+/* Mobile */
+@media (max-width: 700px) {
+    .sidebar { 
+        width: 56px; 
+    }
+    .sidebar .sidebar-label { 
+        opacity: 0; 
+        pointer-events: none; 
+    }
+    
+    .tools-main { 
+        padding: 20px 16px; 
+    }
+    
+    .title { 
+        font-size: 22px; 
+        margin-bottom: 20px;
+    }
+    
+    .moodmeter-wrapper {
+        gap: 22px;
+    }
+    
+    .meter-bottom {
+        max-width: 100%;
+        gap: 18px;
+    }
+    
+    .bottle-section svg {
+        width: 130px;
+        height: auto;
+    }
+    
+    .bottle-pct {
+        font-size: 12px;
+        padding: 4px 14px;
+    }
+}
+
+/* Small Mobile */
+@media (max-width: 480px) {
+    .tools-main {
+        padding: 16px 12px;
+    }
+    
+    .title {
+        font-size: 20px;
+        margin-bottom: 16px;
+    }
+    
+    .moodmeter-wrapper {
+        gap: 18px;
+    }
+    
+    .meter-bottom {
+        gap: 14px;
+    }
+    
+    .legend-box {
+        padding: 10px 12px;
+        gap: 8px 12px;
+        border-radius: 18px;
+    }
+    
+    .legend-item {
+        font-size: 11px;
+    }
+    
+    .legend-dot {
+        width: 10px;
+        height: 10px;
+    }
+    
+    .section-label {
+        font-size: 12px;
+        margin-bottom: 8px;
+    }
+    
+    .mood-btns {
+        gap: 8px;
+    }
+    
+    .mood-btn {
+        padding: 5px 14px;
+        font-size: 11px;
+    }
+    
+    .journal-section textarea {
+        padding: 10px 14px;
+        font-size: 12px;
+        border-radius: 16px;
+    }
+    
+    .save-btn {
+        padding: 10px 24px;
+        font-size: 13px;
+        max-width: 180px;
+    }
+    
+    .bottle-section svg {
+        width: 110px;
+    }
+    
+    .bottle-pct {
+        font-size: 11px;
+        padding: 4px 12px;
+    }
+}
+
+/* Landscape mode on mobile */
+@media (max-height: 550px) and (orientation: landscape) {
+    .tools-main {
+        padding: 12px 20px;
+    }
+    
+    .moodmeter-wrapper {
+        gap: 12px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .bottle-section {
+        padding-top: 0;
+    }
+    
+    .bottle-section svg {
+        width: 95px;
+    }
+    
+    .meter-bottom {
+        max-width: 450px;
+        gap: 12px;
+    }
+    
+    .legend-box {
+        padding: 8px 12px;
+    }
+    
+    .journal-section textarea {
+        min-height: 50px;
+    }
+    
+    .title {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+}
+
+/* Large Desktop */
+@media (min-width: 1400px) {
+    .tools-main {
+        padding: 48px 60px;
+    }
+    
+    .title {
+        font-size: 34px;
+        margin-bottom: 36px;
+    }
+    
+    .moodmeter-wrapper {
+        gap: 42px;
+    }
+    
+    .meter-bottom {
+        max-width: 750px;
+    }
+    
+    .bottle-section svg {
+        width: 180px;
+    }
+    
+    .mood-btn {
+        padding: 10px 26px;
+        font-size: 14px;
+    }
+    
+    .save-btn {
+        padding: 14px 42px;
+        font-size: 15px;
+        max-width: 250px;
+    }
+    
+    .legend-box {
+        padding: 18px 28px;
+    }
+}
+
+/* Mood Calendar - BloomWell Styles */
+
+.mood-calendar-wrapper {
+    max-width: 500px;
+    margin: 20px auto;
+    padding: 25px;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 30px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.mood-title {
+    text-align: center;
+    font-size: 26px;
+    color: #3d2c5e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.mood-badge-label {
+    background: #b89edb;
+    padding: 2px 14px;
+    border-radius: 40px;
+    font-size: 14px;
+    color: white;
+}
+
+.mood-subtitle {
+    text-align: center;
+    color: #6b5a7e;
+    margin-bottom: 20px;
+    border-bottom: 1px dashed #d4c4e6;
+    padding-bottom: 10px;
+}
+
+/* Month Navigator */
+.month-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #e9def5;
+    padding: 8px 14px;
+    border-radius: 40px;
+    margin-bottom: 20px;
+}
+
+.nav-btn {
+    background: white;
+    border: none;
+    border-radius: 40px;
+    padding: 4px 16px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.nav-btn:hover {
+    background: #f3edfc;
+    transform: scale(1.05);
+}
+
+.month-label {
+    font-weight: 600;
+    font-size: 17px;
+    color: #2b1b42;
+}
+
+/* Day Names & Grid */
+.day-names {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    text-align: center;
+    font-weight: 600;
+    color: #6b5a7e;
+    font-size: 12px;
+    margin-bottom: 8px;
+}
+
+.days-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 5px;
+}
+
+.day-cell {
+    aspect-ratio: 1/1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.5);
+    font-weight: 500;
+    font-size: 15px;
+    color: #2b1b42;
+    transition: 0.15s;
+    cursor: pointer;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.day-cell.empty {
+    background: transparent;
+    border: none;
+    cursor: default;
+}
+
+.day-cell.today {
+    border: 2px solid #a07bc9;
+    background: rgba(160, 123, 201, 0.12);
+    font-weight: 700;
+}
+
+.day-cell.selected {
+    outline: 3px solid #8f6db3;
+    outline-offset: -2px;
+}
+
+.day-cell:hover:not(.empty) {
+    background: rgba(160, 123, 201, 0.15);
+    transform: scale(1.03);
+}
+
+.day-number {
+    font-size: 15px;
+}
+
+.mood-badge {
+    font-size: 18px;
+    line-height: 1;
+    margin-top: 1px;
+}
+
+/* Mood Input Area */
+.mood-input-area {
+    display: flex;
+    gap: 8px;
+    margin-top: 20px;
+    background: white;
+    padding: 8px 12px;
+    border-radius: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.mood-date-input {
+    flex: 1;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 40px;
+    background: #f5f0fa;
+    font-size: 14px;
+    outline: none;
+}
+
+.mood-date-input:focus {
+    background: #ede6f7;
+}
+
+.mood-add-btn {
+    background: #8f6db3;
+    border: none;
+    color: white;
+    padding: 8px 18px;
+    border-radius: 40px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.2s;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.mood-add-btn:hover {
+    background: #7b5a9e;
+    transform: scale(1.02);
+}
+
+/* Emoji Picker */
+.mood-emoji-picker {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    margin-top: 14px;
+    flex-wrap: wrap;
+}
+
+.mood-emoji {
+    font-size: 28px;
+    cursor: pointer;
+    transition: 0.15s;
+    padding: 2px 6px;
+    filter: grayscale(0.4);
+    opacity: 0.6;
+}
+
+.mood-emoji:hover {
+    transform: scale(1.25);
+    filter: grayscale(0);
+    opacity: 1;
+}
+
+.mood-emoji.active {
+    transform: scale(1.2);
+    filter: grayscale(0);
+    opacity: 1;
+    border-bottom: 3px solid #7b5a9e;
+}
+
+.mood-footer-note {
+    text-align: center;
+    margin-top: 18px;
+    font-size: 12px;
+    color: #8f7aa3;
+}
+/* Animations for bottle and bubbles */
+        @keyframes wobble {
+            0% { transform: rotate(0deg); }
+            25% { transform: rotate(4deg); }
+            75% { transform: rotate(-3deg); }
+            100% { transform: rotate(0deg); }
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        @keyframes bounceFace {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-3px); }
+        }
+        
+        .floating-bubble {
+            position: fixed;
+            font-size: 32px;
+            pointer-events: none;
+            animation: floatUp 1s ease-out forwards;
+            z-index: 1000;
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-150px) scale(1.3);
+                opacity: 0;
+            }
+        }
+        
+        /* Full screen adjustment */
+        html, body {
+            height: 100%;
+            width: 100%;
+            overflow-x: hidden;
+        }
+        
+        body {
+            min-height: 100vh;
+            min-height: -webkit-fill-available;
+            padding-top: 90px;
+        }
+        
+        .tools-layout {
+            min-height: calc(100vh - 70px);
+            min-height: calc(100dvh - 70px);
+        }
+        
+        /* Cute round bottle animation */
+        #bottle-svg {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        #bottle-svg:hover {
+            animation: pulse 0.3s ease;
+        }
+        
+        /* Face animation when mood changes */
+        .face-animate {
+            animation: bounceFace 0.3s ease;
+        }
+        
+        @media (max-width: 700px) {
+            .tools-main {
+                padding: 20px 16px;
+            }
+            
+            .bottle-section svg {
+                max-width: 100%;
+                height: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .moodmeter-wrapper {
+                gap: 20px;
+            }
+            
+            .meter-bottom {
+                gap: 18px;
+            }
+            
+            .legend-box {
+                padding: 12px 14px;
+            }
+            
+            .mood-btn {
+                padding: 6px 14px;
+                font-size: 11px;
+            }
+            
+            .save-btn {
+                padding: 10px 24px;
+                font-size: 13px;
+            }
+        }
+        
+        @media (max-height: 500px) and (orientation: landscape) {
+            .tools-main {
+                padding: 12px 20px;
+            }
+            
+            .moodmeter-wrapper {
+                gap: 12px;
+            }
+            
+            .bottle-section svg {
+                width: 80px;
+                height: auto;
+            }
+            
+            .meter-bottom {
+                max-width: 500px;
+            }
+            
+            .journal-section textarea {
+                min-height: 50px;
+            }
+        }

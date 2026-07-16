@@ -1,0 +1,558 @@
+/* ============================================
+   analisis.css - Gaya khusus halaman Analisis AI
+   ============================================ */
+
+/* ---------- KONTAINER UTAMA ---------- */
+.analisis-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+}
+
+/* ---------- HEADER ---------- */
+.analisis-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.analisis-header h1 {
+    font-size: 2rem;
+    color: #5a3d7a;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin: 0;
+}
+
+/* ---------- PERIOD SELECTOR (tombol Mingguan/Bulanan) ---------- */
+.period-selector {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.period-btn {
+    padding: 0.6rem 1.5rem;
+    border-radius: 30px;
+    border: 2px solid #d4c4e8;
+    background: transparent;
+    font-weight: 600;
+    color: #5a3d7a;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+}
+
+.period-btn.active {
+    background: #7c5a9e;
+    border-color: #7c5a9e;
+    color: white;
+    box-shadow: 0 4px 12px rgba(124, 90, 158, 0.25);
+}
+
+.period-btn:hover:not(.active) {
+    background: #f0e8ff;
+    transform: scale(1.02);
+}
+
+/* ---------- CONTROLS (navigasi + tombol generate) ---------- */
+.analisis-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    justify-content: space-between;
+}
+
+.period-nav {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: #f5f0ff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 40px;
+    border: 1px solid #ede6f5;
+}
+
+.period-nav-btn {
+    background: none;
+    border: none;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #7c5a9e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.period-nav-btn:hover:not(:disabled) {
+    background: #e0d4ed;
+    transform: scale(1.05);
+}
+
+.period-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.period-range {
+    font-weight: 600;
+    color: #3d2a57;
+    font-size: 0.9rem;
+    min-width: 140px;
+    text-align: center;
+}
+
+/* ---------- TOMBOL GENERATE ---------- */
+.generate-btn {
+    background: #7c5a9e;
+    border: none;
+    padding: 0.8rem 2.5rem;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-family: 'Poppins', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    box-shadow: 0 4px 14px rgba(124, 90, 158, 0.35);
+}
+
+.generate-btn:hover:not(:disabled) {
+    background: #6a4a8a;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(124, 90, 158, 0.4);
+}
+
+.generate-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* ---------- RESULT BOX ---------- */
+.result-box {
+    background: #faf7ff;
+    border-radius: 30px;
+    padding: 2rem;
+    margin-top: 2rem;
+    box-shadow: 0 8px 30px rgba(124, 90, 158, 0.12);
+    border: 1px solid #ede6f5;
+    min-height: 200px;
+    transition: all 0.3s;
+}
+
+.result-box.loading {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    color: #7c5a9e;
+}
+
+/* ---------- SPINNER (loading) ---------- */
+.spinner {
+    width: 48px;
+    height: 48px;
+    border: 5px solid #e0d4ed;
+    border-top-color: #7c5a9e;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* ---------- EMPTY STATE ---------- */
+.empty-state {
+    text-align: center;
+    padding: 2rem 1rem;
+    color: #8a7a9e;
+}
+
+.empty-state .big-icon {
+    font-size: 4rem;
+    display: block;
+    margin-bottom: 1rem;
+}
+
+.empty-state p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+}
+
+/* ---------- RESULT CONTENT ---------- */
+.result-content h2 {
+    color: #3d2a57;
+    font-size: 1.5rem;
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.result-content .summary {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: #2d1f3f;
+    white-space: pre-wrap;
+    background: #f8f4ff;
+    padding: 1rem 1.5rem;
+    border-radius: 16px;
+    border-left: 4px solid #a855f7;
+}
+
+.result-content .suggestions {
+    background: #ede6f5;
+    border-radius: 20px;
+    padding: 1.2rem 1.8rem;
+    margin-top: 1.5rem;
+    border-left: 5px solid #7c5a9e;
+}
+
+.result-content .suggestions h3 {
+    margin-top: 0;
+    color: #5a3d7a;
+}
+
+/* ---------- TOMBOL SIMPAN KE  riwayat ---------- */
+.save- riwayat-btn {
+    margin-top: 1.8rem;
+    background: #1D9E75;
+    border: none;
+    padding: 0.7rem 2rem;
+    border-radius: 40px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+    transition: all 0.2s;
+    display: inline-block;
+    border: none;
+}
+
+.save- riwayat-btn:hover {
+    background: #16835f;
+    transform: scale(1.02);
+    box-shadow: 0 4px 12px rgba(29, 158, 117, 0.3);
+}
+
+/* ---------- TOAST NOTIFICATION ---------- */
+.toast-message {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1D9E75;
+    color: white;
+    padding: 0.8rem 2rem;
+    border-radius: 40px;
+    font-weight: 500;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+    z-index: 999;
+    font-family: 'Poppins', sans-serif;
+}
+
+.toast-message.show {
+    opacity: 1;
+}
+
+/* ---------- BADGE KESEHATAN MENTAL ---------- */
+.health-status {
+    display: inline-block;
+    padding: 0.3rem 1.2rem;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    margin: 0.5rem 0;
+}
+
+.health-status.good {
+    background: #d4edda;
+    color: #155724;
+}
+
+.health-status.moderate {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.health-status.severe {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+/* ---------- MOTIVATION BOX ---------- */
+.motivation-box {
+    background: linear-gradient(135deg, #f8f4ff, #f0e8ff);
+    border-radius: 20px;
+    padding: 1.2rem 1.8rem;
+    margin-top: 1.2rem;
+    border-left: 5px solid #a855f7;
+    font-style: italic;
+    color: #3d2a57;
+}
+
+.motivation-box .quote-icon {
+    font-size: 1.5rem;
+    opacity: 0.5;
+    margin-right: 0.5rem;
+}
+
+/* ---------- SOLUTION LIST ---------- */
+.solution-list {
+    list-style: none;
+    padding: 0;
+    margin: 0.5rem 0;
+}
+
+.solution-list li {
+    padding: 0.4rem 0 0.4rem 1.8rem;
+    background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%237c5a9e" stroke-width="2"><path d="M20 12L8 12M12 16L8 12L12 8"/></svg>') left center no-repeat;
+    background-size: 16px;
+    color: #2d1f3f;
+    line-height: 1.6;
+}
+
+/* ---------- META INFO (tag) ---------- */
+.analysis-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.analysis-meta .tag {
+    background: #ede6f5;
+    padding: 0.2rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.75rem;
+    color: #5a3d7a;
+}
+
+/* ---------- TOMBOL NAVIGASI KE CHAT & RIWAYAT ---------- */
+.nav-link-btn {
+    display: inline-block;
+    padding: 0.6rem 1.8rem;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
+    font-family: 'Poppins', sans-serif;
+}
+
+.nav-link-btn.chat {
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    color: white;
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+}
+
+.nav-link-btn.chat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(168, 85, 247, 0.4);
+}
+
+.nav-link-btn.history {
+    background: #ede6f5;
+    color: #5a3d7a;
+    border: 1px solid #d4c4e8;
+}
+
+.nav-link-btn.history:hover {
+    background: #e0d4ed;
+    transform: translateY(-2px);
+}
+
+.nav-link-group {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+    .analisis-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.5rem;
+    }
+    .analisis-header h1 {
+        font-size: 1.6rem;
+        justify-content: center;
+    }
+    .period-selector {
+        justify-content: center;
+    }
+    .analisis-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .period-nav {
+        justify-content: center;
+    }
+    .period-range {
+        min-width: 100px;
+        font-size: 0.8rem;
+    }
+    .generate-btn {
+        justify-content: center;
+        width: 100%;
+    }
+    .result-box {
+        padding: 1.5rem;
+    }
+    .nav-link-group {
+        flex-direction: column;
+        align-items: center;
+    }
+    .nav-link-btn {
+        width: 100%;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .analisis-container {
+        padding: 1rem 0.8rem;
+    }
+    .result-box {
+        padding: 1rem;
+        border-radius: 20px;
+    }
+    .result-content .summary {
+        font-size: 0.95rem;
+        padding: 0.8rem 1rem;
+    }
+    .period-btn {
+        padding: 0.4rem 1rem;
+        font-size: 0.8rem;
+    }
+    .generate-btn {
+        font-size: 1rem;
+        padding: 0.6rem 1.5rem;
+    }
+}
+
+/* ---------- UTILITY (jika diperlukan) ---------- */
+.period-badge {
+    display: inline-block;
+    background: #7c5a9e;
+    color: white;
+    padding: 0.15rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    margin-left: 0.5rem;
+}
+
+ .result-content .ai-suggestions {
+            background: #f8f3ff;
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            border-left: 4px solid #8f6db3;
+        }
+        .result-content .ai-suggestions h3 {
+            margin: 0 0 8px 0;
+            color: #3d2c5e;
+        }
+        .result-content .ai-suggestions p {
+            margin: 4px 0;
+            line-height: 1.6;
+        }
+        .health-status.good { background: #d4edda; color: #155724; padding: 4px 14px; border-radius: 30px; display: inline-block; }
+        .health-status.moderate { background: #fff3cd; color: #856404; padding: 4px 14px; border-radius: 30px; display: inline-block; }
+        .health-status.severe { background: #f8d7da; color: #721c24; padding: 4px 14px; border-radius: 30px; display: inline-block; }
+        .nav-link-group { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 16px; }
+        .nav-link-btn { padding: 8px 20px; border-radius: 40px; text-decoration: none; font-weight: 500; font-size: 14px; display: inline-block; }
+        .nav-link-btn.chat { background: #8f6db3; color: #fff; }
+        .nav-link-btn.chat:hover { background: #6b3fa0; }
+        .nav-link-btn.history { background: #e8dff5; color: #3d2c5e; }
+        .nav-link-btn.history:hover { background: #d4c4e8; }
+        .save-rangkuman-btn {
+            background: #1D9E75;
+            color: #fff;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+            transition: .2s;
+            margin-top: 16px;
+        }
+        .save-rangkuman-btn:hover { background: #137a5b; }
+        .spinner {
+            border: 4px solid #f3e9ff;
+            border-top: 4px solid #8f6db3;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            animation: spin 0.8s linear infinite;
+            margin: 20px auto;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .result-box.loading { text-align: center; padding: 40px 20px; }
+        .solution-list { list-style: none; padding: 0; margin: 8px 0 0 0; }
+        .solution-list li { background: #f5f0ff; padding: 6px 14px; margin: 4px 0; border-radius: 20px; font-size: 14px; }
+        .motivation-box {
+            background: linear-gradient(135deg, #f9f0ff, #ede0f7);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin-top: 16px;
+            border: 1px solid #dcc6ee;
+        }
+        .motivation-box .quote-icon { font-size: 24px; margin-right: 8px; }
+        .analysis-meta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+        .analysis-meta .tag { background: #ede6f5; padding: 2px 14px; border-radius: 30px; font-size: 13px; }
+        .summary { background: #f5f0ff; padding: 12px 16px; border-radius: 12px; line-height: 1.7; }
+        .result-content h2 { margin-top: 20px; color: #3d2c5e; }
+        .result-content h2:first-of-type { margin-top: 0; }
+        .result-content .health-status { margin: 8px 0; }
+        .period-nav { display: flex; align-items: center; gap: 12px; margin: 8px 0 12px; }
+        .period-nav-btn {
+            background: none; border: 1px solid #d4c4e8; padding: 4px 12px; border-radius: 30px;
+            cursor: pointer; font-size: 16px; background: #f9f5ff; transition: .2s;
+        }
+        .period-nav-btn:hover { background: #ede0f7; }
+        .period-nav-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+        .period-range { font-weight: 500; color: #3d2c5e; min-width: 160px; text-align: center; }
+        .analisis-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: 12px 0 20px; }
+        .generate-btn { background: #8f6db3; color: #fff; border: none; padding: 12px 28px; border-radius: 40px; font-weight: 600; cursor: pointer; transition: .2s; }
+        .generate-btn:hover { background: #6b3fa0; }
+        .generate-btn:disabled { background: #d8c9ea; cursor: not-allowed; }
+        .empty-state .big-icon { font-size: 56px; display: block; margin-bottom: 8px; }
+        .empty-state p { color: #7c6a8f; }
+        .result-box { margin-top: 12px; }
+        .toast-message {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1D9E75; color: #fff; padding: 12px 28px; border-radius: 40px;
+            font-weight: 500; font-size: 14px; box-shadow: 0 6px 24px rgba(0,0,0,0.15);
+            opacity: 0; transition: opacity 0.3s ease; pointer-events: none; z-index: 999;
+        }
+        .toast-message.show { opacity: 1; }
+        .toast-message.error { background: #D85A30; }
+        .result-content .ai-suggestions { background: #f3ecfe; }
+    </style>

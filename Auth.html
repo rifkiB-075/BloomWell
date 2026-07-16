@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Masuk / Daftar | BloomWell</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/auth.css" />
+
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
+                <li><a href="auth.html" class="active">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- AUTH MAIN -->
+    <main class="auth-page">
+        <div class="auth-container">
+            <div class="auth-card">
+
+                <!-- Brand -->
+                <div class="auth-brand">
+                    <div class="brand-icon"><i class="fa-solid fa-seedling"></i></div>
+                    <h1>BloomWell</h1>
+                    <p>Platform kesehatan mental untuk tumbuh dan berkembang</p>
+                </div>
+
+                <!-- Tabs -->
+                <div class="auth-tabs" role="tablist">
+                    <button class="auth-tab active" id="tab-login"   onclick="switchTab('login')"  role="tab">Masuk</button>
+                    <button class="auth-tab"        id="tab-signup"  onclick="switchTab('signup')" role="tab">Daftar</button>
+                </div>
+
+                <!-- ── LOGIN PANEL ── -->
+                <div class="auth-panel active" id="panel-login">
+                    <div class="auth-alert" id="login-alert"></div>
+
+                    <div class="form-group">
+                        <label for="login-email">Email</label>
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" id="login-email" placeholder="nama@email.com" autocomplete="email" />
+                        </div>
+                        <span class="field-error" id="err-login-email">Email tidak valid.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="login-password">Kata Sandi</label>
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="login-password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+                            <button type="button" class="toggle-pw" onclick="togglePassword('login-password', this)" aria-label="Tampilkan kata sandi">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="err-login-password">Kata sandi tidak boleh kosong.</span>
+                    </div>
+
+                    <button class="btn-auth" id="btn-login" onclick="handleLogin()">
+                        <i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Masuk
+                    </button>
+
+                    <div class="auth-switch">
+                        Belum punya akun?
+                        <button onclick="switchTab('signup')">Daftar sekarang</button>
+                    </div>
+                </div>
+
+                <!-- ── SIGNUP PANEL ── -->
+                <div class="auth-panel" id="panel-signup">
+                    <div class="auth-alert" id="signup-alert"></div>
+
+                    <div class="form-group">
+                        <label for="signup-name">Nama Lengkap</label>
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-user"></i>
+                            <input type="text" id="signup-name" placeholder="Nama kamu" autocomplete="name" />
+                        </div>
+                        <span class="field-error" id="err-signup-name">Nama tidak boleh kosong.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-username">Username</label>
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-at"></i>
+                            <input type="text" id="signup-username" placeholder="username unik" autocomplete="username" />
+                        </div>
+                        <span class="field-error" id="err-signup-username">Username tidak boleh kosong.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-email">Email</label>
+                        <div class="input-wrap">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input type="email" id="signup-email" placeholder="nama@email.com" autocomplete="email" />
+                        </div>
+                        <span class="field-error" id="err-signup-email">Masukkan email yang valid.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-password">Kata Sandi</label>
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="signup-password" placeholder="Minimal 8 karakter" autocomplete="new-password" />
+                            <button type="button" class="toggle-pw" onclick="togglePassword('signup-password', this)" aria-label="Tampilkan kata sandi">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="err-signup-password">Kata sandi minimal 8 karakter.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="signup-confirm">Konfirmasi Kata Sandi</label>
+                        <div class="input-wrap">
+                            <i class="fa-solid fa-lock"></i>
+                            <input type="password" id="signup-confirm" placeholder="Ulangi kata sandi" autocomplete="new-password" />
+                            <button type="button" class="toggle-pw" onclick="togglePassword('signup-confirm', this)" aria-label="Tampilkan kata sandi">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                        <span class="field-error" id="err-signup-confirm">Kata sandi tidak cocok.</span>
+                    </div>
+
+                    <button class="btn-auth" id="btn-signup" onclick="handleSignup()">
+                        <i class="fa-solid fa-user-plus"></i>&nbsp; Buat Akun
+                    </button>
+
+                    <p class="terms-text">
+                        Dengan mendaftar, kamu menyetujui <strong>Syarat & Ketentuan</strong><br>serta <strong>Kebijakan Privasi</strong> BloomWell.
+                    </p>
+
+                    <div class="auth-switch">
+                        Sudah punya akun?
+                        <button onclick="switchTab('login')">Masuk di sini</button>
+                    </div>
+                </div>
+
+            </div><!-- .auth-card -->
+        </div><!-- .auth-container -->
+    </main>
+
+    <script>
+        // ── Tab switch ────────────────────────────────────────
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('tab-' + tab).classList.add('active');
+            document.getElementById('panel-' + tab).classList.add('active');
+            clearAlerts();
+        }
+
+        // ── Toggle password visibility ────────────────────────
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon  = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.className = 'fa-regular fa-eye-slash';
+            } else {
+                input.type = 'password';
+                icon.className = 'fa-regular fa-eye';
+            }
+        }
+
+        // ── Show / clear alerts ───────────────────────────────
+        function showAlert(id, type, msg) {
+            const el = document.getElementById(id);
+            el.className = 'auth-alert ' + type;
+            el.innerHTML = `<i class="fa-solid ${type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-check'}"></i> ${msg}`;
+        }
+
+        function clearAlerts() {
+            document.querySelectorAll('.auth-alert').forEach(el => {
+                el.className = 'auth-alert';
+                el.innerHTML = '';
+            });
+            document.querySelectorAll('.field-error').forEach(el => el.classList.remove('visible'));
+            document.querySelectorAll('input').forEach(el => el.classList.remove('input-error'));
+        }
+
+        function fieldError(inputId, errId) {
+            document.getElementById(inputId).classList.add('input-error');
+            document.getElementById(errId).classList.add('visible');
+        }
+
+        // ── URL API backend ───────────────────────────────────
+        const API_BASE = 'backend/api';
+
+        // ── LOGIN ─────────────────────────────────────────────
+        async function handleLogin() {
+            clearAlerts();
+            const email    = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            let valid = true;
+
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                fieldError('login-email', 'err-login-email');
+                valid = false;
+            }
+            if (!password) {
+                fieldError('login-password', 'err-login-password');
+                valid = false;
+            }
+            if (!valid) return;
+
+            const btn = document.getElementById('btn-login');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Memproses...';
+
+            try {
+                const res  = await fetch(`${API_BASE}/login.php`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ email, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Simpan sesi ke localStorage
+                    localStorage.setItem('bw_session', JSON.stringify(data.user));
+                    showAlert('login-alert', 'success', 'Berhasil masuk! Mengarahkan ke halaman akun…');
+                    setTimeout(() => { window.location.href = 'user-account.html'; }, 1200);
+                } else {
+                    showAlert('login-alert', 'error', data.message || 'Email atau kata sandi salah.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Masuk';
+                }
+            } catch (err) {
+                showAlert('login-alert', 'error', 'Tidak dapat terhubung ke server. Pastikan server berjalan.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i>&nbsp; Masuk';
+            }
+        }
+
+        // ── SIGNUP ────────────────────────────────────────────
+        async function handleSignup() {
+            clearAlerts();
+            const name     = document.getElementById('signup-name').value.trim();
+            const username = document.getElementById('signup-username').value.trim();
+            const email    = document.getElementById('signup-email').value.trim();
+            const password = document.getElementById('signup-password').value;
+            const confirm  = document.getElementById('signup-confirm').value;
+            let valid = true;
+
+            if (!name)     { fieldError('signup-name',     'err-signup-name');     valid = false; }
+            if (!username) { fieldError('signup-username', 'err-signup-username'); valid = false; }
+            if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+                fieldError('signup-email', 'err-signup-email'); valid = false;
+            }
+            if (password.length < 8) { fieldError('signup-password', 'err-signup-password'); valid = false; }
+            if (password !== confirm)  { fieldError('signup-confirm', 'err-signup-confirm');  valid = false; }
+            if (!valid) return;
+
+            const btn = document.getElementById('btn-signup');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Membuat akun...';
+
+            try {
+                const res  = await fetch(`${API_BASE}/register.php`, {
+                    method:  'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body:    JSON.stringify({ name, username, email, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    // Langsung login setelah daftar
+                    localStorage.setItem('bw_session', JSON.stringify(data.user));
+                    showAlert('signup-alert', 'success', 'Akun berhasil dibuat! Selamat datang di BloomWell 🌱');
+                    setTimeout(() => { window.location.href = 'user-account.html'; }, 1400);
+                } else {
+                    showAlert('signup-alert', 'error', data.message || 'Pendaftaran gagal.');
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>&nbsp; Buat Akun';
+                }
+            } catch (err) {
+                showAlert('signup-alert', 'error', 'Tidak dapat terhubung ke server. Pastikan server berjalan.');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fa-solid fa-user-plus"></i>&nbsp; Buat Akun';
+            }
+        }
+
+        // ── Cek jika sudah login, skip ke akun ───────────────
+        const session = localStorage.getItem('bw_session');
+        if (session) {
+            window.location.href = 'user-account.html';
+        }
+
+        // ── Baca ?tab=signup dari URL ─────────────────────────
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('tab') === 'signup') switchTab('signup');
+    </script>
+</body>
+</html>

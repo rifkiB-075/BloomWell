@@ -1,0 +1,2 @@
+# BloomWell 
+Blomwell adalah platform kesehatan mental yang dirancang untuk membantu pengguna tumbuh dan berkembang melalui alat bantu mandiri, sumber daya edukatif, dan dukungan profesional. Fitur utama mencakup pelacak suasana hati (mood tracker), perpustakaan artikel/video/podcast, direktori terapis, kuis interaktif, serta akses cepat ke layanan darurat. Dibangun dengan HTML, CSS, dan JavaScript murni. Fokus pada aksesibilitas dan keterlibatan pengguna.

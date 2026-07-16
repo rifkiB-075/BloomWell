@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Interactive Tools | BloomWell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/interactivetools.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="active">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
+                <li><a href="user-account.html">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="tools-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
+            <nav class="sidebar-nav">
+                <a href="#" class="sidebar-item active" onclick="showTool('moodmeter', this); return false;" title="Mood Meter">
+                    <span class="sidebar-icon">🧪</span>
+                    <span class="sidebar-label">Mood Meter</span>
+                </a>
+                <a href="kalender.html" class="sidebar-item" title="Kalender Mood">
+                    <span class="sidebar-icon">📅</span>
+                    <span class="sidebar-label">Kalender Mood</span>
+                </a>
+                <a href="chat-ai.html" class="sidebar-item" title="Chat AI">
+                    <span class="sidebar-icon">💬</span>
+                    <span class="sidebar-label">Chat AI</span>
+                </a>
+                <a href="analisis.html" class="sidebar-item" title="Analisis AI">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Analisis AI</span>
+                </a>
+                 
+                 
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="tools-main">
+
+            <!-- Mood Meter Tool -->
+            <div class="tool-content show" id="tool-moodmeter">
+                <h1 class="title">🧪 Mood Meter ✨</h1>
+
+                <div class="moodmeter-wrapper">
+
+                    <!-- Round Aquarium-Style Bottle SVG with changing face -->
+                    <div class="bottle-section">
+                        <svg id="bottle-svg" width="160" height="300" viewBox="0 0 160 300" xmlns="http://www.w3.org/2000/svg">
+                            <defs>
+                                <!-- Clip path for liquid - round like aquarium -->
+                                <clipPath id="bottleClip">
+                                    <circle cx="80" cy="170" r="65"/>
+                                </clipPath>
+                                <!-- Gradient for glass effect -->
+                                <radialGradient id="glassGrad" cx="35%" cy="30%" r="65%">
+                                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.8"/>
+                                    <stop offset="30%" stop-color="#fef7ff" stop-opacity="0.4"/>
+                                    <stop offset="70%" stop-color="#f0e4ff" stop-opacity="0.2"/>
+                                    <stop offset="100%" stop-color="#e0c8ff" stop-opacity="0.15"/>
+                                </radialGradient>
+                                <!-- Shadow gradient -->
+                                <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+                                    <stop offset="70%" stop-color="#000000" stop-opacity="0.1"/>
+                                    <stop offset="100%" stop-color="#000000" stop-opacity="0"/>
+                                </radialGradient>
+                            </defs>
+                            
+                            <!-- Shadow behind bottle -->
+                            <ellipse cx="80" cy="245" rx="55" ry="12" fill="url(#shadowGrad)"/>
+                            
+                            <!-- Liquid layers (will be filled dynamically) -->
+                            <g id="liquid-layers" clip-path="url(#bottleClip)"></g>
+                            
+                            <!-- Main round bottle body -->
+                            <circle cx="80" cy="170" r="65" fill="url(#glassGrad)" stroke="#d4c4e8" stroke-width="2.5"/>
+                            
+                            <!-- Inner glass highlight -->
+                            <circle cx="80" cy="170" r="62" fill="none" stroke="white" stroke-width="1" opacity="0.3"/>
+                            
+                            <!-- Cute emoji face that changes based on mood -->
+                            <g id="bottle-face">
+                                <!-- Eyes (same for all, but will be animated) -->
+                                <circle id="left-eye" cx="62" cy="155" r="5.5" fill="#7c5a9e"/>
+                                <circle id="right-eye" cx="98" cy="155" r="5.5" fill="#7c5a9e"/>
+                                <!-- Eye shine -->
+                                <circle id="left-shine" cx="64" cy="153" r="2.2" fill="white" opacity="0.9"/>
+                                <circle id="right-shine" cx="100" cy="153" r="2.2" fill="white" opacity="0.9"/>
+                                <!-- Mouth (will change dynamically) -->
+                                <path id="bottle-mouth" d="M 66 175 Q 80 188, 94 175" fill="none" stroke="#7c5a9e" stroke-width="2.5" stroke-linecap="round"/>
+                                <!-- Blush marks -->
+                                <ellipse id="left-blush" cx="52" cy="168" rx="8" ry="5" fill="#fbb6ce" opacity="0.5"/>
+                                <ellipse id="right-blush" cx="108" cy="168" rx="8" ry="5" fill="#fbb6ce" opacity="0.5"/>
+                                <!-- Eyebrows (for some expressions) -->
+                                <path id="left-brow" d="M 55 145 Q 62 142, 68 145" fill="none" stroke="#7c5a9e" stroke-width="2" stroke-linecap="round" opacity="0"/>
+                                <path id="right-brow" d="M 92 145 Q 98 142, 105 145" fill="none" stroke="#7c5a9e" stroke-width="2" stroke-linecap="round" opacity="0"/>
+                                <!-- Tear drop (for sad mood) -->
+                                <ellipse id="tear-drop" cx="78" cy="175" rx="3" ry="5" fill="#7bb8ff" opacity="0"/>
+                            </g>
+                            
+                            <!-- Shine highlight on glass -->
+                            <path d="M 30 140 Q 25 170, 32 200" fill="none" stroke="white" stroke-width="3.5" stroke-linecap="round" opacity="0.5"/>
+                            <path d="M 25 155 Q 22 170, 28 185" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" opacity="0.3"/>
+                            
+                            <!-- Small bubbles inside -->
+                            <circle cx="110" cy="130" r="3" fill="white" opacity="0.3"/>
+                            <circle cx="115" cy="115" r="2" fill="white" opacity="0.2"/>
+                            <circle cx="105" cy="145" r="2.5" fill="white" opacity="0.25"/>
+                        </svg>
+                        <p class="bottle-pct" id="bottle-pct">✨ kosong ✨</p>
+                    </div>
+
+                    <!-- Controls below bottle -->
+                    <div class="meter-bottom">
+
+                        <!-- Legend -->
+                        <div class="legend-box" id="legend-box"></div>
+
+                        <!-- Mood + journal + save -->
+                        <div class="meter-controls">
+                            <div class="mood-section">
+                                <p class="section-label">🥰 Bagaimana perasaanmu sekarang?</p>
+                                <div class="mood-btns" id="mood-btns"></div>
+                            </div>
+                            <div class="journal-section">
+                                <p class="section-label">📝 Catatan perasaan <span style="color:#aaa;">(opsional)</span></p>
+                                <textarea id="journal-input" rows="3" placeholder="Tulis perasaanmu... 💭"></textarea>
+                            </div>
+                            <button class="save-btn" onclick="saveMood()">💖 Simpan Mood 💖</button>
+                            <p class="save-toast" id="save-toast">🎉 Mood tersimpan! Botol makin bahagia 🎉</p>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        const moods = [
+            { label: 'Senang', color: '#EF9F27', light: '#FAE0A0', emoji: '😊', expression: 'happy' },
+            { label: 'Tenang', color: '#1D9E75', light: '#A0DFC7', emoji: '😌', expression: 'calm' },
+            { label: 'Sedih',  color: '#378ADD', light: '#A8C8F0', emoji: '😢', expression: 'sad' },
+            { label: 'Marah',  color: '#D85A30', light: '#F5B09A', emoji: '😠', expression: 'angry' },
+            { label: 'Cemas',  color: '#7F77DD', light: '#C5C1F5', emoji: '😰', expression: 'anxious' },
+            { label: 'Lelah',  color: '#888780', light: '#C8C7C2', emoji: '😴', expression: 'tired' },
+        ];
+
+        let records = [];
+        let selectedMood = null;
+        let currentExpression = 'neutral';
+        const MAX = 10;
+
+        async function fetchMoodApi(url, options = {}) {
+            const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'http://localhost';
+            const baseCandidates = [];
+
+            // Candidate yang paling "aman" untuk kasus static page + Laragon root
+            baseCandidates.push(url);
+            baseCandidates.push(`./${url}`);
+
+            // Jika url diawali backend/, buat versi absolute
+            if (url.startsWith('backend/')) {
+                baseCandidates.push(`${origin}/${url}`);
+                baseCandidates.push(`/${url}`);
+            }
+
+            // Jika url tidak diawali backend/, coba tetap pasangkan dengan root umum
+            baseCandidates.push(`${origin}/backend/api/mood-meter.php`);
+            baseCandidates.push(`/${url}`);
+
+            // Unikkan + buang yang kosong
+            const candidates = [...new Set(baseCandidates)].filter(Boolean);
+
+            let lastError = 'Tidak ada respons dari server mood';
+            for (const candidate of candidates) {
+                try {
+                    const response = await fetch(candidate, options);
+                    const text = await response.text();
+
+                    let payload = null;
+                    try {
+                        payload = text ? JSON.parse(text) : null;
+                    } catch (err) {
+                        payload = { success: false, message: text.slice(0, 220) };
+                    }
+
+                    if (response.ok && payload) {
+                        return { payload, response, candidate };
+                    }
+
+                    lastError = payload?.message || `HTTP ${response.status}`;
+                } catch (error) {
+                    // Biarkan lastError menunjukkan error fetch yang benar
+                    lastError = error?.message || String(error);
+                }
+
+                // Debug untuk tahu candidate mana yang gagal
+                console.warn('[mood-meter] fetch failed candidate:', candidate, 'lastError:', lastError);
+            }
+
+            throw new Error(lastError);
+        }
+
+        // Bottle body coordinates (circle: cx=80, cy=170, r=65)
+        const BODY_TOP_Y = 105;
+        const BODY_BOTTOM_Y = 235;
+        const BODY_HEIGHT = 130;
+
+        function animateBottle() {
+            const bottle = document.getElementById('bottle-svg');
+            bottle.style.animation = 'none';
+            bottle.offsetHeight;
+            bottle.style.animation = 'wobble 0.4s ease-in-out';
+        }
+
+        function animateFace() {
+            const face = document.getElementById('bottle-face');
+            face.classList.remove('face-animate');
+            face.offsetHeight;
+            face.classList.add('face-animate');
+            setTimeout(() => {
+                face.classList.remove('face-animate');
+            }, 300);
+        }
+
+        // Update face expression based on mood
+        function updateFaceExpression(moodLabel) {
+            const mood = moods.find(m => m.label === moodLabel);
+            if (!mood) {
+                updateNeutralFace();
+                return;
+            }
+            
+            const expression = mood.expression;
+            
+            // Get all face elements
+            const leftEye = document.getElementById('left-eye');
+            const rightEye = document.getElementById('right-eye');
+            const leftShine = document.getElementById('left-shine');
+            const rightShine = document.getElementById('right-shine');
+            const mouth = document.getElementById('bottle-mouth');
+            const leftBlush = document.getElementById('left-blush');
+            const rightBlush = document.getElementById('right-blush');
+            const leftBrow = document.getElementById('left-brow');
+            const rightBrow = document.getElementById('right-brow');
+            const tearDrop = document.getElementById('tear-drop');
+            
+            // Reset all special effects
+            leftBrow.setAttribute('opacity', '0');
+            rightBrow.setAttribute('opacity', '0');
+            tearDrop.setAttribute('opacity', '0');
+            leftBlush.setAttribute('opacity', '0.5');
+            rightBlush.setAttribute('opacity', '0.5');
+            
+            // Set eye color and expression based on mood
+            switch(expression) {
+                case 'happy':
+                    leftEye.setAttribute('fill', '#EF9F27');
+                    rightEye.setAttribute('fill', '#EF9F27');
+                    leftShine.setAttribute('opacity', '0.9');
+                    rightShine.setAttribute('opacity', '0.9');
+                    mouth.setAttribute('d', 'M 63 175 Q 80 200, 97 175');
+                    mouth.setAttribute('stroke', '#EF9F27');
+                    mouth.setAttribute('stroke-width', '3');
+                    leftBlush.setAttribute('opacity', '0.8');
+                    rightBlush.setAttribute('opacity', '0.8');
+                    break;
+                    
+                case 'calm':
+                    leftEye.setAttribute('fill', '#1D9E75');
+                    rightEye.setAttribute('fill', '#1D9E75');
+                    leftShine.setAttribute('opacity', '0.7');
+                    rightShine.setAttribute('opacity', '0.7');
+                    mouth.setAttribute('d', 'M 66 177 Q 80 185, 94 177');
+                    mouth.setAttribute('stroke', '#1D9E75');
+                    mouth.setAttribute('stroke-width', '2.5');
+                    leftBlush.setAttribute('opacity', '0.3');
+                    rightBlush.setAttribute('opacity', '0.3');
+                    break;
+                    
+                case 'sad':
+                    leftEye.setAttribute('fill', '#378ADD');
+                    rightEye.setAttribute('fill', '#378ADD');
+                    leftShine.setAttribute('opacity', '0.4');
+                    rightShine.setAttribute('opacity', '0.4');
+                    mouth.setAttribute('d', 'M 68 180 Q 80 172, 92 180');
+                    mouth.setAttribute('stroke', '#378ADD');
+                    mouth.setAttribute('stroke-width', '2.5');
+                    leftBlush.setAttribute('opacity', '0');
+                    rightBlush.setAttribute('opacity', '0');
+                    tearDrop.setAttribute('opacity', '0.6');
+                    tearDrop.setAttribute('cy', '175');
+                    break;
+                    
+                case 'angry':
+                    leftEye.setAttribute('fill', '#D85A30');
+                    rightEye.setAttribute('fill', '#D85A30');
+                    leftShine.setAttribute('opacity', '0.5');
+                    rightShine.setAttribute('opacity', '0.5');
+                    mouth.setAttribute('d', 'M 66 182 L 94 182');
+                    mouth.setAttribute('stroke', '#D85A30');
+                    mouth.setAttribute('stroke-width', '3');
+                    leftBrow.setAttribute('d', 'M 54 144 L 68 148');
+                    rightBrow.setAttribute('d', 'M 92 148 L 106 144');
+                    leftBrow.setAttribute('opacity', '1');
+                    rightBrow.setAttribute('opacity', '1');
+                    leftBrow.setAttribute('stroke', '#D85A30');
+                    rightBrow.setAttribute('stroke', '#D85A30');
+                    leftBlush.setAttribute('opacity', '0.2');
+                    rightBlush.setAttribute('opacity', '0.2');
+                    break;
+                    
+                case 'anxious':
+                    leftEye.setAttribute('fill', '#7F77DD');
+                    rightEye.setAttribute('fill', '#7F77DD');
+                    leftShine.setAttribute('opacity', '0.6');
+                    rightShine.setAttribute('opacity', '0.6');
+                    mouth.setAttribute('d', 'M 66 175 Q 80 182, 94 175');
+                    mouth.setAttribute('stroke', '#7F77DD');
+                    mouth.setAttribute('stroke-width', '2.5');
+                    leftEye.setAttribute('cx', '63');
+                    rightEye.setAttribute('cx', '97');
+                    leftEye.setAttribute('r', '4.5');
+                    rightEye.setAttribute('r', '4.5');
+                    leftBrow.setAttribute('d', 'M 55 146 Q 62 150, 68 146');
+                    rightBrow.setAttribute('d', 'M 92 146 Q 98 150, 105 146');
+                    leftBrow.setAttribute('opacity', '1');
+                    rightBrow.setAttribute('opacity', '1');
+                    leftBrow.setAttribute('stroke', '#7F77DD');
+                    rightBrow.setAttribute('stroke', '#7F77DD');
+                    break;
+                    
+                case 'tired':
+                    leftEye.setAttribute('fill', '#888780');
+                    rightEye.setAttribute('fill', '#888780');
+                    leftShine.setAttribute('opacity', '0.3');
+                    rightShine.setAttribute('opacity', '0.3');
+                    mouth.setAttribute('d', 'M 68 178 Q 80 174, 92 178');
+                    mouth.setAttribute('stroke', '#888780');
+                    mouth.setAttribute('stroke-width', '2');
+                    leftEye.setAttribute('cy', '156');
+                    rightEye.setAttribute('cy', '156');
+                    leftEye.setAttribute('rx', '5');
+                    rightEye.setAttribute('rx', '5');
+                    break;
+                    
+                default:
+                    updateNeutralFace();
+            }
+            
+            currentExpression = expression;
+            animateFace();
+        }
+        
+        function updateNeutralFace() {
+            const leftEye = document.getElementById('left-eye');
+            const rightEye = document.getElementById('right-eye');
+            const leftShine = document.getElementById('left-shine');
+            const rightShine = document.getElementById('right-shine');
+            const mouth = document.getElementById('bottle-mouth');
+            const leftBlush = document.getElementById('left-blush');
+            const rightBlush = document.getElementById('right-blush');
+            const leftBrow = document.getElementById('left-brow');
+            const rightBrow = document.getElementById('right-brow');
+            const tearDrop = document.getElementById('tear-drop');
+            
+            leftEye.setAttribute('fill', '#7c5a9e');
+            rightEye.setAttribute('fill', '#7c5a9e');
+            leftEye.setAttribute('cx', '62');
+            rightEye.setAttribute('cx', '98');
+            leftEye.setAttribute('cy', '155');
+            rightEye.setAttribute('cy', '155');
+            leftEye.setAttribute('r', '5.5');
+            rightEye.setAttribute('r', '5.5');
+            leftShine.setAttribute('opacity', '0.9');
+            rightShine.setAttribute('opacity', '0.9');
+            mouth.setAttribute('d', 'M 68 178 Q 80 174, 92 178');
+            mouth.setAttribute('stroke', '#7c5a9e');
+            mouth.setAttribute('stroke-width', '2');
+            leftBlush.setAttribute('opacity', '0.3');
+            rightBlush.setAttribute('opacity', '0.3');
+            leftBrow.setAttribute('opacity', '0');
+            rightBrow.setAttribute('opacity', '0');
+            tearDrop.setAttribute('opacity', '0');
+        }
+
+        function showBubble() {
+            const bubble = document.createElement('div');
+            bubble.className = 'floating-bubble';
+            const moodEmoji = selectedMood !== null ? moods[selectedMood].emoji : '🎈';
+            const emojis = ['🎈', '💖', '✨', '🌟', '🎉', '🌸', '🌈', '🍭', '🧸', '💫', '⭐', '🥰', '😍', moodEmoji];
+            bubble.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            bubble.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            bubble.style.bottom = '20px';
+            document.body.appendChild(bubble);
+            setTimeout(() => bubble.remove(), 1000);
+        }
+
+        function renderBottle() {
+            const layersEl = document.getElementById('liquid-layers');
+            const pctEl = document.getElementById('bottle-pct');
+            layersEl.innerHTML = '';
+
+            const total = records.length;
+            if (total === 0) { 
+                pctEl.textContent = '✨ kosong ✨ isi dulu yaa~ ✨';
+                updateNeutralFace();
+                return; 
+            }
+
+            const counts = {};
+            moods.forEach(m => counts[m.label] = 0);
+            records.forEach(r => counts[r.mood]++);
+
+            const fillRatio = Math.min(total / MAX, 1);
+            const fillH = BODY_HEIGHT * fillRatio;
+            const liquidYStart = BODY_BOTTOM_Y - fillH;
+            
+            if (fillRatio >= 0.9) {
+                pctEl.textContent = '🎉 ' + Math.round(fillRatio * 100) + '% penuh! Kamu hebat! 🎉';
+            } else if (fillRatio >= 0.5) {
+                pctEl.textContent = '🌱 ' + Math.round(fillRatio * 100) + '% terisi 🌱 semangat!';
+            } else if (fillRatio > 0) {
+                pctEl.textContent = '💧 ' + Math.round(fillRatio * 100) + '% terisi 💧 ayo tambah lagi!';
+            } else {
+                pctEl.textContent = '✨ kosong ✨';
+            }
+
+            // Build layers from bottom to top
+            let cursorY = BODY_BOTTOM_Y;
+            const layers = [];
+            
+            for (let i = moods.length - 1; i >= 0; i--) {
+                const m = moods[i];
+                const c = counts[m.label];
+                if (c === 0) continue;
+                const layerHeight = (c / total) * fillH;
+                if (layerHeight <= 0) continue;
+                layers.push({
+                    mood: m,
+                    height: layerHeight,
+                    yStart: cursorY - layerHeight
+                });
+                cursorY -= layerHeight;
+            }
+            
+            layers.forEach(layer => {
+                const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+                rect.setAttribute('x', '15');
+                rect.setAttribute('y', layer.yStart.toFixed(1));
+                rect.setAttribute('width', '130');
+                rect.setAttribute('height', layer.height.toFixed(1));
+                rect.setAttribute('fill', layer.mood.light);
+                rect.setAttribute('stroke', layer.mood.color);
+                rect.setAttribute('stroke-width', '0.5');
+                rect.style.transition = 'all 0.3s ease';
+                layersEl.appendChild(rect);
+            });
+            
+            // Add wave effect on top of liquid
+            if (fillRatio > 0 && fillRatio < 1) {
+                const wavePath = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                wavePath.setAttribute('d', `M 15 ${liquidYStart} Q 47 ${liquidYStart-3}, 80 ${liquidYStart} Q 113 ${liquidYStart+2}, 145 ${liquidYStart}`);
+                wavePath.setAttribute('fill', 'none');
+                wavePath.setAttribute('stroke', 'white');
+                wavePath.setAttribute('stroke-width', '1.5');
+                wavePath.setAttribute('opacity', '0.6');
+                layersEl.appendChild(wavePath);
+            }
+        }
+
+        function renderLegend() {
+            const el = document.getElementById('legend-box');
+            const counts = {};
+            moods.forEach(m => counts[m.label] = 0);
+            records.forEach(r => counts[r.mood]++);
+            el.innerHTML = moods.map(m =>
+                `<div class="legend-item">
+                    <span class="legend-dot" style="background:${m.light}; border:2px solid ${m.color};"></span>
+                    <span class="legend-name">${m.label} ${m.emoji}</span>
+                    <span class="legend-count" style="color:${m.color};">${counts[m.label]}x</span>
+                </div>`
+            ).join('');
+        }
+
+        function renderMoodBtns() {
+            const wrap = document.getElementById('mood-btns');
+            wrap.innerHTML = moods.map((m, i) => {
+                const sel = selectedMood === i;
+                return `<button class="mood-btn" onclick="selectMood(${i})"
+                    style="border-color:${m.color}; color:${sel ? '#fff' : m.color}; background:${sel ? m.color : 'transparent'};"
+                >${m.emoji} ${m.label} ${sel ? '✓' : ''}</button>`;
+            }).join('');
+        }
+
+        function selectMood(i) { 
+            selectedMood = i; 
+            renderMoodBtns();
+            // Preview the expression when selecting mood
+            updateFaceExpression(moods[i].label);
+        }
+
+        async function saveMood() {
+            if (selectedMood === null) { alert('Pilih mood dulu yaa~ ✨'); return; }
+            if (records.length >= MAX) { 
+                alert('🎉 Botol sudah penuh! Kamu hebat! Ayo lanjutkan esok hari ya~ 🎉'); 
+                return; 
+            }
+            
+            const selectedMoodObj = moods[selectedMood];
+            const note = document.getElementById('journal-input').value.trim();
+            const moodValue = Math.max(10, Math.min(100, 100 - (selectedMood * 15)));
+
+            try {
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mood_value: moodValue,
+                        mood_label: selectedMoodObj.label,
+                        note: note
+                    })
+                });
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menyimpan data mood');
+                }
+
+                records.push({ mood: selectedMoodObj.label, note, date: new Date().toISOString().split('T')[0] });
+                updateFaceExpression(selectedMoodObj.label);
+                
+                document.getElementById('journal-input').value = '';
+                selectedMood = null;
+                renderMoodBtns();
+                renderBottle();
+                renderLegend();
+                animateBottle();
+                showBubble();
+                
+                const t = document.getElementById('save-toast');
+                t.textContent = '🎉 Mood tersimpan ke database! 🎉';
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2200);
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan mood: ' + error.message);
+            }
+        }
+
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        function showTool(id, el) {
+            document.querySelectorAll('.tool-content').forEach(t => t.classList.remove('show'));
+            document.querySelectorAll('.sidebar-item').forEach(s => s.classList.remove('active'));
+            document.getElementById('tool-' + id).classList.add('show');
+            el.classList.add('active');
+        }
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            renderBottle();
+        });
+
+        renderBottle();
+        renderLegend();
+        renderMoodBtns();
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,91 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Emergency Service | BloomWell</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+        body { background: #f3f5ff; }
+        .page-header { margin: 130px auto 40px; max-width: 1100px; padding: 0 20px; text-align: center; }
+        .page-header h1 { font-size: 2.4rem; margin-bottom: 12px; color: #1f2937; }
+        .page-header p { max-width: 760px; margin: 0 auto; color: #4b5563; line-height: 1.7; }
+        .emergency-grid { display: grid; gap: 20px; max-width: 1100px; margin: 0 auto; padding: 0 20px 60px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+        .emergency-card { background: white; border-radius: 24px; padding: 26px; box-shadow: 0 18px 40px rgba(15, 23, 42, 0.08); border: 1px solid rgba(99, 102, 241, 0.12); }
+        .emergency-card h2 { font-size: 1.3rem; margin-bottom: 12px; color: #1f2937; }
+        .emergency-card p { color: #4b5563; line-height: 1.75; margin-bottom: 18px; }
+        .emergency-card .badge { display: inline-flex; align-items: center; gap: 10px; background: #eef2ff; color: #4338ca; padding: 10px 14px; border-radius: 9999px; font-weight: 600; margin-bottom: 16px; }
+        .emergency-card a { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; color: #4338ca; text-decoration: none; }
+        .emergency-card a:hover { text-decoration: underline; }
+        .emergency-highlight { background: linear-gradient(180deg, #eef2ff 0%, #ffffff 100%); border: 1px solid rgba(99, 102, 241, 0.18); }
+        .emergency-hero-notice { margin-top: 18px; display: inline-block; padding: 14px 20px; border-radius: 16px; background: #e9f5ff; color: #1d4ed8; border: 1px solid #bfdbfe; }
+        @media (max-width: 640px) { .page-header { margin-top: 110px; } }
+    </style>
+</head>
+<body>
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link active">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="page-header">
+        <span class="badge">Emergency Service</span>
+        <h1>Bantuan Darurat untuk Kesehatan Mental</h1>
+        <p>Jika Anda membutuhkan bantuan cepat, gunakan kontak darurat ini. BloomWell hadir untuk menghubungkan Anda dengan layanan dukungan, nomor helpline, dan sumber daya kesehatan mental terpercaya.</p>
+        <div class="emergency-hero-notice">Jika ini adalah keadaan darurat nyawa atau bahaya serius, hubungi nomor darurat lokal segera.</div>
+    </section>
+
+    <section class="emergency-grid">
+        <article class="emergency-card emergency-highlight">
+            <h2>Call Center Darurat</h2>
+            <p>Hubungi hotline kesehatan mental 24 jam untuk konsultasi cepat dengan tenaga profesional.</p>
+            <p><strong>Nomor:</strong> <a href="tel:+622112345678">+62 21 1234 5678</a></p>
+            <a href="tel:+622112345678"><i class="fa-solid fa-phone"></i> Telepon Sekarang</a>
+        </article>
+
+        <article class="emergency-card">
+            <h2>Layanan Chat Instan</h2>
+            <p>Gunakan chat untuk dukungan langsung jika Anda merasa cemas, depresi, atau membutuhkan seseorang untuk diajak bicara.</p>
+            <a href="#chat-support"><i class="fa-solid fa-message"></i> Mulai Chat</a>
+        </article>
+
+        <article class="emergency-card">
+            <h2>Pusat Layanan Terdekat</h2>
+            <p>Temukan rumah sakit, klinik, atau pusat dukungan mental di dekat lokasi Anda untuk konsultasi langsung.</p>
+            <a href="#nearby-centers"><i class="fa-solid fa-location-dot"></i> Lihat Lokasi</a>
+        </article>
+
+        <article class="emergency-card">
+            <h2>Tips Ketenangan Cepat</h2>
+            <p>Tarik napas dalam, berlatih grounding, dan gunakan teknik penenangan diri ketika rasa takut atau cemas muncul.</p>
+            <a href="#tips"><i class="fa-solid fa-heart-pulse"></i> Lihat Panduan</a>
+        </article>
+    </section>
+</body>
+</html>

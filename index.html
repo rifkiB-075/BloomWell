@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home | BloomWell</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link active">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="auth.html" class="nav-link">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO SWIPER — FULL WIDTH, DI LUAR .home-wrapper -->
+    <div class="swiper mySwiper hero-swiper">
+        <div class="swiper-wrapper">
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="content-container">
+                        <div class="content">
+                            <h2>BloomWell</h2>
+                            <p>"Tingkatkan kesejahteraan mental Anda dengan BloomWell, tempat Anda menemukan gerbang menuju sumber daya tepercaya, bimbingan ahli, dan dukungan berkelanjutan."</p>
+                        </div>
+                    </div>
+                    <div class="img-div">
+                        <img src="images/slider1.jpg" alt="Kesehatan Mental" />
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="content-container">
+                        <div class="content">
+                            <h2>BloomWell</h2>
+                            <p>"Temukan berbagai alat perawatan diri yang dirancang untuk memandu Anda menuju pikiran yang lebih seimbang dan sehat."</p>
+                        </div>
+                    </div>
+                    <div class="img-div">
+<<<<<<< HEAD
+                        <img src="images/slider2.jpg" alt="Perawatan Diri" />
+=======
+<<<<<<< HEAD
+                        <img src="images/slider2.jpg" alt="Perawatan Diri" />
+=======
+                        <img src="images/slider2.png" alt="Perawatan Diri" />
+>>>>>>> bca9436cb2268b64890918418e5bd10c06d7fde1
+>>>>>>> 9b85d89cc64b1ec6bced16d8d1867081e2c1e8b1
+                    </div>
+                </div>
+            </div>
+            <div class="swiper-slide">
+                <div class="container">
+                    <div class="content-container">
+                        <div class="content">
+                            <h2>BloomWell</h2>
+                            <p>"Terhubunglah dengan para profesional kesehatan mental yang penuh kasih yang benar-benar memahami kebutuhan Anda."</p>
+                        </div>
+                    </div>
+                    <div class="img-div">
+                        <img src="images/slider3.jpg" alt="Dukungan Profesional" />
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-swiper-button-next">
+            <i class="fa-solid fa-arrow-right"></i>
+        </div>
+        <div class="hero-swiper-button-prev">
+            <i class="fa-solid fa-arrow-left"></i>
+        </div>
+        <div class="swiper-pagination hero-swiper-pagination"></div>
+    </div>
+
+    <!-- KONTEN UTAMA — dibungkus .home-wrapper untuk max-width -->
+    <div class="home-wrapper">
+
+        <!-- DASHBOARD: Welcome + Stats -->
+        <div class="dashboard-section">
+            <div class="dashboard-grid">
+                <div class="welcome-card">
+                    <div class="welcome-card-top">
+                        <span class="label" id="wc-label">Selamat Datang</span>
+                        <div class="badge-group">
+                            <span class="streak-badge"><i class="fa-solid fa-fire"></i> <span id="wc-streak">Streak 0 Hari</span></span>
+                            <span class="account-status" id="wc-status">Akun Aktif</span>
+                        </div>
+                    </div>
+                    <span class="account-name" id="wc-name">NAMA AKUN</span>
+                    <p class="welcome-text" id="wc-text">Selamat datang kembali! Lihat ringkasan aktivitas dan kemajuan kesehatan mental Anda di sini, agar setiap hari terasa lebih seimbang.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARTIKEL SECTION -->
+        <div class="article-section">
+            <div class="section-header">
+                <h2 class="section-title">ARTIKEL</h2>
+                <a href="resourcelibrary.html#artikel" class="see-all-link">Lihat selengkapnya</a>
+            </div>
+            <div class="cards-swiper swiper artikel-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/managing-anxiety.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/anxiety.jpg" alt="Kecemasan">
+                            <div class="card-body">
+                                <p class="card-title">Mengelola Kecemasan: Tips Praktis untuk Menenangkan Pikiran Anda</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/overcoming-depression.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/Depresi.jpg" alt="Depresi">
+                            <div class="card-body">
+                                <p class="card-title">Mengatasi Depresi: Langkah-langkah untuk Menemukan Kembali Hidup Anda</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/living-with-ocd.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/OCD.jpg" alt="OCD">
+                            <div class="card-body">
+                                <p class="card-title">Hidup dengan OCD: Memahami dan Mengelola Gangguan Obsesif-Kompulsif</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/understanding-ptsd.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/ptsd.jpg" alt="PTSD">
+                            <div class="card-body">
+                                <p class="card-title">Memahami PTSD: Jalan Menuju Pemulihan Setelah Trauma</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/managing-bipolar-disorder.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/Bipolar.jpg" alt="Bipolar">
+                            <div class="card-body">
+                                <p class="card-title">Mengelola Gangguan Bipolar: Menemukan Keseimbangan dalam Perubahan Suasana Hati</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="articles/feeling-like-a-future.html" class="scroll-card">
+                            <img class="card-thumbnail" src="images/article/merasagagal.jpg" alt="Rasa Gagal">
+                            <div class="card-body">
+                                <p class="card-title">Merasa Seperti Orang Gagal</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-pagination artikel-pagination cards-pagination"></div>
+            </div>
+        </div>
+
+        <!-- PODCAST SECTION -->
+        <div class="podcast-section">
+            <div class="section-header">
+                <h2 class="section-title">PODCAST</h2>
+                <a href="resourcelibrary.html#podcast" class="see-all-link">Lihat selengkapnya</a>
+            </div>
+            <div class="cards-swiper swiper podcast-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=0" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/1.webp" alt="Podcast 1">
+                            <div class="card-body">
+                                <p class="card-title">Nasihat Jordan Peterson untuk Orang dengan Depresi</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=1" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/2.webp" alt="Podcast 2">
+                            <div class="card-body">
+                                <p class="card-title">Kristen Bell tentang Hidup dengan Depresi dan Kecemasan</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=2" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/3.webp" alt="Podcast 3">
+                            <div class="card-body">
+                                <p class="card-title">Apakah Kamu Baik-Baik Saja?</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=3" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/4.webp" alt="Podcast 4">
+                            <div class="card-body">
+                                <p class="card-title">KETIKA KAMU MERASA INGIN MENYERAH - Pidato Inspiratif Terbaik</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=4" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/5.webp" alt="Podcast 5">
+                            <div class="card-body">
+                                <p class="card-title">PTSD Kompleks dalam 5 Menit</p>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="swiper-slide card-slide">
+                        <a href="podcast/podcast.html?index=5" class="scroll-card">
+                            <img class="card-thumbnail" src="podcast/assets/imagess/6.webp" alt="Podcast 6">
+                            <div class="card-body">
+                                <p class="card-title">Apa Itu Depresi? - Helen M. Farrell</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="swiper-pagination podcast-pagination cards-pagination"></div>
+            </div>
+        </div>
+
+    </div><!-- end home-wrapper -->
+
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script>
+        // Hero Swiper
+        new Swiper(".hero-swiper", {
+            spaceBetween: 30,
+            effect: "fade",
+            autoplay: { delay: 5000, disableOnInteraction: false },
+            navigation: {
+                nextEl: ".hero-swiper-button-next",
+                prevEl: ".hero-swiper-button-prev",
+            },
+            pagination: {
+                el: ".hero-swiper-pagination",
+                clickable: true,
+            },
+        });
+
+        // Artikel Swiper
+        new Swiper(".artikel-swiper", {
+            slidesPerView: 1.3,
+            spaceBetween: 16,
+            grabCursor: true,
+            allowTouchMove: true,
+            simulateTouch: true,
+            touchRatio: 1,
+            touchAngle: 45,
+            touchStartPreventDefault: false,
+            touchMoveStopPropagation: false,
+            preventClicks: false,
+            preventClicksPropagation: false,
+            slideToClickedSlide: true,
+            breakpoints: {
+                480:  { slidesPerView: 2.2, spaceBetween: 16 },
+                768:  { slidesPerView: 3.2, spaceBetween: 18 },
+                1024: { slidesPerView: 4.2, spaceBetween: 20 },
+                1280: { slidesPerView: 5,   spaceBetween: 20 },
+            },
+            pagination: {
+                el: ".artikel-pagination",
+                clickable: true,
+            },
+        });
+
+        // Podcast Swiper
+        new Swiper(".podcast-swiper", {
+            slidesPerView: 1.3,
+            spaceBetween: 16,
+            grabCursor: true,
+            allowTouchMove: true,
+            simulateTouch: true,
+            touchRatio: 1,
+            touchAngle: 45,
+            touchStartPreventDefault: false,
+            touchMoveStopPropagation: false,
+            preventClicks: false,
+            preventClicksPropagation: false,
+            slideToClickedSlide: true,
+            breakpoints: {
+                480:  { slidesPerView: 2.2, spaceBetween: 16 },
+                768:  { slidesPerView: 3.2, spaceBetween: 18 },
+                1024: { slidesPerView: 4.2, spaceBetween: 20 },
+                1280: { slidesPerView: 5,   spaceBetween: 20 },
+            },
+            pagination: {
+                el: ".podcast-pagination",
+                clickable: true,
+            },
+        });
+    </script>
+
+    <script>
+        // ── Welcome Card — isi data dari session ──────────────
+        function loadWelcomeCard() {
+            let session = null;
+            try {
+                const raw = localStorage.getItem('bw_session');
+                session   = raw ? JSON.parse(raw) : null;
+            } catch(e) { session = null; }
+
+            const elName   = document.getElementById('wc-name');
+            const elLabel  = document.getElementById('wc-label');
+            const elStreak = document.getElementById('wc-streak');
+            const elStatus = document.getElementById('wc-status');
+            const elText   = document.getElementById('wc-text');
+
+            // Ambil nama dari berbagai kemungkinan field
+            const nama = (session && (session.name || session.full_name || session.username)) || null;
+
+            if (nama) {
+                const firstName = nama.split(' ')[0];
+                elName.textContent   = nama.toUpperCase();
+                elLabel.textContent  = 'Selamat Datang,';
+                elText.textContent   = `Halo, ${firstName}! Lihat ringkasan aktivitas dan kemajuan kesehatan mental kamu di sini, agar setiap hari terasa lebih seimbang.`;
+                elStatus.textContent = 'Akun Aktif';
+                elStatus.style.background = 'rgba(255,255,255,0.2)';
+
+                // Streak
+                const streakKey  = 'bw_streak_' + (session.id || 'guest');
+                const streakData = JSON.parse(localStorage.getItem(streakKey) || '{"count":0,"lastDate":""}');
+                const today      = new Date().toISOString().slice(0, 10);
+                const yesterday  = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+                const streak     = (streakData.lastDate === today || streakData.lastDate === yesterday) ? streakData.count : 0;
+                elStreak.textContent = `Streak ${streak} Hari`;
+
+            } else {
+                // Belum login — tampilkan state tamu
+                elName.textContent   = 'Halo, Tamu!';
+                elLabel.textContent  = 'Selamat Datang';
+                elText.innerHTML     = 'Mulai perjalanan kesehatan mentalmu. <a href="auth.html?tab=signup" style="color:#fff;font-weight:700;text-decoration:underline;">Daftar gratis</a> atau <a href="auth.html" style="color:#fff;font-weight:700;text-decoration:underline;">masuk</a> untuk melacak perkembanganmu.';
+                elStatus.textContent = 'Tamu';
+                elStatus.style.background = 'rgba(255,255,255,0.12)';
+                elStreak.textContent = 'Streak 0 Hari';
+            }
+        }
+
+        // Jalankan saat DOM siap
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', loadWelcomeCard);
+        } else {
+            loadWelcomeCard();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Riwayat Analisis | BloomWell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/interactivetools.css">
+    <link rel="stylesheet" href="css/riwayat.css">
+</head>
+<body>
+
+    <!-- NAVBAR -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div"><img src="images/logo bloomwell.png" alt="BloomWell Logo"></div>
+                <div><h2>BloomWell</h2></div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="active">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
+                <li><a href="user-account.html">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="tools-layout">
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
+            <nav class="sidebar-nav">
+                <a href="interactiveTools.html#tool-moodmeter" class="sidebar-item" title="Mood Meter">
+                    <span class="sidebar-icon">🧪</span><span class="sidebar-label">Mood Meter</span>
+                </a>
+                <a href="kalender.html" class="sidebar-item" title="Kalender Mood">
+                    <span class="sidebar-icon">📅</span><span class="sidebar-label">Kalender Mood</span>
+                </a>
+                <a href="chat-ai.html" class="sidebar-item" title="Chat AI">
+                    <span class="sidebar-icon">💬</span><span class="sidebar-label">Chat AI</span>
+                </a>
+                <a href="analisis.html" class="sidebar-item active" title="Analisis AI">
+                    <span class="sidebar-icon">📊</span><span class="sidebar-label">Analisis AI</span>
+                </a>
+            </nav>
+        </aside>
+
+        <main>
+            <div class="riwayat-container">
+                <div class="riwayat-header">
+                    <h1>📜 Riwayat Analisis</h1>
+                    <div class="riwayat-controls">
+                        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Cari kata kunci...">
+                        <select class="filter-select" id="filterPeriod">
+                            <option value="all">Semua Periode</option>
+                            <option value="weekly">Mingguan</option>
+                            <option value="monthly">Bulanan</option>
+                        </select>
+                        <button class="clear-all-btn" onclick="clearAllData()">🗑️ Hapus Semua</button>
+                    </div>
+                </div>
+
+                <div class="stats-bar" id="statsBar">
+                    <div class="stats-item">📊 Total: <strong id="totalCount">0</strong></div>
+                    <div class="stats-item">✅ Sehat: <strong id="goodCount" style="color:#155724;">0</strong></div>
+                    <div class="stats-item">⚠️ Perlu Perhatian: <strong id="moderateCount" style="color:#856404;">0</strong></div>
+                    <div class="stats-item">🔴 Risiko Tinggi: <strong id="severeCount" style="color:#721c24;">0</strong></div>
+                </div>
+
+                <div class="riwayat-list" id="riwayatList"></div>
+            </div>
+        </main>
+    </div>
+
+    <div class="toast-riwayat" id="toastRiwayat"></div>
+
+    <script>
+        // ================== TOAST ==================
+        function showToast(msg, isError = false) {
+            const toast = document.getElementById('toastRiwayat');
+            toast.textContent = msg;
+            toast.className = 'toast-riwayat' + (isError ? ' error' : '');
+            toast.classList.add('show');
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ================== LOCAL STORAGE (KEY TANPA SPASI) ==================
+        function getHistory() {
+            return JSON.parse(localStorage.getItem('riwayatHistory')) || [];
+        }
+
+        function saveHistory(data) {
+            localStorage.setItem('riwayatHistory', JSON.stringify(data));
+        }
+
+        // ================== RENDER ==================
+        function renderRiwayat() {
+            const list = document.getElementById('riwayatList');
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const filter = document.getElementById('filterPeriod').value;
+
+            let data = getHistory();
+
+            if (filter !== 'all') {
+                data = data.filter(item => item.period === filter);
+            }
+
+            if (search !== '') {
+                data = data.filter(item => {
+                    const summary = (item.summary || '').toLowerCase();
+                    const suggestions = (item.suggestions || '').toLowerCase();
+                    const motivation = (item.motivation || '').toLowerCase();
+                    return summary.includes(search) || suggestions.includes(search) || motivation.includes(search);
+                });
+            }
+
+            data.sort((a, b) => (b.id || 0) - (a.id || 0));
+
+            updateStats(data);
+
+            if (data.length === 0) {
+                list.innerHTML = `
+                    <div class="empty-state-riwayat">
+                        <span class="big-icon">📭</span>
+                        <p style="font-size:1.1rem;color:#5a3d7a;">Belum ada analisis tersimpan.</p>
+                        <p style="color:#8a7a9e;">Kunjungi <strong>Analisis AI</strong> untuk membuat analisis pertama.</p>
+                        <a href="analisis.html" class="nav-link-btn" style="display:inline-block;margin-top:12px;padding:10px 24px;background:#8f6db3;color:#fff;border-radius:40px;text-decoration:none;">📊 Buka Analisis AI</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = '';
+            data.forEach((item, index) => {
+                const periodLabel = item.period === 'weekly' ? 'Mingguan' : 'Bulanan';
+                const status = item.mentalHealthStatus || 'unknown';
+                const statusLabel = item.mentalHealthLevel || 'Tidak diketahui';
+
+                let statusBadge = '';
+                if (status === 'good') statusBadge = `<span class="badge-status good">✅ ${statusLabel}</span>`;
+                else if (status === 'moderate') statusBadge = `<span class="badge-status moderate">⚠️ ${statusLabel}</span>`;
+                else if (status === 'severe') statusBadge = `<span class="badge-status severe">🔴 ${statusLabel}</span>`;
+                else statusBadge = `<span class="badge-status unknown">❓ ${statusLabel}</span>`;
+
+                const date = new Date(item.savedAt || item.generatedAt);
+                const dateStr = date.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+                const timeStr = date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+
+                let moodTags = '';
+                if (item.moodCounts && Object.keys(item.moodCounts).length > 0) {
+                    const emojiMap = { 'Senang':'😊', 'Tenang':'😌', 'Sedih':'😢', 'Marah':'😠', 'Cemas':'😰', 'Lelah':'😴' };
+                    const sorted = Object.entries(item.moodCounts).sort((a,b) => b[1]-a[1]);
+                    moodTags = sorted.map(([mood, count]) =>
+                        `<span class="mood-tag">${emojiMap[mood] || ''} ${mood} (${count}x)</span>`
+                    ).join('');
+                }
+
+                const summaryText = (item.summary || '').replace(/\n/g, '<br>');
+                const suggestionText = item.suggestions || '';
+
+                html += `
+                    <div class="riwayat-card">
+                        <div class="card-header-riwayat">
+                            <div>
+                                <span class="badge-period">${periodLabel}</span>
+                                ${statusBadge}
+                            </div>
+                            <span class="date-meta">📆 ${dateStr} • ${timeStr}</span>
+                        </div>
+                        <div class="card-body-riwayat">
+                            <div class="summary-text">${summaryText}</div>
+                            ${suggestionText ? `<div class="suggestion-text"><strong>💡 Saran:</strong> ${suggestionText}</div>` : ''}
+                            ${item.motivation ? `<div style="margin-top:0.5rem;font-style:italic;color:#5a3d7a;">💬 "${item.motivation}"</div>` : ''}
+                        </div>
+                        <div class="card-footer-riwayat">
+                            <div class="mood-tags">${moodTags}</div>
+                            <button class="delete-item-btn" onclick="deleteItem(${index})" title="Hapus analisis ini">✕ Hapus</button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            list.innerHTML = html;
+        }
+
+        // ================== STATISTIK ==================
+        function updateStats(data) {
+            document.getElementById('totalCount').textContent = data.length;
+            let good = 0, moderate = 0, severe = 0;
+            data.forEach(item => {
+                if (item.mentalHealthStatus === 'good') good++;
+                else if (item.mentalHealthStatus === 'moderate') moderate++;
+                else if (item.mentalHealthStatus === 'severe') severe++;
+            });
+            document.getElementById('goodCount').textContent = good;
+            document.getElementById('moderateCount').textContent = moderate;
+            document.getElementById('severeCount').textContent = severe;
+        }
+
+        // ================== HAPUS ==================
+        function deleteItem(index) {
+            const data = getHistory();
+            const sorted = [...data].sort((a, b) => (b.id || 0) - (a.id || 0));
+            if (index < 0 || index >= sorted.length) return;
+            const targetId = sorted[index].id;
+            const newData = data.filter(item => item.id !== targetId);
+            if (newData.length === data.length) {
+                showToast('Gagal menghapus item.', true);
+                return;
+            }
+            saveHistory(newData);
+            renderRiwayat();
+            showToast('🗑️ Analisis dihapus.');
+        }
+
+        function clearAllData() {
+            if (!confirm('Hapus SEMUA riwayat?')) return;
+            saveHistory([]);
+            renderRiwayat();
+            showToast('🗑️ Semua riwayat dihapus.');
+        }
+
+        // ================== EVENT & INIT ==================
+        document.getElementById('searchInput').addEventListener('input', renderRiwayat);
+        document.getElementById('filterPeriod').addEventListener('change', renderRiwayat);
+        document.addEventListener('DOMContentLoaded', renderRiwayat);
+
+        // ================== SIDEBAR ==================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+    </script>
+</body>
+</html>

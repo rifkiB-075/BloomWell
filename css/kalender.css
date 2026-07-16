@@ -1,0 +1,370 @@
+.calendar-wrapper {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+        }
+
+        .calendar-title {
+            text-align: center;
+            font-size: 24px;
+            color: #3d2c5e;
+            margin-bottom: 4px;
+        }
+
+        .calendar-subtitle {
+            text-align: center;
+            color: #7c6a8f;
+            font-size: 14px;
+            margin-bottom: 20px;
+            border-bottom: 1px dashed #d4c4e6;
+            padding-bottom: 12px;
+        }
+
+        .calendar-stats {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: white;
+            padding: 6px 18px;
+            border-radius: 40px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #3d2c5e;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .stat-item span {
+            font-weight: 700;
+            color: #8f6db3;
+        }
+
+        .month-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #e9def5;
+            padding: 8px 14px;
+            border-radius: 40px;
+            margin-bottom: 18px;
+        }
+
+        .nav-btn {
+            background: white;
+            border: none;
+            border-radius: 40px;
+            padding: 4px 16px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #3d2c5e;
+            font-weight: 500;
+        }
+
+        .nav-btn:hover {
+            background: #f3edfc;
+            transform: scale(1.05);
+        }
+
+        .month-label {
+            font-weight: 600;
+            font-size: 17px;
+            color: #2b1b42;
+        }
+
+        .day-names {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            text-align: center;
+            font-weight: 600;
+            color: #6b5a7e;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 5px;
+        }
+
+        .day-cell {
+            aspect-ratio: 1/1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.5);
+            font-weight: 500;
+            font-size: 14px;
+            color: #2b1b42;
+            transition: 0.15s;
+            cursor: default;
+            border: 1px solid rgba(255,255,255,0.3);
+            position: relative;
+            min-height: 48px;
+        }
+
+        .day-cell.empty {
+            background: transparent;
+            border: none;
+            cursor: default;
+        }
+
+        .day-cell.today {
+            border: 2px solid #a07bc9;
+            background: rgba(160, 123, 201, 0.12);
+            font-weight: 700;
+        }
+
+        .day-cell .day-number {
+            font-size: 14px;
+            line-height: 1.2;
+        }
+
+        .day-cell .mood-emoji-cell {
+            font-size: 20px;
+            line-height: 1;
+            margin-top: 1px;
+        }
+
+        .day-cell .mood-count-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: #8f6db3;
+            color: white;
+            font-size: 9px;
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+        }
+
+        .day-cell.has-mood {
+            background: rgba(160, 123, 201, 0.08);
+            border-color: rgba(160, 123, 201, 0.2);
+        }
+
+        .no-data-message {
+            text-align: center;
+            color: #aaa;
+            font-size: 13px;
+            margin-top: 16px;
+            padding: 20px;
+            background: rgba(255,255,255,0.4);
+            border-radius: 20px;
+        }
+
+        .calendar-footer {
+            text-align: center;
+            margin-top: 18px;
+            font-size: 12px;
+            color: #8f7aa3;
+        }
+
+        .detail-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(45, 31, 70, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 2000;
+        }
+
+        .detail-modal-overlay.show {
+            display: flex;
+        }
+
+        .detail-modal {
+            width: min(480px, 100%);
+            background: white;
+            border-radius: 24px;
+            box-shadow: 0 16px 50px rgba(0,0,0,0.18);
+            padding: 22px;
+            position: relative;
+        }
+
+        .detail-modal-close {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            border: none;
+            background: #f3ebfb;
+            color: #6d4a95;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .detail-modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3d2c5e;
+            margin-bottom: 8px;
+        }
+
+        .detail-modal-subtitle {
+            font-size: 13px;
+            color: #8a7a99;
+            margin-bottom: 14px;
+        }
+
+        .detail-entry {
+            background: #faf6ff;
+            border: 1px solid #eadff8;
+            border-radius: 16px;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+        }
+
+        .detail-entry strong {
+            display: block;
+            color: #3d2c5e;
+            margin-bottom: 4px;
+        }
+
+        .detail-entry .note {
+            color: #6c5b7f;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 6px;
+        }
+
+        .detail-entry-score {
+            font-size: 12px;
+            color: #8b6aa8;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        .detail-entry-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .detail-action-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 6px 10px;
+            font-size: 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .detail-action-btn.edit {
+            background: #f0e7ff;
+            color: #6d4a95;
+        }
+
+        .detail-action-btn.delete {
+            background: #ffe6e6;
+            color: #a94b4b;
+        }
+
+        .detail-edit-form {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-top: 8px;
+        }
+
+        .detail-edit-form select,
+        .detail-edit-form textarea {
+            border: 1px solid #e4d9f2;
+            border-radius: 12px;
+            padding: 8px 10px;
+            font: inherit;
+            color: #4d3f63;
+            background: white;
+        }
+
+        .detail-edit-form textarea {
+            min-height: 72px;
+            resize: vertical;
+        }
+
+        .detail-edit-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .detail-edit-actions button {
+            border: none;
+            border-radius: 999px;
+            padding: 7px 12px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+
+        .detail-edit-actions .save {
+            background: #8f6db3;
+            color: white;
+        }
+
+        .detail-edit-actions .cancel {
+            background: #f3ebfb;
+            color: #6d4a95;
+        }
+
+        /* Legend Mood Colors */
+        .mood-legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 14px;
+            justify-content: center;
+            margin: 12px 0 6px;
+        }
+
+        .mood-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: #5a4a6e;
+        }
+
+        .mood-legend-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.06);
+        }
+
+        @media (max-width: 480px) {
+            .calendar-wrapper {
+                padding: 14px;
+            }
+            .day-cell {
+                min-height: 38px;
+                font-size: 12px;
+            }
+            .day-cell .mood-emoji-cell {
+                font-size: 16px;
+            }
+            .calendar-stats {
+                gap: 10px;
+            }
+            .stat-item {
+                font-size: 11px;
+                padding: 4px 12px;
+            }
+        }
