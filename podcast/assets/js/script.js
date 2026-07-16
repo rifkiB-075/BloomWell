@@ -8,8 +8,8 @@
 
 const musicData = [
   {
-    backgroundimages: "assets/imagess/1.webp",
-    posterUrl: "assets/imagess/1.webp",
+    backgroundimages: "assets/images/nama1.webp",
+    posterUrl: "assets/images/1.webp",
     title: "Jordan Peterson’s Advice For People With Depression",
     album: "Guided Thoughts with Jordan Peterson ",
     year: 2021,
@@ -17,8 +17,8 @@ const musicData = [
     musicPath: "assets/music/1.mp3",
   },
   {
-    backgroundimages: "assets/imagess/2.webp",
-    posterUrl: "assets/imagess/2.webp",
+    backgroundimages: "assets/images/2.webp",
+    posterUrl: "assets/images/2.webp",
     title: "Kristen Bell on Living with Depression and Anxiety - Body Stories - SELF",
     album: "Celebrities Speak Out",
     year: 2019,
@@ -26,8 +26,8 @@ const musicData = [
     musicPath: "assets/music/2.mp3",
   },
   {
-    backgroundimages: "assets/imagess/3.webp",
-    posterUrl: "assets/imagess/3.webp",
+    backgroundimages: "assets/images/3.webp",
+    posterUrl: "assets/images/3.webp",
     title: "Are You Okay?",
     album: "Heart-to-Heart Conversations",
     year: 2022,
@@ -35,8 +35,8 @@ const musicData = [
     musicPath: "assets/music/3.mp3",
   },
   {
-    backgroundimages: "assets/imagess/4.webp",
-    posterUrl: "assets/imagess/4.webp",
+    backgroundimages: "assets/images/4.webp",
+    posterUrl: "assets/images/4.webp",
     title: "WHEN YOU FEEL LIKE QUITTING - Best Inspiring Speech on Mental Health",
     album: "Rise Above: Motivational Journeys",
     year: 2021,
@@ -44,8 +44,8 @@ const musicData = [
     musicPath: "assets/music/4.mp3",
   },
   {
-    backgroundimages: "assets/imagess/5.webp",
-    posterUrl: "assets/imagess/5.webp",
+    backgroundimages: "assets/images/5.webp",
+    posterUrl: "assets/images/5.webp",
     title: "Complex PTSD in 5 Minutes",
     album: " Mental Health Explained",
     year: 2023,
@@ -53,8 +53,8 @@ const musicData = [
     musicPath: "assets/music/5.mp3",
   },
   {
-    backgroundimages: "assets/imagess/6.webp",
-    posterUrl: "assets/imagess/6.webp",
+    backgroundimages: "assets/images/6.webp",
+    posterUrl: "assets/images/6.webp",
     title: "What is Depression? - Helen M. Farrell",
     album: "Understanding Mental Health ",
     year: 2020,
