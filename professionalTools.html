@@ -24,16 +24,31 @@
 </head>
 
 <body>
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">
-                <div class="img-div">
-                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
-                </div>
-                <div>
-                    <h2>BloomWell</h2>
-                </div>
+
+    <!-- ===== Auth Gate Modal ===== -->
+    <div class="auth-gate-overlay" id="auth-gate-overlay">
+        <div class="auth-gate-modal">
+            <button class="auth-gate-close" id="auth-gate-close" aria-label="Tutup">&times;</button>
+            <div class="auth-gate-icon">🔒</div>
+            <h3>Masuk Dulu, Yuk!</h3>
+            <p>Untuk menghubungi dan mengirim pesan ke psikolog, kamu perlu masuk atau membuat akun BloomWell terlebih dahulu.</p>
+            <div class="auth-gate-actions">
+                <button class="auth-gate-btn primary" id="auth-gate-login">Sudah Punya Akun</button>
+                <button class="auth-gate-btn secondary" id="auth-gate-signup">Daftar Akun Baru</button>
             </div>
+        </div>
+    </div>
+
+    <header class="header">
+    <nav class="nav">
+        <div class="logo">
+                <div class="img-div">
+                    <!-- <img src="images/logo.png" alt="BloomWell Logo"> -->
+                </div>
+            <div>
+                <h2>BloomWell</h2>
+            </div>
+        </div>
 
         <ul class="nav-links">
             <li><a href="index.html" class="nav-link ">Home</a></li>
@@ -100,6 +115,42 @@
 </div>
 
 <script>
+/* ===== Auth Gate Logic ===== */
+function isLoggedIn() {
+    try {
+        return !!localStorage.getItem('bw_session');
+    } catch (e) {
+        return false;
+    }
+}
+
+function openAuthGate() {
+    document.getElementById('auth-gate-overlay').classList.add('show');
+}
+
+function closeAuthGate() {
+    document.getElementById('auth-gate-overlay').classList.remove('show');
+}
+
+// Panggil ini sebelum menjalankan aksi yang butuh login.
+// Mengembalikan true jika sudah login, false jika belum (dan menampilkan modal).
+function requireLogin() {
+    if (isLoggedIn()) return true;
+    openAuthGate();
+    return false;
+}
+
+document.getElementById('auth-gate-close').addEventListener('click', closeAuthGate);
+document.getElementById('auth-gate-overlay').addEventListener('click', function (e) {
+    if (e.target.id === 'auth-gate-overlay') closeAuthGate();
+});
+document.getElementById('auth-gate-login').addEventListener('click', function () {
+    window.location.href = 'Auth.html';
+});
+document.getElementById('auth-gate-signup').addEventListener('click', function () {
+    window.location.href = 'Auth.html?tab=signup';
+});
+
 /* ==========================================================
    DATA DAFTAR PSIKOLOG
    Avatar memakai layanan DiceBear (ilustrasi kartun, bukan
@@ -284,6 +335,7 @@ function renderMessages(history) {
 }
 
 function openChat(id) {
+    if (!requireLogin()) return;
     currentDoctor = doctors.find(d => d.id === id);
     if (!currentDoctor) return;
 
