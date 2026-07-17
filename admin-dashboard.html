@@ -184,6 +184,15 @@
 
       : 'backend/api';
 
+<<<<<<< HEAD
+    // Bypass sementara: nonaktifkan gate login admin agar admin-dashboard.html bisa diakses langsung.
+    function isAdminLoggedIn(){
+      return true;
+    }
+
+    function requireAdmin(){
+      // no-op (bypass)
+=======
     function isAdminLoggedIn(){
       try {
         const raw = localStorage.getItem(ADMIN_SESSION_KEY);
@@ -199,10 +208,15 @@
       if(!isAdminLoggedIn()){
         window.location.href = 'admin-login.html';
       }
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     }
 
     requireAdmin();
 
+<<<<<<< HEAD
+
+=======
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     function openTab(tab){
       const resourcesBtn = document.getElementById('tab-resources');
       const moodsBtn = document.getElementById('tab-moods');
