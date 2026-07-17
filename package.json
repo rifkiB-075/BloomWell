@@ -20,6 +20,10 @@
   "license": "MIT",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.21.0",
+<<<<<<< HEAD
+    "@google/generative-ai": "^0.24.1",
+=======
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     "axios": "^1.18.1",
     "cors": "^2.8.5",
     "dotenv": "^16.6.1",
