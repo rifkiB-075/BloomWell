@@ -228,8 +228,13 @@
     color: #5a3d7a;
 }
 
+<<<<<<< HEAD
+/* ---------- TOMBOL SIMPAN KE RANGKUMAN ---------- */
+.save-rangkuman-btn {
+=======
 /* ---------- TOMBOL SIMPAN KE  riwayat ---------- */
 .save- riwayat-btn {
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     margin-top: 1.8rem;
     background: #1D9E75;
     border: none;
@@ -244,7 +249,11 @@
     border: none;
 }
 
+<<<<<<< HEAD
+.save-rangkuman-btn:hover {
+=======
 .save- riwayat-btn:hover {
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     background: #16835f;
     transform: scale(1.02);
     box-shadow: 0 4px 12px rgba(29, 158, 117, 0.3);
@@ -465,6 +474,9 @@
     font-size: 0.7rem;
     font-weight: 600;
     margin-left: 0.5rem;
+<<<<<<< HEAD
+}
+=======
 }
 
  .result-content .ai-suggestions {
@@ -556,3 +568,4 @@
         .toast-message.error { background: #D85A30; }
         .result-content .ai-suggestions { background: #f3ecfe; }
     </style>
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
