@@ -10,6 +10,17 @@
 </head>
 <body>
 
+<<<<<<< HEAD
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+=======
     <!-- ===== Auth Gate Modal ===== -->
     <div class="auth-gate-overlay" id="auth-gate-overlay">
         <div class="auth-gate-modal">
@@ -29,6 +40,7 @@
             <div class="logo">
                 <div class="img-div"></div>
                 <div><h2>BloomWell</h2></div>
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
             </div>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
@@ -47,6 +59,26 @@
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
             <nav class="sidebar-nav">
+<<<<<<< HEAD
+                <a href="#" class="sidebar-item active" onclick="showTool('moodmeter', this); return false;" title="Mood Meter">
+                    <span class="sidebar-icon">🧪</span>
+                    <span class="sidebar-label">Mood Meter</span>
+                </a>
+                <a href="kalender.html" class="sidebar-item" title="Kalender Mood">
+                    <span class="sidebar-icon">📅</span>
+                    <span class="sidebar-label">Kalender Mood</span>
+                </a>
+                <a href="chat-ai.html" class="sidebar-item" title="Chat AI">
+                    <span class="sidebar-icon">💬</span>
+                    <span class="sidebar-label">Chat AI</span>
+                </a>
+                <a href="analisis.html" class="sidebar-item" title="Analisis AI">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Analisis AI</span>
+                </a>
+                 
+                 
+=======
                 <a href="#" class="sidebar-item active" onclick="if(!requireLogin())return false; showTool('moodmeter', this); return false;" title="Mood Meter">
                     <span class="sidebar-icon">🧪</span>
                     <span class="sidebar-label">Mood Meter</span>
@@ -63,6 +95,7 @@
                     <span class="sidebar-icon">📊</span>
                     <span class="sidebar-label">Analisis AI</span>
                 </a>
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
             </nav>
         </aside>
 
@@ -170,6 +203,8 @@
     </div>
 
     <script>
+<<<<<<< HEAD
+=======
         /* ===== Auth Gate Logic ===== */ 
         function isLoggedIn() {
             try {
@@ -206,6 +241,7 @@
             window.location.href = 'Auth.html?tab=signup';
         });
 
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
         const moods = [
             { label: 'Senang', color: '#EF9F27', light: '#FAE0A0', emoji: '😊', expression: 'happy' },
             { label: 'Tenang', color: '#1D9E75', light: '#A0DFC7', emoji: '😌', expression: 'calm' },
@@ -220,6 +256,60 @@
         let currentExpression = 'neutral';
         const MAX = 10;
 
+<<<<<<< HEAD
+        async function fetchMoodApi(url, options = {}) {
+            const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'http://localhost';
+            const baseCandidates = [];
+
+            // Candidate yang paling "aman" untuk kasus static page + Laragon root
+            baseCandidates.push(url);
+            baseCandidates.push(`./${url}`);
+
+            // Jika url diawali backend/, buat versi absolute
+            if (url.startsWith('backend/')) {
+                baseCandidates.push(`${origin}/${url}`);
+                baseCandidates.push(`/${url}`);
+            }
+
+            // Jika url tidak diawali backend/, coba tetap pasangkan dengan root umum
+            baseCandidates.push(`${origin}/backend/api/mood-meter.php`);
+            baseCandidates.push(`/${url}`);
+
+            // Unikkan + buang yang kosong
+            const candidates = [...new Set(baseCandidates)].filter(Boolean);
+
+            let lastError = 'Tidak ada respons dari server mood';
+            for (const candidate of candidates) {
+                try {
+                    const response = await fetch(candidate, options);
+                    const text = await response.text();
+
+                    let payload = null;
+                    try {
+                        payload = text ? JSON.parse(text) : null;
+                    } catch (err) {
+                        payload = { success: false, message: text.slice(0, 220) };
+                    }
+
+                    if (response.ok && payload) {
+                        return { payload, response, candidate };
+                    }
+
+                    lastError = payload?.message || `HTTP ${response.status}`;
+                } catch (error) {
+                    // Biarkan lastError menunjukkan error fetch yang benar
+                    lastError = error?.message || String(error);
+                }
+
+                // Debug untuk tahu candidate mana yang gagal
+                console.warn('[mood-meter] fetch failed candidate:', candidate, 'lastError:', lastError);
+            }
+
+            throw new Error(lastError);
+        }
+
+=======
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
         // Bottle body coordinates (circle: cx=80, cy=170, r=65)
         const BODY_TOP_Y = 105;
         const BODY_BOTTOM_Y = 235;
@@ -513,15 +603,22 @@
         }
 
         function selectMood(i) { 
+<<<<<<< HEAD
+=======
             if (!requireLogin()) return;
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
             selectedMood = i; 
             renderMoodBtns();
             // Preview the expression when selecting mood
             updateFaceExpression(moods[i].label);
         }
 
+<<<<<<< HEAD
+        async function saveMood() {
+=======
         function saveMood() {
             if (!requireLogin()) return;
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
             if (selectedMood === null) { alert('Pilih mood dulu yaa~ ✨'); return; }
             if (records.length >= MAX) { 
                 alert('🎉 Botol sudah penuh! Kamu hebat! Ayo lanjutkan esok hari ya~ 🎉'); 
@@ -529,6 +626,45 @@
             }
             
             const selectedMoodObj = moods[selectedMood];
+<<<<<<< HEAD
+            const note = document.getElementById('journal-input').value.trim();
+            const moodValue = Math.max(10, Math.min(100, 100 - (selectedMood * 15)));
+
+            try {
+                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mood_value: moodValue,
+                        mood_label: selectedMoodObj.label,
+                        note: note
+                    })
+                });
+
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menyimpan data mood');
+                }
+
+                records.push({ mood: selectedMoodObj.label, note, date: new Date().toISOString().split('T')[0] });
+                updateFaceExpression(selectedMoodObj.label);
+                
+                document.getElementById('journal-input').value = '';
+                selectedMood = null;
+                renderMoodBtns();
+                renderBottle();
+                renderLegend();
+                animateBottle();
+                showBubble();
+                
+                const t = document.getElementById('save-toast');
+                t.textContent = '🎉 Mood tersimpan ke database! 🎉';
+                t.classList.add('show');
+                setTimeout(() => t.classList.remove('show'), 2200);
+            } catch (error) {
+                console.error(error);
+                alert('Gagal menyimpan mood: ' + error.message);
+            }
+=======
             records.push({ mood: selectedMoodObj.label, note: document.getElementById('journal-input').value.trim() });
             
             // Update face expression based on the mood just added
@@ -545,6 +681,7 @@
             const t = document.getElementById('save-toast');
             t.classList.add('show');
             setTimeout(() => t.classList.remove('show'), 2000);
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
         }
 
         function toggleSidebar() {
