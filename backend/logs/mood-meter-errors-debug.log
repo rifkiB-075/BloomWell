@@ -170,6 +170,8 @@ Stack trace:
 #0 C:\laragon\www\BloomWell\backend\api\mood-meter.php(214): mysqli_stmt_bind_param(false, 'iis', 1, 40, '')
 #1 {main}
   thrown in C:\laragon\www\BloomWell\backend\api\mood-meter.php on line 214
+<<<<<<< HEAD
+=======
 [2026-07-16 14:02:08] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
 [2026-07-16 14:02:08] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
 [2026-07-16 14:02:08] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
@@ -314,3 +316,4 @@ Stack trace:
 [2026-07-16 19:22:13] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
 [2026-07-16 19:22:13] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
 [2026-07-16 19:22:13] SHUTDOWN ERROR: mysqli_connect(): (HY000/1045): Access denied for user 'root'@'localhost' (using password: YES) in C:\laragon\www\BloomWell\backend\config\database.php on line 13
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
