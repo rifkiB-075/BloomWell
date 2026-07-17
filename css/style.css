@@ -14,6 +14,7 @@ body {
     background: #f7f9fc;
     color: #222;
     font-size: 16px;
+    padding-top: 70px; /* Untuk memberi ruang pada fixed header */
 }
 
 /* Container Global */
@@ -43,6 +44,9 @@ body {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 100%;
 }
 
 /* LOGO */
@@ -92,6 +96,7 @@ body {
     padding-bottom: 4px;
     position: relative;
     white-space: nowrap;
+    transition: color 0.3s ease;
 }
 
 /* Garis bawah animasi */
@@ -128,6 +133,11 @@ body {
    =========================== */
 
 @media (max-width: 900px) {
+    .header {
+        height: auto;
+        min-height: 70px;
+    }
+
     .nav {
         flex-wrap: wrap;
         justify-content: center;
@@ -149,6 +159,10 @@ body {
 }
 
 @media (max-width: 768px) {
+    body {
+        padding-top: 60px;
+    }
+
     .header {
         padding: 10px 15px;
         height: auto;
@@ -175,5 +189,34 @@ body {
 
     .nav-links li a {
         font-size: 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 12px;
+    }
+
+    .nav-links {
+        gap: 8px;
+    }
+
+    .nav-links li a {
+        font-size: 0.7rem;
+        padding-bottom: 2px;
+    }
+
+    .logo h2 {
+        font-size: 16px;
+    }
+
+    .logo .img-div {
+        width: 30px;
+        height: 30px;
+    }
+
+    .logo .img-div img {
+        width: 30px;
+        height: 30px;
     }
 }
