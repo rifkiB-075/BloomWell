@@ -24,6 +24,18 @@
 </head>
 
 <body>
+<<<<<<< HEAD
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+=======
 
     <!-- ===== Auth Gate Modal ===== -->
     <div class="auth-gate-overlay" id="auth-gate-overlay">
@@ -49,6 +61,7 @@
                 <h2>BloomWell</h2>
             </div>
         </div>
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 
         <ul class="nav-links">
             <li><a href="index.html" class="nav-link ">Home</a></li>
@@ -115,6 +128,8 @@
 </div>
 
 <script>
+<<<<<<< HEAD
+=======
 /* ===== Auth Gate Logic ===== */
 function isLoggedIn() {
     try {
@@ -151,6 +166,7 @@ document.getElementById('auth-gate-signup').addEventListener('click', function (
     window.location.href = 'Auth.html?tab=signup';
 });
 
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 /* ==========================================================
    DATA DAFTAR PSIKOLOG
    Avatar memakai layanan DiceBear (ilustrasi kartun, bukan
@@ -335,7 +351,10 @@ function renderMessages(history) {
 }
 
 function openChat(id) {
+<<<<<<< HEAD
+=======
     if (!requireLogin()) return;
+>>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     currentDoctor = doctors.find(d => d.id === id);
     if (!currentDoctor) return;
 
