@@ -780,246 +780,241 @@ body {
     font-size: 12px;
     color: #8f7aa3;
 }
-<<<<<<< HEAD
-/* Animations for bottle and bubbles */
-=======
-        /* Animations for bottle and bubbles */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
-        @keyframes wobble {
-            0% { transform: rotate(0deg); }
-            25% { transform: rotate(4deg); }
-            75% { transform: rotate(-3deg); }
-            100% { transform: rotate(0deg); }
-        }
-        
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
-        }
-        
-        @keyframes bounceFace {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
-        }
-        
-        .floating-bubble {
-            position: fixed;
-            font-size: 32px;
-            pointer-events: none;
-            animation: floatUp 1s ease-out forwards;
-            z-index: 1000;
-        }
-        
-        @keyframes floatUp {
-            0% {
-                transform: translateY(0) scale(0.5);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-150px) scale(1.3);
-                opacity: 0;
-            }
-        }
-        
-        /* Full screen adjustment */
-        html, body {
-            height: 100%;
-            width: 100%;
-            overflow-x: hidden;
-        }
-        
-        body {
-            min-height: 100vh;
-            min-height: -webkit-fill-available;
-            padding-top: 90px;
-        }
-        
-        .tools-layout {
-            min-height: calc(100vh - 70px);
-            min-height: calc(100dvh - 70px);
-        }
-        
-        /* Cute round bottle animation */
-        #bottle-svg {
-            cursor: pointer;
-            transition: transform 0.2s ease;
-        }
-        
-        #bottle-svg:hover {
-            animation: pulse 0.3s ease;
-        }
-        
-        /* Face animation when mood changes */
-        .face-animate {
-            animation: bounceFace 0.3s ease;
-        }
-        
-        @media (max-width: 700px) {
-            .tools-main {
-                padding: 20px 16px;
-            }
-            
-            .bottle-section svg {
-                max-width: 100%;
-                height: auto;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .moodmeter-wrapper {
-                gap: 20px;
-            }
-            
-            .meter-bottom {
-                gap: 18px;
-            }
-            
-            .legend-box {
-                padding: 12px 14px;
-            }
-            
-            .mood-btn {
-                padding: 6px 14px;
-                font-size: 11px;
-            }
-            
-            .save-btn {
-                padding: 10px 24px;
-                font-size: 13px;
-            }
-        }
-        
-        @media (max-height: 500px) and (orientation: landscape) {
-            .tools-main {
-                padding: 12px 20px;
-            }
-            
-            .moodmeter-wrapper {
-                gap: 12px;
-            }
-            
-            .bottle-section svg {
-                width: 80px;
-                height: auto;
-            }
-            
-            .meter-bottom {
-                max-width: 500px;
-            }
-            
-            .journal-section textarea {
-                min-height: 50px;
-            }
-<<<<<<< HEAD
-=======
-        }
 
-        /* ===== Auth Gate Modal ===== */
-        .auth-gate-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(60, 40, 80, 0.45);
-            backdrop-filter: blur(3px);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 3000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.25s ease;
-            padding: 16px;
-        }
+/* ===== ANIMATIONS ===== */
+@keyframes wobble {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(4deg); }
+    75% { transform: rotate(-3deg); }
+    100% { transform: rotate(0deg); }
+}
 
-        .auth-gate-overlay.show {
-            opacity: 1;
-            pointer-events: all;
-        }
+@keyframes pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+}
 
-        .auth-gate-modal {
-            background: #fff;
-            border-radius: 20px;
-            max-width: 380px;
-            width: 100%;
-            padding: 32px 28px 28px;
-            text-align: center;
-            position: relative;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.25);
-            transform: translateY(14px) scale(0.97);
-            transition: transform 0.25s ease;
-        }
+@keyframes bounceFace {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-3px); }
+}
 
-        .auth-gate-overlay.show .auth-gate-modal {
-            transform: translateY(0) scale(1);
-        }
+.floating-bubble {
+    position: fixed;
+    font-size: 32px;
+    pointer-events: none;
+    animation: floatUp 1s ease-out forwards;
+    z-index: 1000;
+}
 
-        .auth-gate-close {
-            position: absolute;
-            top: 14px;
-            right: 14px;
-            border: none;
-            background: #f2ecf9;
-            color: #7c5a9e;
-            width: 30px;
-            height: 30px;
-            border-radius: 50%;
-            font-size: 18px;
-            line-height: 1;
-            cursor: pointer;
-        }
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-150px) scale(1.3);
+        opacity: 0;
+    }
+}
 
-        .auth-gate-icon {
-            width: 64px;
-            height: 64px;
-            margin: 0 auto 14px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #a084d4, #7c5a9e);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 28px;
-        }
+/* Full screen adjustment */
+html, body {
+    height: 100%;
+    width: 100%;
+    overflow-x: hidden;
+}
 
-        .auth-gate-modal h3 {
-            font-size: 19px;
-            color: #4a3866;
-            margin-bottom: 8px;
-        }
+body {
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    padding-top: 90px;
+}
 
-        .auth-gate-modal p {
-            font-size: 14px;
-            color: #6d6480;
-            line-height: 1.5;
-            margin-bottom: 22px;
-        }
+.tools-layout {
+    min-height: calc(100vh - 70px);
+    min-height: calc(100dvh - 70px);
+}
 
-        .auth-gate-actions {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
+/* Cute round bottle animation */
+#bottle-svg {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
 
-        .auth-gate-btn {
-            border: none;
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-family: "Poppins", sans-serif;
-            font-weight: 600;
-            font-size: 14px;
-            cursor: pointer;
-            transition: transform 0.15s ease, opacity 0.15s ease;
-        }
+#bottle-svg:hover {
+    animation: pulse 0.3s ease;
+}
 
-        .auth-gate-btn:hover {
-            transform: translateY(-1px);
-        }
+/* Face animation when mood changes */
+.face-animate {
+    animation: bounceFace 0.3s ease;
+}
 
-        .auth-gate-btn.primary {
-            background: linear-gradient(135deg, #a084d4, #7c5a9e);
-            color: #fff;
-        }
+/* Additional responsive adjustments */
+@media (max-width: 700px) {
+    .tools-main {
+        padding: 20px 16px;
+    }
+    
+    .bottle-section svg {
+        max-width: 100%;
+        height: auto;
+    }
+}
 
-        .auth-gate-btn.secondary {
-            background: #f2ecf9;
-            color: #7c5a9e;
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
-        }
+@media (max-width: 480px) {
+    .moodmeter-wrapper {
+        gap: 20px;
+    }
+    
+    .meter-bottom {
+        gap: 18px;
+    }
+    
+    .legend-box {
+        padding: 12px 14px;
+    }
+    
+    .mood-btn {
+        padding: 6px 14px;
+        font-size: 11px;
+    }
+    
+    .save-btn {
+        padding: 10px 24px;
+        font-size: 13px;
+    }
+}
+
+@media (max-height: 500px) and (orientation: landscape) {
+    .tools-main {
+        padding: 12px 20px;
+    }
+    
+    .moodmeter-wrapper {
+        gap: 12px;
+    }
+    
+    .bottle-section svg {
+        width: 80px;
+        height: auto;
+    }
+    
+    .meter-bottom {
+        max-width: 500px;
+    }
+    
+    .journal-section textarea {
+        min-height: 50px;
+    }
+}
+
+/* ===== AUTH GATE MODAL ===== */
+.auth-gate-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(60, 40, 80, 0.45);
+    backdrop-filter: blur(3px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+    padding: 16px;
+}
+
+.auth-gate-overlay.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.auth-gate-modal {
+    background: #fff;
+    border-radius: 20px;
+    max-width: 380px;
+    width: 100%;
+    padding: 32px 28px 28px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    transform: translateY(14px) scale(0.97);
+    transition: transform 0.25s ease;
+}
+
+.auth-gate-overlay.show .auth-gate-modal {
+    transform: translateY(0) scale(1);
+}
+
+.auth-gate-close {
+    position: absolute;
+    top: 14px;
+    right: 14px;
+    border: none;
+    background: #f2ecf9;
+    color: #7c5a9e;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+}
+
+.auth-gate-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 14px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a084d4, #7c5a9e);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+}
+
+.auth-gate-modal h3 {
+    font-size: 19px;
+    color: #4a3866;
+    margin-bottom: 8px;
+}
+
+.auth-gate-modal p {
+    font-size: 14px;
+    color: #6d6480;
+    line-height: 1.5;
+    margin-bottom: 22px;
+}
+
+.auth-gate-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.auth-gate-btn {
+    border: none;
+    border-radius: 12px;
+    padding: 12px 18px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.auth-gate-btn:hover {
+    transform: translateY(-1px);
+}
+
+.auth-gate-btn.primary {
+    background: linear-gradient(135deg, #a084d4, #7c5a9e);
+    color: #fff;
+}
+
+.auth-gate-btn.secondary {
+    background: #f2ecf9;
+    color: #7c5a9e;
+}
