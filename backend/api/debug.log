@@ -1,0 +1,18 @@
+RAW INPUT: '{name:Test User,username:testuser4,email:test4@example.com,password:password123}'
+JSON PARSE: 
+JSON ERROR: 4
+USING POST: Array
+(
+)
+
+=== NEW REQUEST ===
+RAW: '{name:Test User,username:testuser6,email:test6@example.com,password:password123}'
+JSON PARSE: 
+JSON ERROR: 4
+FIXED JSON: '{name:"Test" User,username:"testuser6",email:"test6@example.com",password:"password123"}'
+FIXED PARSE: 
+FORM PARSE: Array
+(
+    ['{name:Test_User,username:testuser6,email:test6@example_com,password:password123}'] => 
+)
+

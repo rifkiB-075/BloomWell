@@ -27,6 +27,44 @@ if (!GEMINI_API_KEY) {
 // ===== Ambil data mood =====
 const MOOD_API_URL = process.env.MOOD_API_URL || 'http://localhost/BloomWell/backend/api/mood-meter.php';
 
+// ===== Proxy untuk backend PHP =====
+const PHP_BACKEND_URL = process.env.PHP_BACKEND_URL || 'http://localhost/BloomWell/backend/api';
+
+// Proxy endpoint untuk login.php, register.php, dll.
+app.use('/api/backend/*', async (req, res) => {
+    try {
+        const backendPath = req.params[0]; // menangkap semua path setelah /api/backend/
+        const backendUrl = `${PHP_BACKEND_URL}/${backendPath}`;
+        
+        console.log(`🔄 Proxying ${req.method} ${req.path} → ${backendUrl}`);
+        
+        // Forward request ke backend PHP
+        const response = await axios({
+            method: req.method,
+            url: backendUrl,
+            data: req.body,
+            headers: {
+                'Content-Type': req.headers['content-type'] || 'application/json',
+                'Accept': req.headers['accept'] || '*/*'
+            },
+            params: req.query
+        });
+        
+        console.log(`✅ Proxy response: ${response.status}`);
+        // Return response dari backend PHP
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error('❌ Proxy error:', error.message);
+        if (error.response) {
+            console.error('   Status:', error.response.status);
+            console.error('   Data:', error.response.data);
+        }
+        const status = error.response?.status || 500;
+        const data = error.response?.data || { success: false, message: 'Gagal terhubung ke backend PHP' };
+        res.status(status).json(data);
+    }
+});
+
 async function fetchMoodHistory() {
     try {
         const response = await axios.get(MOOD_API_URL);

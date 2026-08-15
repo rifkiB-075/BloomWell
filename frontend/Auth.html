@@ -206,9 +206,7 @@
         }
 
         // ── URL API backend ───────────────────────────────────
-        const API_BASE = (window.location.origin && window.location.origin !== 'null')
-          ? window.location.origin + '/BloomWell/backend/api'
-          : '/BloomWell/backend/api';
+        const API_BASE = 'http://bloomwell.test/backend/api';
 
         // ── LOGIN ─────────────────────────────────────────────
         async function handleLogin() {

@@ -7,15 +7,49 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-// Ambil raw input
+// Ambil raw input data - gunakan metode yang reliable
 $raw = file_get_contents("php://input");
 
-// Coba parse JSON
-$data = json_decode($raw, true);
+// Jika raw input kosong, coba dari global $HTTP_RAW_POST_DATA (untuk mod_fcgid)
+if (empty($raw) && isset($HTTP_RAW_POST_DATA)) {
+    $raw = $HTTP_RAW_POST_DATA;
+}
 
-// Jika gagal, coba dari $_POST
-if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+// Jika masih kosong, coba dari $_POST (untuk form-data)
+if (empty($raw) && !empty($_POST)) {
     $data = $_POST;
+} else {
+    // Coba parse sebagai JSON
+    $data = json_decode($raw, true);
+    
+    // Jika gagal parse JSON (error 4 = syntax error), coba perbaiki format
+    if (json_last_error() === JSON_ERROR_SYNTAX) {
+        // Handle case: JavaScript object literal tanpa quotes (mod_fcgid issue)
+        $fixed = preg_replace_callback(
+            '/(\w+)\s*:\s*([^,}\s]+)/',
+            function($matches) {
+                $key = $matches[1];
+                $value = trim($matches[2]);
+                // Jika value mengandung spasi atau karakter khusus, wrap dengan quotes
+                if (preg_match('/[\s,@#$%^&*()\/\\]/', $value) || is_numeric($value)) {
+                    return '"' . $key . '":"' . addslashes($value) . '"';
+                }
+                return '"' . $key . '":"' . $value . '"';
+            },
+            $raw
+        );
+        $data = json_decode($fixed, true);
+    }
+    
+    // Jika masih gagal, coba parse sebagai form URL-encoded
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+        parse_str($raw, $data);
+    }
+    
+    // Jika masih gagal, gunakan $_POST sebagai fallback
+    if (!is_array($data) || empty($data)) {
+        $data = $_POST;
+    }
 }
 
 $email    = trim($data['email'] ?? '');

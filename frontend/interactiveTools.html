@@ -189,7 +189,16 @@
         /* ===== API helper (optional server calls) ===== */
         async function fetchMoodApi(url, options = {}) {
             const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'http://localhost';
-            const baseCandidates = [url, `./${url}`, `${origin}/BloomWell/backend/api/mood-meter.php`, `/BloomWell/${url}`];
+            const basePath = window.location.pathname.includes('BloomWell') ? '/BloomWell' : '';
+            const baseCandidates = [
+                url,
+                `./${url}`,
+                `${basePath}/backend/api/${url}`,
+                `/BloomWell/backend/api/${url}`,
+                `${origin}/BloomWell/backend/api/${url}`,
+                `${origin}:8000/BloomWell/backend/api/${url}`,
+                `${origin}:8080/BloomWell/backend/api/${url}`
+            ];
             const candidates = [...new Set(baseCandidates)].filter(Boolean);
             let lastError = 'Tidak ada respons dari server mood';
             for (const candidate of candidates) {
@@ -291,8 +300,59 @@
 
         function selectMood(i){ if (!requireLogin()) return; selectedMood=i; renderMoodBtns(); updateFaceExpression(moods[i].label); }
 
-        function saveMood(){ if (!requireLogin()) return; if (selectedMood===null){ alert('Pilih mood dulu yaa~ ✨'); return; } if (records.length>=MAX){ alert('🎉 Botol sudah penuh! Kamu hebat! Ayo lanjutkan esok hari ya~ 🎉'); return; }
-            const selectedMoodObj = moods[selectedMood]; const note = document.getElementById('journal-input').value.trim(); records.push({ mood: selectedMoodObj.label, note }); updateFaceExpression(selectedMoodObj.label); document.getElementById('journal-input').value=''; selectedMood=null; renderMoodBtns(); renderBottle(); renderLegend(); animateBottle(); showBubble(); const t=document.getElementById('save-toast'); t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2000);
+        function getMoodValueFromLabel(label) {
+            const moodValues = {
+                'Senang': 85,
+                'Tenang': 72,
+                'Netral': 55,
+                'Sedih': 34,
+                'Marah': 24,
+                'Cemas': 28,
+                'Lelah': 22
+            };
+            return moodValues[label] || 50;
+        }
+
+        async function saveMood(){ 
+            if (!requireLogin()) return; 
+            if (selectedMood===null){ alert('Pilih mood dulu yaa~ ✨'); return; } 
+            if (records.length>=MAX){ alert('🎉 Botol sudah penuh! Kamu hebat! Ayo lanjutkan esok hari ya~ 🎉'); return; }
+            
+            const selectedMoodObj = moods[selectedMood]; 
+            const note = document.getElementById('journal-input').value.trim();
+            const moodValue = getMoodValueFromLabel(selectedMoodObj.label);
+            
+            try {
+                const { payload: result } = await fetchMoodApi('mood-meter.php', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        mood_value: moodValue,
+                        mood_label: selectedMoodObj.label,
+                        note: note
+                    })
+                });
+                
+                if (!result.success) {
+                    throw new Error(result.message || 'Gagal menyimpan mood');
+                }
+                
+                records.push({ mood: selectedMoodObj.label, note }); 
+                updateFaceExpression(selectedMoodObj.label); 
+                document.getElementById('journal-input').value=''; 
+                selectedMood=null; 
+                renderMoodBtns(); 
+                renderBottle(); 
+                renderLegend(); 
+                animateBottle(); 
+                showBubble(); 
+                const t=document.getElementById('save-toast'); 
+                t.classList.add('show'); 
+                setTimeout(()=>t.classList.remove('show'),2000);
+            } catch (error) {
+                console.error('Error saving mood:', error);
+                alert('Gagal menyimpan mood: ' + error.message);
+            }
         }
 
         function toggleSidebar(){ document.getElementById('sidebar').classList.toggle('collapsed'); }

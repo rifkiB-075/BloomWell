@@ -7,7 +7,7 @@
 // Koneksi ke database
 $host = 'localhost';
 $user = 'root';
-$pass = '';
+$pass = 'root';
 $dbname = 'bloomwell_db';
 
 $conn = mysqli_connect($host, $user, $pass, $dbname);
