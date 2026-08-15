@@ -20,6 +20,7 @@
     .sidebar { background:white; border:1px solid #e5e7eb; border-radius: 18px; padding: 14px; position: sticky; top: 16px; height: fit-content; }
     .sidebar button { width:100%; text-align:left; padding: 10px 12px; border-radius: 12px; border:1px solid transparent; background: transparent; cursor:pointer; font-weight:700; color:#111827; margin-bottom: 8px; }
     .sidebar button.active { background:#2563eb; color:white; border-color:#2563eb; }
+    .sidebar button:hover:not(.active) { background:#f1f5f9; }
 
     .panel { background:white; border:1px solid #e5e7eb; border-radius: 18px; padding: 16px; }
 
@@ -31,10 +32,12 @@
     .status.err { background:#fef2f2; border-color:#ef4444; color:#991b1b; }
 
     label { display:block; margin-top: 10px; font-weight: 700; font-size: 13px; }
-    input, textarea, select { width:100%; padding:10px 12px; margin-top: 6px; border:1px solid #d1d5db; border-radius:12px; font-family: inherit; }
+    input, textarea, select { width:100%; padding:10px 12px; margin-top: 6px; border:1px solid #d1d5db; border-radius:12px; font-family: inherit; box-sizing: border-box; }
     textarea { resize: vertical; }
     button.primary { background:#2563eb; color:white; border:none; border-radius: 12px; padding: 10px 14px; font-weight:800; cursor:pointer; }
+    button.primary:hover { background:#1d4ed8; }
     button.secondary { background:#e5e7eb; color:#111827; border:none; border-radius: 12px; padding: 10px 14px; font-weight:800; cursor:pointer; }
+    button.secondary:hover { background:#d1d5db; }
 
     .table { width:100%; border-collapse: collapse; margin-top: 10px; }
     .table th, .table td { border-bottom: 1px solid #e5e7eb; padding: 10px 8px; text-align:left; font-size: 13px; vertical-align: top; }
@@ -58,8 +61,7 @@
           <div class="muted">Kelola Resources, Mood Entries, dan Data terkait</div>
         </div>
       </div>
-      <div class="badge" id="adminBadge">Status: Menunggu...
-      </div>
+      <div class="badge" id="adminBadge">Status: Menunggu...</div>
     </div>
 
     <div class="grid">
@@ -181,18 +183,9 @@
     const ADMIN_SESSION_KEY = 'bw_admin_session';
     const API_BASE = (window.location.origin && window.location.origin !== 'null')
       ? window.location.origin + '/BloomWell/backend/api'
-
       : '/BloomWell/backend/api';
 
-<<<<<<< HEAD
-    // Bypass sementara: nonaktifkan gate login admin agar admin-dashboard.html bisa diakses langsung.
-    function isAdminLoggedIn(){
-      return true;
-    }
-
-    function requireAdmin(){
-      // no-op (bypass)
-=======
+    // Fungsi untuk cek login admin
     function isAdminLoggedIn(){
       try {
         const raw = localStorage.getItem(ADMIN_SESSION_KEY);
@@ -206,17 +199,13 @@
 
     function requireAdmin(){
       if(!isAdminLoggedIn()){
+        // Redirect ke halaman login
         window.location.href = 'admin-login.html';
       }
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     }
 
     requireAdmin();
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     function openTab(tab){
       const resourcesBtn = document.getElementById('tab-resources');
       const moodsBtn = document.getElementById('tab-moods');
@@ -232,6 +221,7 @@
 
     function setStatus(elId, ok, text){
       const el = document.getElementById(elId);
+      if (!el) return;
       el.classList.remove('ok','err');
       el.classList.add(ok?'ok':'err');
       el.textContent = text;
@@ -249,7 +239,7 @@
       document.getElementById('confirmText').textContent = text;
       document.getElementById('confirmYesBtn').onclick = () => {
         closeConfirm();
-        onYes();
+        if (typeof onYes === 'function') onYes();
       };
       document.getElementById('confirmModal').classList.add('show');
     }
@@ -273,13 +263,14 @@
       setStatus('resourcesStatus', true, 'Memuat resources...');
       try{
         const res = await fetch(API_BASE + '/resources.php');
-
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
         const data = await res.json();
         const resources = data.resources || data || [];
 
         tbody.innerHTML = resources.map(item => {
-          const title = (item.title||'').replace(/</g,'<');
-          const desc = (item.description||'').replace(/</g,'<');
+          const title = (item.title||'').replace(/</g,'&lt;');
+          const desc = (item.description||'').replace(/</g,'&lt;');
           const cat = item.category_label || item.category || '';
           const file = item.file_path || '';
           return `
@@ -289,18 +280,17 @@
               <td>${desc}</td>
               <td>${file ? `<a target="_blank" href="${file}">Lihat</a>` : '-'}</td>
               <td>
-                <button class="secondary" style="padding:8px 10px;" onclick="resourcesEdit(${item.id}, ${JSON.stringify(item.title||'')}, ${JSON.stringify(item.category||'')}, ${JSON.stringify(item.category_label||'')}, ${JSON.stringify(item.description||'')}, ${JSON.stringify(item.read_time||'')})">Edit</button>
+                <button class="secondary" style="padding:8px 10px;" onclick="resourcesEdit(${item.id}, '${(item.title||'').replace(/'/g, "\\'")}', '${(item.category||'').replace(/'/g, "\\'")}', '${(item.category_label||'').replace(/'/g, "\\'")}', '${(item.description||'').replace(/'/g, "\\'")}', '${(item.read_time||'').replace(/'/g, "\\'")}')">Edit</button>
                 <button class="secondary" style="padding:8px 10px; background:#dc2626; color:white; border:none;" onclick="resourcesDelete(${item.id})">Hapus</button>
               </td>
             </tr>
           `;
         }).join('');
 
-
         setStatus('resourcesStatus', true, `Memuat ${resources.length} resource.`);
       }catch(e){
         console.error(e);
-        setStatus('resourcesStatus', false, 'Gagal memuat resources. Lihat console.');
+        setStatus('resourcesStatus', false, 'Gagal memuat resources: ' + e.message);
       }
     }
 
@@ -318,6 +308,9 @@
       // PDF optional saat edit
       const file = f.querySelector('input[name="pdf_file"]');
       file.required = false;
+      
+      // Scroll ke form
+      f.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
 
     async function resourcesDelete(id){
@@ -325,7 +318,6 @@
         try{
           const res = await fetch(API_BASE + '/resources.php', {
             method:'DELETE',
-
             headers:{'Content-Type':'application/json'},
             body: JSON.stringify({id})
           });
@@ -359,7 +351,7 @@
 
       try{
         setStatus('resourcesStatus', true, 'Mengirim...');
-          const res = await fetch(API_BASE + '/resources.php', { method:'POST', body: formData });
+        const res = await fetch(API_BASE + '/resources.php', { method:'POST', body: formData });
         const data = await res.json();
         if(!data.success) throw new Error(data.message||'Gagal menyimpan');
         await resourcesLoad();
@@ -375,7 +367,7 @@
     async function moodsLoad(forceUserId=false){
       const tbody = document.querySelector('#moodsTable tbody');
       const userIdInput = document.getElementById('moodsUserId');
-      const userId = forceUserId ? (userIdInput.value.trim() || '') : (userIdInput.value.trim() || '');
+      const userId = userIdInput ? userIdInput.value.trim() : '';
 
       setStatus('moodsStatus', true, 'Memuat mood entries...');
       try{
@@ -384,6 +376,8 @@
           url += '?user_id=' + encodeURIComponent(userId);
         }
         const res = await fetch(url);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        
         const data = await res.json();
         const entries = data.entries || [];
 
@@ -393,7 +387,7 @@
               <td>${en.entry_date || ''}</td>
               <td>${en.mood_label || ''}</td>
               <td>${en.mood_value ?? ''}</td>
-              <td>${(en.note||'').replace(/</g,'<')}</td>
+              <td>${(en.note||'').replace(/</g,'&lt;')}</td>
             </tr>
           `;
         }).join('');
@@ -401,11 +395,11 @@
         setStatus('moodsStatus', true, `Memuat ${entries.length} entri mood.`);
       }catch(e){
         console.error(e);
-        setStatus('moodsStatus', false, 'Gagal memuat mood. Lihat console.');
+        setStatus('moodsStatus', false, 'Gagal memuat mood: ' + e.message);
       }
     }
 
-    // init
+    // ===== Init =====
     try {
       const raw = localStorage.getItem(ADMIN_SESSION_KEY);
       const s = raw ? JSON.parse(raw) : null;
@@ -419,9 +413,9 @@
       document.getElementById('adminBadge').textContent = 'Status: siap';
     }
 
+    // Load data
     resourcesLoad();
-    moodsLoad(false);
+    moodsLoad();
   </script>
 </body>
 </html>
-

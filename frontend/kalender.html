@@ -5,96 +5,82 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kalender Mood - BloomWell</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
-    <link rel="stylesheet" href="css/interactivetools.css" />
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="css/kalender.css" />
+    <link rel="stylesheet" href="/css/interactivetools.css" />
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/kalender.css" />
 </head>
 <body>
 
-    <!-- Header Sama Seperti Interactive Tools -->
     <header class="header">
         <nav class="nav">
             <div class="logo">
                 <div class="img-div">
-                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                    <img src="/images/logo bloomwell.png" alt="BloomWell Logo">
                 </div>
-                <div>
-                    <h2>BloomWell</h2>
-                </div>
+                <div><h2>BloomWell</h2></div>
             </div>
             <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="resourcelibrary.html">Resources Library</a></li>
-                <li><a href="interactiveTools.html" class="active">Interactive Tools</a></li>
-                <li><a href="professionalTools.html">Professional Service</a></li>
-                <li><a href="emergencyService.html">Emergency Service</a></li>
-                <li><a href="user-account.html">Akun</a></li>
+                <li><a href="/index.html">Home</a></li>
+                <li><a href="/resourcelibrary.html">Resources Library</a></li>
+                <li><a href="/interactiveTools.html" class="active">Interactive Tools</a></li>
+                <li><a href="/professionalTools.html">Professional Service</a></li>
+                <li><a href="/emergencyService.html">Emergency Service</a></li>
+                <li><a href="/user-account.html">Akun</a></li>
             </ul>
         </nav>
     </header>
 
-    <!-- Layout Sama Seperti Interactive Tools -->
     <div class="tools-layout">
-
-        <!-- Sidebar -->
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
             <nav class="sidebar-nav">
-                <a href="interactiveTools.html" class="sidebar-item" title="Mood Meter">
+                <a href="/interactiveTools.html" class="sidebar-item" title="Mood Meter">
                     <span class="sidebar-icon">🧪</span>
                     <span class="sidebar-label">Mood Meter</span>
                 </a>
-                <a href="kalender.html" class="sidebar-item active" title="Kalender Mood">
+                <a href="/kalender.html" class="sidebar-item active" title="Kalender Mood">
                     <span class="sidebar-icon">📅</span>
                     <span class="sidebar-label">Kalender Mood</span>
                 </a>
-                <a href="chat-ai.html" class="sidebar-item" title="Chat AI">
+                <a href="/chat-ai.html" class="sidebar-item" title="Chat AI">
                     <span class="sidebar-icon">💬</span>
                     <span class="sidebar-label">Chat AI</span>
                 </a>
-                <a href="analisis.html" class="sidebar-item" title="Analisis AI">
+                <a href="/analisis.html" class="sidebar-item" title="Analisis AI">
                     <span class="sidebar-icon">📊</span>
                     <span class="sidebar-label">Analisis AI</span>
                 </a>
-
             </nav>
         </aside>
 
-        <!-- Main Content -->
         <main class="tools-main">
             <div class="calendar-wrapper">
                 <h1 class="calendar-title">📅 Kalender Mood ✨</h1>
                 <p class="calendar-subtitle">Lihat riwayat perasaanmu setiap hari</p>
 
-                <!-- Statistik Singkat -->
                 <div class="calendar-stats" id="calendarStats">
                     <div class="stat-item">📊 Total Mood: <span id="totalMood">0</span></div>
                     <div class="stat-item">📅 Hari Aktif: <span id="activeDays">0</span></div>
                     <div class="stat-item">🔥 Streak: <span id="streakDays">0</span> hari</div>
                 </div>
 
-                <!-- Legend Mood -->
                 <div class="mood-legend" id="moodLegend"></div>
 
-                <!-- Navigator Bulan -->
                 <div class="month-nav">
                     <button class="nav-btn" id="prevMonth">‹</button>
                     <span class="month-label" id="monthLabel">Januari 2026</span>
                     <button class="nav-btn" id="nextMonth">›</button>
                 </div>
 
-                <!-- Nama Hari -->
                 <div class="day-names">
                     <span>Min</span><span>Sen</span><span>Sel</span><span>Rab</span>
                     <span>Kam</span><span>Jum</span><span>Sab</span>
                 </div>
 
-                <!-- Grid Tanggal -->
                 <div class="days-grid" id="daysGrid"></div>
 
-                <!-- Pesan jika tidak ada data -->
                 <div class="no-data-message" id="noDataMessage">
-                    🌱 Belum ada catatan mood. Yuk ke <a href="interactiveTools.html" style="color:#8f6db3; font-weight:600;">Mood Meter</a> untuk mulai mencatat!
+                    🌱 Belum ada catatan mood. Yuk ke <a href="/interactiveTools.html" style="color:#8f6db3; font-weight:600;">Mood Meter</a> untuk mulai mencatat!
                 </div>
 
                 <div class="calendar-footer">
@@ -105,516 +91,405 @@
     </div>
 
     <div class="detail-modal-overlay" id="detailModalOverlay">
-        <div class="detail-modal" role="dialog" aria-modal="true" aria-labelledby="detailModalTitle">
+        <div class="detail-modal" role="dialog" aria-modal="true">
             <button class="detail-modal-close" id="detailModalClose" aria-label="Tutup detail">✕</button>
             <div id="detailModalContent"></div>
         </div>
     </div>
 
+    <style>
+    /* Style tambahan untuk kalender */
+    .calendar-wrapper {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+        background: rgba(255, 255, 255, 0.75);
+        backdrop-filter: blur(10px);
+        border-radius: 30px;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.06);
+    }
+    .calendar-title { text-align: center; font-size: 24px; color: #3d2c5e; margin-bottom: 4px; }
+    .calendar-subtitle { text-align: center; color: #7c6a8f; font-size: 14px; margin-bottom: 20px; border-bottom: 1px dashed #d4c4e6; padding-bottom: 12px; }
+    .calendar-stats { display: flex; justify-content: center; gap: 24px; margin-bottom: 18px; flex-wrap: wrap; }
+    .stat-item { background: white; padding: 6px 18px; border-radius: 40px; font-size: 13px; font-weight: 500; color: #3d2c5e; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
+    .stat-item span { font-weight: 700; color: #8f6db3; }
+    .month-nav { display: flex; justify-content: space-between; align-items: center; background: #e9def5; padding: 8px 14px; border-radius: 40px; margin-bottom: 18px; }
+    .nav-btn { background: white; border: none; border-radius: 40px; padding: 4px 16px; font-size: 20px; cursor: pointer; transition: 0.2s; color: #3d2c5e; font-weight: 500; }
+    .nav-btn:hover { background: #f3edfc; transform: scale(1.05); }
+    .month-label { font-weight: 600; font-size: 17px; color: #2b1b42; }
+    .day-names { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-weight: 600; color: #6b5a7e; font-size: 12px; margin-bottom: 8px; }
+    .days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .day-cell { aspect-ratio: 1/1; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 14px; background: rgba(255, 255, 255, 0.5); font-weight: 500; font-size: 14px; color: #2b1b42; transition: 0.15s; cursor: default; border: 1px solid rgba(255,255,255,0.3); position: relative; min-height: 48px; }
+    .day-cell.empty { background: transparent; border: none; cursor: default; }
+    .day-cell.today { border: 2px solid #a07bc9; background: rgba(160, 123, 201, 0.12); font-weight: 700; }
+    .day-cell .day-number { font-size: 14px; line-height: 1.2; }
+    .day-cell .mood-emoji-cell { font-size: 20px; line-height: 1; margin-top: 1px; }
+    .day-cell .mood-count-badge { position: absolute; top: -4px; right: -4px; background: #8f6db3; color: white; font-size: 9px; border-radius: 50%; width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+    .day-cell.has-mood { background: rgba(160, 123, 201, 0.08); border-color: rgba(160, 123, 201, 0.2); cursor: pointer; }
+    .day-cell.has-mood:hover { background: rgba(160, 123, 201, 0.2); transform: scale(1.05); }
+    .no-data-message { text-align: center; color: #aaa; font-size: 13px; margin-top: 16px; padding: 20px; background: rgba(255,255,255,0.4); border-radius: 20px; }
+    .calendar-footer { text-align: center; margin-top: 18px; font-size: 12px; color: #8f7aa3; }
+    .detail-modal-overlay { position: fixed; inset: 0; background: rgba(45, 31, 70, 0.45); display: none; align-items: center; justify-content: center; padding: 20px; z-index: 2000; }
+    .detail-modal-overlay.show { display: flex; }
+    .detail-modal { width: min(480px, 100%); background: white; border-radius: 24px; box-shadow: 0 16px 50px rgba(0,0,0,0.18); padding: 22px; position: relative; max-height: 80vh; overflow-y: auto; }
+    .detail-modal-close { position: absolute; top: 12px; right: 12px; border: none; background: #f3ebfb; color: #6d4a95; width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 16px; }
+    .detail-modal-title { font-size: 18px; font-weight: 700; color: #3d2c5e; margin-bottom: 8px; }
+    .detail-modal-subtitle { font-size: 13px; color: #8a7a99; margin-bottom: 14px; }
+    .detail-entry { background: #faf6ff; border: 1px solid #eadff8; border-radius: 16px; padding: 12px 14px; margin-bottom: 10px; }
+    .detail-entry strong { display: block; color: #3d2c5e; margin-bottom: 4px; }
+    .detail-entry .note { color: #6c5b7f; font-size: 13px; line-height: 1.5; margin-top: 6px; }
+    .detail-entry-score { font-size: 12px; color: #8b6aa8; margin-top: 6px; font-weight: 600; }
+    .mood-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; justify-content: center; margin: 12px 0 6px; }
+    .mood-legend-item { display: flex; align-items: center; gap: 4px; font-size: 12px; color: #5a4a6e; }
+    .mood-legend-dot { width: 12px; height: 12px; border-radius: 4px; border: 1px solid rgba(0,0,0,0.06); }
+    @media (max-width: 480px) { .calendar-wrapper { padding: 14px; } .day-cell { min-height: 38px; font-size: 12px; } .day-cell .mood-emoji-cell { font-size: 16px; } .calendar-stats { gap: 10px; } .stat-item { font-size: 11px; padding: 4px 12px; } }
+    </style>
+
     <script>
-        // ============================================
-        // AMBIL DATA DARI DATABASE VIA API
-        // ============================================
-        async function fetchMoodApi(url, options = {}) {
-            const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'http://localhost';
-            const normalizedUrl = url.startsWith('http') ? url : `${origin}/BloomWell/${url}`.replace(/([^:]\/\/)\/+/, '$1');
-            const candidates = [
-                normalizedUrl,
-                `/BloomWell/${url}`,
-                url.replace(/^backend\//, `${origin}/BloomWell/backend/`),
-                url.replace(/^backend\//, `/BloomWell/${url}`)
-            ];
+    // ============================================
+    // API CONFIG - Backend di Laragon
+    // ============================================
+    const API_BASE = 'http://bloomwell.test/backend/api';
 
-            let lastError = 'Tidak ada respons dari server mood';
-            for (const candidate of candidates) {
-                try {
-                    const response = await fetch(candidate, options);
-                    const text = await response.text();
-                    let payload = null;
-                    try {
-                        payload = text ? JSON.parse(text) : null;
-                    } catch (err) {
-                        payload = { success: false, message: text.slice(0, 220) };
-                    }
-
-                    if (response.ok && payload) {
-                        return { payload, response, candidate };
-                    }
-
-                    lastError = payload?.message || `HTTP ${response.status}`;
-                } catch (error) {
-                    lastError = error.message;
-                }
-            }
-
-            throw new Error(lastError);
-        }
-
-        async function getMoodRecords() {
+    async function fetchMoodApi(endpoint, options = {}) {
+        const cleanEndpoint = endpoint.replace(/^\/+/, '');
+        const url = `${API_BASE}/${cleanEndpoint}`;
+        console.log('[Kalender] Fetching:', url);
+        
+        try {
+            const response = await fetch(url, {
+                ...options,
+                mode: 'cors',
+                credentials: 'omit'
+            });
+            const text = await response.text();
+            let payload = null;
             try {
-                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php');
-                if (!result.success) {
-                    throw new Error(result.message || 'Gagal mengambil data mood');
-                }
+                payload = text ? JSON.parse(text) : null;
+            } catch (err) {
+                payload = { success: false, message: text.slice(0, 220) };
+            }
+            
+            if (response.ok && payload && payload.success !== false) {
+                return { payload, response };
+            }
+            throw new Error(payload?.message || `HTTP ${response.status}`);
+        } catch (error) {
+            console.error('[Kalender] Error:', error.message);
+            throw error;
+        }
+    }
 
-                return (result.entries || []).map(entry => ({
-                    id: entry.id,
-                    mood: entry.mood_label || 'Netral',
-                    moodValue: entry.mood_value || 50,
-                    note: entry.note || '',
-                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
-                }));
-            } catch (e) {
-                console.warn('Gagal ambil data dari database:', e);
+    function getCurrentUser() {
+        try {
+            const session = localStorage.getItem('bw_session');
+            if (!session) return null;
+            return JSON.parse(session);
+        } catch (e) { return null; }
+    }
+
+    async function getMoodRecords() {
+        try {
+            const user = getCurrentUser();
+            if (!user || !user.id) {
+                console.warn('User tidak login');
                 return [];
             }
-        }
-
-        function getTodayString() {
-            const d = new Date();
-            return d.getFullYear() + '-' + 
-                   String(d.getMonth() + 1).padStart(2, '0') + '-' + 
-                   String(d.getDate()).padStart(2, '0');
-        }
-
-        function getYesterdayString() {
-            const d = new Date();
-            d.setDate(d.getDate() - 1);
-            return d.getFullYear() + '-' + 
-                   String(d.getMonth() + 1).padStart(2, '0') + '-' + 
-                   String(d.getDate()).padStart(2, '0');
-        }
-
-        // ============================================
-        // DATA & STATE
-        // ============================================
-        let moodRecords = [];
-        let currentDate = new Date();
-        let selectedDate = null;
-
-        // Mapping mood ke emoji dan warna (sama dengan di interactiveTools)
-        const moodMap = {
-            'Senang': { emoji: '😊', color: '#EF9F27', light: '#FAE0A0' },
-            'Tenang': { emoji: '😌', color: '#1D9E75', light: '#A0DFC7' },
-            'Sedih':  { emoji: '😢', color: '#378ADD', light: '#A8C8F0' },
-            'Marah':  { emoji: '😠', color: '#D85A30', light: '#F5B09A' },
-            'Cemas':  { emoji: '😰', color: '#7F77DD', light: '#C5C1F5' },
-            'Lelah':  { emoji: '😴', color: '#888780', light: '#C8C7C2' },
-        };
-
-        // ============================================
-        // ELEMEN DOM
-        // ============================================
-        const monthLabel = document.getElementById('monthLabel');
-        const daysGrid = document.getElementById('daysGrid');
-        const prevBtn = document.getElementById('prevMonth');
-        const nextBtn = document.getElementById('nextMonth');
-        const noDataMsg = document.getElementById('noDataMessage');
-        const totalMoodEl = document.getElementById('totalMood');
-        const activeDaysEl = document.getElementById('activeDays');
-        const streakDaysEl = document.getElementById('streakDays');
-        const moodLegendEl = document.getElementById('moodLegend');
-
-        // ============================================
-        // FUNGSI UTAMA
-        // ============================================
-        function renderCalendar(year, month) {
-            const firstDay = new Date(year, month, 1).getDay();
-            const daysInMonth = new Date(year, month + 1, 0).getDate();
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-
-            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            monthLabel.textContent = `${monthNames[month]} ${year}`;
-
-            // Kumpulkan mood per tanggal
-            const moodByDate = {};
-            moodRecords.forEach(record => {
-                if (record.date) {
-                    if (!moodByDate[record.date]) {
-                        moodByDate[record.date] = [];
-                    }
-                    moodByDate[record.date].push(record);
-                }
-            });
-
-            const datesWithMood = Object.keys(moodByDate);
-            const hasAnyData = datesWithMood.length > 0;
-
-            // Update statistik
-            updateStats();
-
-            // Tampilkan/sembunyikan pesan no data
-            noDataMsg.style.display = hasAnyData ? 'none' : 'block';
-
-            let html = '';
-            // Sel kosong di awal
-            for (let i = 0; i < firstDay; i++) {
-                html += `<div class="day-cell empty"></div>`;
-            }
-
-            // Hari dalam bulan
-            for (let day = 1; day <= daysInMonth; day++) {
-                const dateObj = new Date(year, month, day);
-                const dateStr = dateObj.toISOString().split('T')[0];
-                const isToday = (dateStr === todayStr);
-                const moodsForDate = moodByDate[dateStr] || [];
-
-                let classes = 'day-cell';
-                if (isToday) classes += ' today';
-                if (moodsForDate.length > 0) classes += ' has-mood';
-
-                // Ambil mood terakhir untuk ditampilkan (atau mood yang paling sering)
-                let displayEmoji = '';
-                let displayMood = '';
-                if (moodsForDate.length > 0) {
-                    // Tampilkan mood yang paling akhir dicatat
-                    const lastMood = moodsForDate[moodsForDate.length - 1];
-                    const moodInfo = moodMap[lastMood.mood];
-                    if (moodInfo) {
-                        displayEmoji = moodInfo.emoji;
-                        displayMood = lastMood.mood;
-                    }
-                }
-
-                // Jumlah mood di hari itu
-                const moodCount = moodsForDate.length;
-                const countBadge = moodCount > 1 ? `<span class="mood-count-badge">${moodCount}</span>` : '';
-
-                html += `
-                    <div class="${classes}" data-date="${dateStr}" data-mood="${displayMood}" title="${displayMood || 'Tidak ada catatan'}">
-                        <span class="day-number">${day}</span>
-                        ${displayEmoji ? `<span class="mood-emoji-cell">${displayEmoji}</span>` : ''}
-                        ${countBadge}
-                    </div>
-                `;
-            }
-
-            daysGrid.innerHTML = html;
-
-            // Event listener untuk klik tanggal (show detail)
-            document.querySelectorAll('.day-cell:not(.empty)').forEach(cell => {
-                cell.addEventListener('click', function() {
-                    const date = this.dataset.date;
-                    if (date) {
-                        showDateDetail(date);
-                    }
-                });
-            });
-        }
-
-        function updateStats() {
-            const total = moodRecords.length;
-            totalMoodEl.textContent = total;
-
-            // Hitung hari aktif (unique dates)
-            const uniqueDates = new Set();
-            moodRecords.forEach(r => {
-                if (r.date) uniqueDates.add(r.date);
-            });
-            activeDaysEl.textContent = uniqueDates.size;
-
-            // Hitung streak (hari berturut-turut dari hari ini ke belakang)
-            let streak = 0;
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
             
-            // Cek apakah hari ini ada catatan
-            const hasToday = moodRecords.some(r => r.date === todayStr);
+            const userId = user.id;
+            console.log('[Kalender] Ambil data untuk user:', userId);
             
-            if (hasToday) {
-                streak = 1;
-                // Cek hari-hari sebelumnya
-                let checkDate = new Date(today);
-                checkDate.setDate(checkDate.getDate() - 1);
-                
-                while (true) {
-                    const dateStr = checkDate.toISOString().split('T')[0];
-                    const hasDate = moodRecords.some(r => r.date === dateStr);
-                    if (hasDate) {
-                        streak++;
-                        checkDate.setDate(checkDate.getDate() - 1);
-                    } else {
-                        break;
-                    }
-                }
-            } else {
-                // Cek streak dari hari terakhir yang ada
-                const sortedDates = Array.from(uniqueDates).sort();
-                if (sortedDates.length > 0) {
-                    const lastDate = new Date(sortedDates[sortedDates.length - 1] + 'T00:00:00');
-                    const diffDays = Math.floor((today - lastDate) / (1000 * 60 * 60 * 24));
-                    if (diffDays === 0) {
-                        streak = 1;
-                    } else if (diffDays === 1) {
-                        // Cek streak dari lastDate ke belakang
-                        let tempDate = new Date(lastDate);
-                        let tempStreak = 1;
-                        while (true) {
-                            tempDate.setDate(tempDate.getDate() - 1);
-                            const dateStr = tempDate.toISOString().split('T')[0];
-                            const hasDate = moodRecords.some(r => r.date === dateStr);
-                            if (hasDate) {
-                                tempStreak++;
-                            } else {
-                                break;
-                            }
-                        }
-                        streak = tempStreak;
-                    }
-                }
+            const { payload: result } = await fetchMoodApi(`get-mood.php?user_id=${userId}&limit=100`);
+            
+            if (!result.success) {
+                throw new Error(result.message || 'Gagal mengambil data mood');
             }
             
-            streakDaysEl.textContent = streak;
+            return (result.data || []).map(entry => ({
+                id: entry.id,
+                mood: entry.mood || 'Netral',
+                moodValue: entry.mood_value || 50,
+                note: entry.note || '',
+                date: entry.date ? entry.date.split(' ')[0] : ''
+            }));
+        } catch (e) {
+            console.warn('Gagal ambil data dari database:', e);
+            return [];
         }
+    }
 
-        function renderLegend() {
-            const uniqueMoods = new Set();
-            moodRecords.forEach(r => uniqueMoods.add(r.mood));
-            
-            let html = '';
-            uniqueMoods.forEach(mood => {
-                const info = moodMap[mood];
-                if (info) {
-                    html += `
-                        <span class="mood-legend-item">
-                            <span class="mood-legend-dot" style="background:${info.light}; border-color:${info.color};"></span>
-                            ${info.emoji} ${mood}
-                        </span>
-                    `;
+    // ============================================
+    // DATA & STATE
+    // ============================================
+    let moodRecords = [];
+    let currentDate = new Date();
+
+    const moodMap = {
+        'Senang': { emoji: '😊', color: '#EF9F27', light: '#FAE0A0' },
+        'Tenang': { emoji: '😌', color: '#1D9E75', light: '#A0DFC7' },
+        'Sedih':  { emoji: '😢', color: '#378ADD', light: '#A8C8F0' },
+        'Marah':  { emoji: '😠', color: '#D85A30', light: '#F5B09A' },
+        'Cemas':  { emoji: '😰', color: '#7F77DD', light: '#C5C1F5' },
+        'Lelah':  { emoji: '😴', color: '#888780', light: '#C8C7C2' },
+        'Netral': { emoji: '😐', color: '#999999', light: '#E0E0E0' }
+    };
+
+    // ============================================
+    // DOM ELEMENTS
+    // ============================================
+    const monthLabel = document.getElementById('monthLabel');
+    const daysGrid = document.getElementById('daysGrid');
+    const prevBtn = document.getElementById('prevMonth');
+    const nextBtn = document.getElementById('nextMonth');
+    const noDataMsg = document.getElementById('noDataMessage');
+    const totalMoodEl = document.getElementById('totalMood');
+    const activeDaysEl = document.getElementById('activeDays');
+    const streakDaysEl = document.getElementById('streakDays');
+    const moodLegendEl = document.getElementById('moodLegend');
+
+    // ============================================
+    // FUNGSI UTAMA
+    // ============================================
+    function renderCalendar(year, month) {
+        const firstDay = new Date(year, month, 1).getDay();
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        monthLabel.textContent = `${monthNames[month]} ${year}`;
+
+        const moodByDate = {};
+        moodRecords.forEach(record => {
+            if (record.date) {
+                if (!moodByDate[record.date]) {
+                    moodByDate[record.date] = [];
                 }
-            });
-            moodLegendEl.innerHTML = html || '<span style="color:#aaa; font-size:12px;">Belum ada mood tercatat</span>';
-        }
-
-        function getMoodValueFromLabel(label) {
-            const moodValues = {
-                'Senang': 85,
-                'Tenang': 72,
-                'Netral': 55,
-                'Sedih': 34,
-                'Marah': 24,
-                'Cemas': 28,
-                'Lelah': 22
-            };
-            return moodValues[label] || 50;
-        }
-
-        async function updateMoodEntry(entryId, moodLabel, note) {
-            try {
-                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
-                    method: 'PUT',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        id: entryId,
-                        mood_value: getMoodValueFromLabel(moodLabel),
-                        note
-                    })
-                });
-                if (!result.success) {
-                    throw new Error(result.message || 'Gagal memperbarui mood');
-                }
-                moodRecords = (result.entries || []).map(entry => ({
-                    id: entry.id,
-                    mood: entry.mood_label || 'Netral',
-                    moodValue: entry.mood_value || 50,
-                    note: entry.note || '',
-                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
-                }));
-                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-                renderLegend();
-                return true;
-            } catch (error) {
-                console.error(error);
-                alert('Gagal mengedit mood: ' + error.message);
-                return false;
+                moodByDate[record.date].push(record);
             }
+        });
+
+        const datesWithMood = Object.keys(moodByDate);
+        const hasAnyData = datesWithMood.length > 0;
+
+        updateStats();
+        noDataMsg.style.display = hasAnyData ? 'none' : 'block';
+
+        let html = '';
+        for (let i = 0; i < firstDay; i++) {
+            html += `<div class="day-cell empty"></div>`;
         }
 
-        async function deleteMoodEntry(entryId) {
-            if (!confirm('Hapus catatan mood ini?')) return;
-            try {
-                const { payload: result } = await fetchMoodApi('backend/api/mood-meter.php', {
-                    method: 'DELETE',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id: entryId })
-                });
-                if (!result.success) {
-                    throw new Error(result.message || 'Gagal menghapus mood');
-                }
-                moodRecords = (result.entries || []).map(entry => ({
-                    id: entry.id,
-                    mood: entry.mood_label || 'Netral',
-                    moodValue: entry.mood_value || 50,
-                    note: entry.note || '',
-                    date: entry.entry_date || entry.logged_at?.split(' ')[0]
-                }));
-                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-                renderLegend();
-                return true;
-            } catch (error) {
-                console.error(error);
-                alert('Gagal menghapus mood: ' + error.message);
-                return false;
-            }
-        }
+        for (let day = 1; day <= daysInMonth; day++) {
+            const dateObj = new Date(year, month, day);
+            const dateStr = dateObj.toISOString().split('T')[0];
+            const isToday = (dateStr === todayStr);
+            const moodsForDate = moodByDate[dateStr] || [];
 
-        function showDateDetail(dateStr) {
-            const recordsForDate = moodRecords.filter(r => r.date === dateStr);
-            const modal = document.getElementById('detailModalOverlay');
-            const content = document.getElementById('detailModalContent');
+            let classes = 'day-cell';
+            if (isToday) classes += ' today';
+            if (moodsForDate.length > 0) classes += ' has-mood';
 
-            if (recordsForDate.length === 0) {
-                content.innerHTML = `
-                    <h3 class="detail-modal-title">📅 ${formatDateDisplay(dateStr)}</h3>
-                    <p class="detail-modal-subtitle">Belum ada catatan mood di tanggal ini.</p>
-                `;
-                modal.classList.add('show');
-                return;
+            let displayEmoji = '';
+            let displayMood = '';
+            if (moodsForDate.length > 0) {
+                const lastMood = moodsForDate[moodsForDate.length - 1];
+                const moodInfo = moodMap[lastMood.mood] || moodMap['Netral'];
+                displayEmoji = moodInfo.emoji;
+                displayMood = lastMood.mood;
             }
 
-            const dateDisplay = formatDateDisplay(dateStr);
-            const averageScore = Math.round(
-                recordsForDate.reduce((sum, item) => sum + (item.moodValue || 0), 0) / recordsForDate.length
-            );
-            const entriesHtml = recordsForDate.map((r, i) => {
-                const info = moodMap[r.mood];
-                const emoji = info ? info.emoji : '📌';
-                const note = r.note && r.note.trim() ? r.note.trim() : 'Tidak ada catatan tambahan.';
-                return `
-                    <div class="detail-entry">
-                        <strong>${i + 1}. ${emoji} ${r.mood}</strong>
-                        <div class="detail-entry-score">📈 Skor: ${r.moodValue || 0}/100</div>
-                        <div class="note">📝 ${note}</div>
-                        <div class="detail-entry-actions">
-                            <button class="detail-action-btn edit" data-action="edit" data-entry-id="${r.id}">✏️ Edit</button>
-                            <button class="detail-action-btn delete" data-action="delete" data-entry-id="${r.id}">🗑️ Hapus</button>
-                        </div>
-                    </div>
-                `;
-            }).join('');
+            const moodCount = moodsForDate.length;
+            const countBadge = moodCount > 1 ? `<span class="mood-count-badge">${moodCount}</span>` : '';
 
-            content.innerHTML = `
-                <h3 class="detail-modal-title">📅 ${dateDisplay}</h3>
-                <p class="detail-modal-subtitle">${recordsForDate.length} catatan mood tersimpan • Skor rata-rata ${averageScore}/100</p>
-                ${entriesHtml}
+            html += `
+                <div class="${classes}" data-date="${dateStr}" data-mood="${displayMood}" title="${displayMood || 'Tidak ada catatan'}">
+                    <span class="day-number">${day}</span>
+                    ${displayEmoji ? `<span class="mood-emoji-cell">${displayEmoji}</span>` : ''}
+                    ${countBadge}
+                </div>
             `;
+        }
 
-            content.querySelectorAll('[data-action="edit"]').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const entryId = parseInt(button.getAttribute('data-entry-id'), 10);
-                    const entry = moodRecords.find(item => item.id === entryId);
-                    if (!entry) return;
-                    content.innerHTML = `
-                        <h3 class="detail-modal-title">✏️ Edit Mood</h3>
-                        <p class="detail-modal-subtitle">${dateDisplay}</p>
-                        <div class="detail-edit-form">
-                            <label for="editMoodSelect">Mood</label>
-                            <select id="editMoodSelect">
-                                ${Object.keys(moodMap).map(label => `<option value="${label}" ${entry.mood === label ? 'selected' : ''}>${label}</option>`).join('')}
-                            </select>
-                            <label for="editMoodNote">Catatan</label>
-                            <textarea id="editMoodNote">${entry.note || ''}</textarea>
-                            <div class="detail-edit-actions">
-                                <button class="save" id="saveEditBtn">💾 Simpan</button>
-                                <button class="cancel" id="cancelEditBtn">Batal</button>
-                            </div>
-                        </div>
-                    `;
-                    document.getElementById('saveEditBtn').addEventListener('click', async () => {
-                        const moodLabel = document.getElementById('editMoodSelect').value;
-                        const note = document.getElementById('editMoodNote').value.trim();
-                        const ok = await updateMoodEntry(entryId, moodLabel, note);
-                        if (ok) {
-                            showDateDetail(dateStr);
-                        }
-                    });
-                    document.getElementById('cancelEditBtn').addEventListener('click', () => {
-                        showDateDetail(dateStr);
-                    });
-                });
+        daysGrid.innerHTML = html;
+
+        document.querySelectorAll('.day-cell.has-mood').forEach(cell => {
+            cell.addEventListener('click', function() {
+                const date = this.dataset.date;
+                if (date) {
+                    showDateDetail(date);
+                }
             });
+        });
+    }
 
-            content.querySelectorAll('[data-action="delete"]').forEach(button => {
-                button.addEventListener('click', async () => {
-                    const entryId = parseInt(button.getAttribute('data-entry-id'), 10);
-                    const ok = await deleteMoodEntry(entryId);
-                    if (ok) {
-                        showDateDetail(dateStr);
-                    }
-                });
-            });
+    function updateStats() {
+        const total = moodRecords.length;
+        totalMoodEl.textContent = total;
 
+        const uniqueDates = new Set();
+        moodRecords.forEach(r => {
+            if (r.date) uniqueDates.add(r.date);
+        });
+        activeDaysEl.textContent = uniqueDates.size;
+
+        let streak = 0;
+        const today = new Date();
+        const todayStr = today.toISOString().split('T')[0];
+        
+        const hasToday = moodRecords.some(r => r.date === todayStr);
+        
+        if (hasToday) {
+            streak = 1;
+            let checkDate = new Date(today);
+            checkDate.setDate(checkDate.getDate() - 1);
+            
+            while (true) {
+                const dateStr = checkDate.toISOString().split('T')[0];
+                const hasDate = moodRecords.some(r => r.date === dateStr);
+                if (hasDate) {
+                    streak++;
+                    checkDate.setDate(checkDate.getDate() - 1);
+                } else {
+                    break;
+                }
+            }
+        }
+        
+        streakDaysEl.textContent = streak;
+    }
+
+    function renderLegend() {
+        const uniqueMoods = new Set();
+        moodRecords.forEach(r => uniqueMoods.add(r.mood));
+        
+        let html = '';
+        uniqueMoods.forEach(mood => {
+            const info = moodMap[mood] || moodMap['Netral'];
+            if (info) {
+                html += `
+                    <span class="mood-legend-item">
+                        <span class="mood-legend-dot" style="background:${info.light}; border-color:${info.color};"></span>
+                        ${info.emoji} ${mood}
+                    </span>
+                `;
+            }
+        });
+        moodLegendEl.innerHTML = html || '<span style="color:#aaa; font-size:12px;">Belum ada mood tercatat</span>';
+    }
+
+    function showDateDetail(dateStr) {
+        const recordsForDate = moodRecords.filter(r => r.date === dateStr);
+        const modal = document.getElementById('detailModalOverlay');
+        const content = document.getElementById('detailModalContent');
+
+        if (recordsForDate.length === 0) {
+            content.innerHTML = `
+                <h3 class="detail-modal-title">📅 ${formatDateDisplay(dateStr)}</h3>
+                <p class="detail-modal-subtitle">Belum ada catatan mood di tanggal ini.</p>
+            `;
             modal.classList.add('show');
+            return;
         }
 
-        function formatDateDisplay(dateStr) {
-            const parts = dateStr.split('-');
-            const year = parts[0];
-            const month = parseInt(parts[1]);
-            const day = parseInt(parts[2]);
-            const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
-                                'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-            return `${day} ${monthNames[month-1]} ${year}`;
+        const dateDisplay = formatDateDisplay(dateStr);
+        const averageScore = Math.round(
+            recordsForDate.reduce((sum, item) => sum + (item.moodValue || 0), 0) / recordsForDate.length
+        );
+        
+        const entriesHtml = recordsForDate.map((r, i) => {
+            const info = moodMap[r.mood] || moodMap['Netral'];
+            const emoji = info ? info.emoji : '📌';
+            const note = r.note && r.note.trim() ? r.note.trim() : 'Tidak ada catatan tambahan.';
+            return `
+                <div class="detail-entry">
+                    <strong>${i + 1}. ${emoji} ${r.mood}</strong>
+                    <div class="detail-entry-score">📈 Skor: ${r.moodValue || 50}/100</div>
+                    <div class="note">📝 ${note}</div>
+                </div>
+            `;
+        }).join('');
+
+        content.innerHTML = `
+            <h3 class="detail-modal-title">📅 ${dateDisplay}</h3>
+            <p class="detail-modal-subtitle">${recordsForDate.length} catatan mood tersimpan • Skor rata-rata ${averageScore}/100</p>
+            ${entriesHtml}
+        `;
+
+        modal.classList.add('show');
+    }
+
+    function formatDateDisplay(dateStr) {
+        const parts = dateStr.split('-');
+        const year = parts[0];
+        const month = parseInt(parts[1]);
+        const day = parseInt(parts[2]);
+        const monthNames = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 
+                            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+        return `${day} ${monthNames[month-1]} ${year}`;
+    }
+
+    // ============================================
+    // NAVIGASI
+    // ============================================
+    prevBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    });
+
+    nextBtn.addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+    });
+
+    // ============================================
+    // SIDEBAR TOGGLE
+    // ============================================
+    function toggleSidebar() {
+        document.getElementById('sidebar').classList.toggle('collapsed');
+    }
+
+    function closeDetailModal() {
+        document.getElementById('detailModalOverlay').classList.remove('show');
+    }
+
+    document.getElementById('detailModalClose').addEventListener('click', closeDetailModal);
+    document.getElementById('detailModalOverlay').addEventListener('click', function(event) {
+        if (event.target === this) {
+            closeDetailModal();
         }
-
-        // ============================================
-        // NAVIGASI BULAN
-        // ============================================
-        prevBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() - 1);
-            renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        });
-
-        nextBtn.addEventListener('click', () => {
-            currentDate.setMonth(currentDate.getMonth() + 1);
-            renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-        });
-
-        // ============================================
-        // SIDEBAR TOGGLE (sama dengan interactiveTools)
-        // ============================================
-        function toggleSidebar() {
-            document.getElementById('sidebar').classList.toggle('collapsed');
+    });
+    document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape') {
+            closeDetailModal();
         }
+    });
 
-        function closeDetailModal() {
-            document.getElementById('detailModalOverlay').classList.remove('show');
-        }
+    // ============================================
+    // INISIALISASI
+    // ============================================
+    async function loadMoodData() {
+        moodRecords = await getMoodRecords();
+        renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
+        renderLegend();
+    }
 
-        document.getElementById('detailModalClose').addEventListener('click', closeDetailModal);
-        document.getElementById('detailModalOverlay').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeDetailModal();
-            }
-        });
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeDetailModal();
-            }
-        });
+    const user = getCurrentUser();
+    if (!user || !user.id) {
+        window.location.href = 'Auth.html';
+    } else {
+        loadMoodData();
+    }
 
-        // ============================================
-        // INISIALISASI
-        // ============================================
-        async function loadMoodData() {
-            moodRecords = await getMoodRecords();
+    setInterval(async () => {
+        const newRecords = await getMoodRecords();
+        if (JSON.stringify(newRecords) !== JSON.stringify(moodRecords)) {
+            moodRecords = newRecords;
             renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
             renderLegend();
         }
-
-        loadMoodData();
-
-        // Auto-refresh data setiap 5 detik (jika ada perubahan dari halaman lain)
-        setInterval(async () => {
-            const newRecords = await getMoodRecords();
-            if (JSON.stringify(newRecords) !== JSON.stringify(moodRecords)) {
-                moodRecords = newRecords;
-                renderCalendar(currentDate.getFullYear(), currentDate.getMonth());
-                renderLegend();
-            }
-        }, 5000);
+    }, 30000);
     </script>
 
 </body>

@@ -69,24 +69,28 @@ $email = 'admin@bloomwell.local';
 $password = password_hash('admin123', PASSWORD_DEFAULT);
 $role = 'admin';
 
-$insert = "INSERT INTO users (username, email, password, role) 
-           VALUES ('$username', '$email', '$password', '$role')";
+$stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $password, $role);
 
-if (mysqli_query($conn, $insert)) {
+if (mysqli_stmt_execute($stmt)) {
+    $new_id = mysqli_insert_id($conn);
     echo json_encode([
         'success' => true,
         'message' => '✅ Admin berhasil dibuat!',
         'admin' => [
+            'id' => $new_id,
             'username' => 'admin',
             'password' => 'admin123'
         ],
         'login_url' => 'http://bloomwell.test/admin-login.html'
     ]);
+    mysqli_stmt_close($stmt);
 } else {
     echo json_encode([
         'success' => false,
         'message' => 'Gagal membuat admin: ' . mysqli_error($conn)
     ]);
+    mysqli_stmt_close($stmt);
 }
 
 mysqli_close($conn);

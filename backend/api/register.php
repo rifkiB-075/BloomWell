@@ -114,8 +114,9 @@ mysqli_stmt_close($stmt);
 $hashed = password_hash($password, PASSWORD_DEFAULT);
 
 // INSERT tanpa kolom name/full_name
-$stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, 'user')");
-mysqli_stmt_bind_param($stmt, "sss", $username, $email, $hashed);
+$role = 'user';
+$stmt = mysqli_prepare($conn, "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)");
+mysqli_stmt_bind_param($stmt, "ssss", $username, $email, $hashed, $role);
 
 if (mysqli_stmt_execute($stmt)) {
     $new_id = mysqli_insert_id($conn);

@@ -10,6 +10,14 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $data = json_decode(file_get_contents('php://input'), true);
+
+// Handle case where JSON parsing fails
+if ($data === null && !empty(file_get_contents('php://input'))) {
+    http_response_code(400);
+    echo json_encode(['success' => false, 'error' => 'Format JSON tidak valid.']);
+    exit();
+}
+
 $mood = trim($data['mood'] ?? '');
 $note = trim($data['note'] ?? '');
 
