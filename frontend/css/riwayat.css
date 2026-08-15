@@ -1,0 +1,454 @@
+/* ======================================================
+   RIWAYAT ANALISIS - CSS RAPI & CLEAN
+   ====================================================== */
+
+/* ---------- RESET & BASE ---------- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f5f0ff 0%, #f0e8ff 100%);
+    min-height: 100vh;
+    padding: 2rem;
+    padding-top: 80px; /* Tambahan padding untuk navbar */
+}
+
+/* ---------- KONTAINER ---------- */
+.riwayat-container {
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+/* ---------- HEADER ---------- */
+.riwayat-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.riwayat-header h1 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #4a2d6a;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+}
+
+/* ---------- KONTROL (search + filter + hapus) ---------- */
+.riwayat-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.7rem;
+}
+
+.riwayat-controls .search-input {
+    padding: 0.55rem 1.2rem;
+    border-radius: 40px;
+    border: 2px solid #ddd0eb;
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    min-width: 210px;
+    transition: border 0.2s;
+}
+
+.riwayat-controls .search-input:focus {
+    border-color: #a855f7;
+}
+
+.riwayat-controls .filter-select {
+    padding: 0.55rem 1.2rem;
+    border-radius: 40px;
+    border: 2px solid #ddd0eb;
+    background: white;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #3d2a57;
+    cursor: pointer;
+    outline: none;
+}
+
+.riwayat-controls .filter-select:focus {
+    border-color: #a855f7;
+}
+
+.riwayat-controls .clear-all-btn {
+    padding: 0.55rem 1.6rem;
+    border-radius: 40px;
+    border: none;
+    background: #fee2e2;
+    color: #991b1b;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.15s;
+}
+
+.riwayat-controls .clear-all-btn:hover {
+    background: #fecaca;
+    transform: scale(1.02);
+}
+
+/* ---------- STATISTIK ---------- */
+.stats-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.8rem 2.5rem;
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(6px);
+    padding: 0.9rem 2rem;
+    border-radius: 18px;
+    margin-bottom: 2.2rem;
+    border: 1px solid #e8dff2;
+    box-shadow: 0 2px 12px rgba(124, 90, 158, 0.06);
+}
+
+.stats-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.95rem;
+    color: #3d2a57;
+}
+
+.stats-item strong {
+    color: #6b3f8e;
+    font-size: 1.2rem;
+}
+
+/* ---------- LIST KARTU ---------- */
+.riwayat-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+}
+
+/* ---------- KARTU ---------- */
+.riwayat-card {
+    background: white;
+    border-radius: 20px;
+    padding: 1.4rem 1.8rem;
+    border: 1px solid #ede6f5;
+    box-shadow: 0 2px 12px rgba(124, 90, 158, 0.05);
+    transition: box-shadow 0.25s, transform 0.2s;
+}
+
+.riwayat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(124, 90, 158, 0.10);
+}
+
+/* ---------- HEADER KARTU ---------- */
+.card-header-riwayat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin-bottom: 0.6rem;
+}
+
+.card-header-riwayat .left-badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.card-header-riwayat .badge-period {
+    background: #7c5a9e;
+    color: white;
+    padding: 0.2rem 1rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.card-header-riwayat .badge-status {
+    padding: 0.2rem 1rem;
+    border-radius: 30px;
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+.badge-status.good {
+    background: #d1fae5;
+    color: #065f46;
+}
+.badge-status.moderate {
+    background: #fef3c7;
+    color: #92400e;
+}
+.badge-status.severe {
+    background: #fee2e2;
+    color: #991b1b;
+}
+.badge-status.unknown {
+    background: #f3f4f6;
+    color: #4b5563;
+}
+
+.card-header-riwayat .date-meta {
+    color: #9a8aaa;
+    font-size: 0.78rem;
+}
+
+/* ---------- BODY KARTU ---------- */
+.card-body-riwayat .summary-text {
+    font-size: 0.97rem;
+    line-height: 1.7;
+    color: #2d1f3f;
+    white-space: pre-wrap;
+    margin: 0.2rem 0 0.6rem 0;
+}
+
+.card-body-riwayat .suggestion-text {
+    background: #f5efff;
+    border-radius: 14px;
+    padding: 0.7rem 1.2rem;
+    margin: 0.4rem 0;
+    border-left: 4px solid #a855f7;
+    font-size: 0.9rem;
+    color: #2d1f3f;
+}
+
+.card-body-riwayat .suggestion-text strong {
+    color: #6b3f8e;
+}
+
+.card-body-riwayat .motivation-text {
+    margin-top: 0.5rem;
+    font-style: italic;
+    color: #6b4f8a;
+    font-size: 0.92rem;
+    padding-left: 0.3rem;
+}
+
+/* ---------- FOOTER KARTU ---------- */
+.card-footer-riwayat {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem 1rem;
+    margin-top: 0.9rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid #ede6f5;
+}
+
+.card-footer-riwayat .mood-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+}
+
+.mood-tag {
+    background: #f5f0ff;
+    border: 1px solid #ddd0eb;
+    padding: 0.1rem 0.8rem;
+    border-radius: 30px;
+    font-size: 0.72rem;
+    color: #5a3d7a;
+}
+
+.card-footer-riwayat .delete-item-btn {
+    background: none;
+    border: none;
+    color: #b91c1c;
+    font-size: 0.95rem;
+    cursor: pointer;
+    opacity: 0.35;
+    transition: opacity 0.2s;
+    padding: 0.1rem 0.5rem;
+    border-radius: 30px;
+}
+
+.card-footer-riwayat .delete-item-btn:hover {
+    opacity: 1;
+    background: #fee2e2;
+}
+
+/* ---------- EMPTY STATE ---------- */
+.empty-state-riwayat {
+    text-align: center;
+    padding: 3.5rem 1rem;
+    color: #8a7a9e;
+}
+
+.empty-state-riwayat .big-icon {
+    font-size: 3.8rem;
+    display: block;
+    margin-bottom: 0.8rem;
+}
+
+.empty-state-riwayat p {
+    margin: 0.3rem 0;
+}
+
+.empty-state-riwayat .nav-link-btn {
+    display: inline-block;
+    padding: 0.65rem 2rem;
+    border-radius: 40px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    background: linear-gradient(135deg, #c084fc, #a855f7);
+    color: white;
+    box-shadow: 0 4px 14px rgba(168, 85, 247, 0.3);
+    margin-top: 1.2rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.empty-state-riwayat .nav-link-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(168, 85, 247, 0.4);
+}
+
+/* ---------- TOAST ---------- */
+.toast-riwayat {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #1D9E75;
+    color: white;
+    padding: 0.7rem 2rem;
+    border-radius: 40px;
+    font-weight: 500;
+    font-size: 0.95rem;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    transition: opacity 0.35s ease;
+    pointer-events: none;
+    z-index: 999;
+    font-family: 'Poppins', sans-serif;
+}
+
+.toast-riwayat.show {
+    opacity: 1;
+}
+
+.toast-riwayat.error {
+    background: #dc2626;
+}
+
+/* ======================================================
+   RESPONSIVE
+   ====================================================== */
+
+@media (max-width: 820px) {
+    body {
+        padding-top: 70px; /* Padding lebih kecil untuk layar sedang */
+    }
+    
+    .riwayat-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.8rem;
+    }
+
+    .riwayat-header h1 {
+        justify-content: center;
+        font-size: 1.6rem;
+    }
+
+    .riwayat-controls {
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .riwayat-controls .search-input {
+        min-width: 180px;
+        flex: 1 1 180px;
+    }
+}
+
+@media (max-width: 600px) {
+    body {
+        padding: 1rem 0.8rem;
+        padding-top: 65px; /* Padding lebih kecil untuk mobile */
+    }
+
+    .riwayat-header h1 {
+        font-size: 1.4rem;
+    }
+
+    .riwayat-controls {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.6rem;
+    }
+
+    .riwayat-controls .search-input,
+    .riwayat-controls .filter-select,
+    .riwayat-controls .clear-all-btn {
+        width: 100%;
+        text-align: center;
+    }
+
+    .riwayat-card {
+        padding: 1rem 1rem;
+    }
+
+    .card-header-riwayat {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .card-footer-riwayat {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .stats-bar {
+        justify-content: center;
+        gap: 0.8rem 1.5rem;
+        padding: 0.8rem 1.2rem;
+    }
+
+    .stats-item {
+        font-size: 0.85rem;
+    }
+
+    .stats-item strong {
+        font-size: 1rem;
+    }
+}
+
+@media (max-width: 400px) {
+    body {
+        padding-top: 60px; /* Padding terkecil untuk layar sangat kecil */
+    }
+    
+    .riwayat-header h1 {
+        font-size: 1.2rem;
+    }
+
+    .card-body-riwayat .summary-text {
+        font-size: 0.9rem;
+    }
+
+    .card-body-riwayat .suggestion-text {
+        font-size: 0.82rem;
+        padding: 0.5rem 0.9rem;
+    }
+
+    .mood-tag {
+        font-size: 0.65rem;
+        padding: 0.05rem 0.6rem;
+    }
+}

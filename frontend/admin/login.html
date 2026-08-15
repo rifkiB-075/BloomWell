@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login Admin | BloomWell</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <style>
+    body { font-family: 'Poppins', sans-serif; background:#f8fafc; margin:0; }
+    .wrap { max-width: 980px; margin: 0 auto; padding: 28px 18px; }
+    .card { background:white; border:1px solid #e5e7eb; border-radius:18px; padding: 18px; }
+    .row { display:flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+    .brand { display:flex; gap:12px; align-items:center; }
+    .logo { width:44px; height:44px; border-radius:14px; background:#2563eb; display:flex; align-items:center; justify-content:center; color:white; font-weight:800; }
+    input, button { font-family: inherit; }
+    .muted { color:#6b7280; font-size: 13px; margin-top: 6px; }
+
+    label { display:block; margin-top: 12px; font-weight:700; font-size: 13px; }
+    .input-wrap { position: relative; }
+    input { width:100%; padding: 12px 12px 12px 42px; border-radius: 12px; border:1px solid #d1d5db; margin-top: 6px; outline:none; }
+    .icon { position:absolute; left: 14px; top: 50%; transform: translateY(-50%); color:#6b7280; }
+
+    button.primary { background:#2563eb; color:white; border:none; border-radius: 12px; padding: 10px 14px; font-weight:800; cursor:pointer; margin-top: 14px; width: 100%; }
+    button.primary:disabled { opacity: .7; cursor: not-allowed; }
+
+    .alert { margin-top: 12px; padding: 12px 12px; border-radius: 12px; border:1px solid #e5e7eb; display:none; }
+    .alert.show { display:block; }
+    .alert.ok { background:#ecfdf5; color:#065f46; border-color:#10b981; }
+    .alert.err { background:#fef2f2; color:#991b1b; border-color:#ef4444; }
+
+    .footer-link { margin-top: 14px; font-size: 13px; }
+    .footer-link a { color:#2563eb; font-weight:700; text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="row" style="justify-content:space-between;">
+        <div class="brand">
+          <div class="logo">A</div>
+          <div>
+            <h2 style="margin:0; font-size:18px;">Login Admin</h2>
+            <div class="muted">Akses khusus untuk mengelola Resources & Mood Meter</div>
+          </div>
+        </div>
+      </div>
+
+      <div id="alert" class="alert"></div>
+
+      <form id="adminLoginForm" onsubmit="return false;">
+        <label for="admin-username">Username Admin</label>
+        <div class="input-wrap">
+          <span class="icon"><i class="fa-solid fa-at"></i></span>
+          <input id="admin-username" type="text" placeholder="admin" autocomplete="username" />
+        </div>
+        <span id="err-username" class="muted" style="display:none; color:#991b1b; font-weight:700;">Username wajib diisi.</span>
+
+
+        <label for="admin-password">Kata Sandi</label>
+        <div class="input-wrap">
+          <span class="icon"><i class="fa-solid fa-lock"></i></span>
+          <input id="admin-password" type="password" placeholder="Masukkan kata sandi" autocomplete="current-password" />
+        </div>
+        <span id="err-password" class="muted" style="display:none; color:#991b1b; font-weight:700;">Kata sandi wajib diisi.</span>
+
+        <button id="btn" class="primary" type="button" onclick="handleAdminLogin()">
+          <i class="fa-solid fa-lock"></i>&nbsp; Masuk Admin
+        </button>
+
+        <div class="footer-link">
+          Kembali ke halaman utama: <a href="index.html">Home</a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = (window.location.origin && window.location.origin !== 'null')
+      ? window.location.origin + '/backend/api'
+      : 'backend/api';
+
+
+
+    function showAlert(type, msg) {
+      const el = document.getElementById('alert');
+      el.className = 'alert show ' + (type === 'ok' ? 'ok' : 'err');
+      el.innerHTML = `<i class="fa-solid ${type === 'ok' ? 'fa-circle-check' : 'fa-circle-exclamation'}"></i> ${msg}`;
+    }
+
+    function hideAlert() {
+      const el = document.getElementById('alert');
+      el.className = 'alert';
+      el.innerHTML = '';
+    }
+
+    function validate() {
+      let ok = true;
+      const username = document.getElementById('admin-username').value.trim();
+      const password = document.getElementById('admin-password').value;
+      const usernameErr = document.getElementById('err-username');
+      const pwErr = document.getElementById('err-password');
+
+      if (!username) { usernameErr.style.display = 'block'; ok = false; } else usernameErr.style.display = 'none';
+
+      if (!password) { pwErr.style.display = 'block'; ok = false; } else pwErr.style.display = 'none';
+
+      return ok;
+    }
+
+    async function handleAdminLogin() {
+      hideAlert();
+      if (!validate()) return;
+
+      const btn = document.getElementById('btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>&nbsp; Memproses...';
+
+      const username = document.getElementById('admin-username').value.trim();
+      const password = document.getElementById('admin-password').value;
+
+      // backend admin-login.php butuh email, jadi konversi sementara:
+      // anggap email = username @ bloomwell.local (default seed)
+      const email = username + '@bloomwell.local';
+
+
+      try {
+        const res = await fetch(`${API_BASE}/admin-login.php`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+
+          // Simpan "admin session" (minimal): cukup untuk proteksi UI saat ini
+          localStorage.setItem('bw_admin_session', JSON.stringify(data.admin));
+          showAlert('ok', 'Login admin berhasil! Mengarahkan dashboard...');
+          setTimeout(() => { window.location.href = 'admin-dashboard.html'; }, 1000);
+        } else {
+          showAlert('err', data.message || 'Login admin gagal.');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-lock"></i>&nbsp; Masuk Admin';
+        }
+      } catch (e) {
+        showAlert('err', 'Tidak dapat terhubung ke server. Pastikan server berjalan.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-lock"></i>&nbsp; Masuk Admin';
+      }
+    }
+
+    // Auto redirect jika sudah ada session admin
+    (function(){
+      try {
+        const raw = localStorage.getItem('bw_admin_session');
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          if (parsed && parsed.id) {
+            window.location.href = 'admin-dashboard.html';
+          }
+        }
+      } catch(e) {}
+    })();
+  </script>
+</body>
+</html>
+

@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Resources Library | BloomWell</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat&family=Ubuntu&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Satisfy&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #f6fbff 0%, #fef7f2 100%);
+            color: #1f2937;
+        }
+
+        .library-page {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 110px 20px 80px;
+        }
+
+        .hero-card {
+            background: white;
+            border-radius: 24px;
+            padding: 30px;
+            box-shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+            margin-bottom: 24px;
+        }
+
+        .hero-card h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #2b6cb0;
+        }
+
+        .hero-card p {
+            color: #64748b;
+            line-height: 1.7;
+            margin-bottom: 16px;
+        }
+
+        .hero-stats {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .hero-stats span {
+            background: #eef6ff;
+            color: #2563eb;
+            padding: 8px 12px;
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .filter-bar {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin: 24px 0 18px;
+        }
+
+        .filter-btn {
+            border: none;
+            background: #f1f5f9;
+            color: #475569;
+            padding: 10px 14px;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: 0.2s ease;
+            font-weight: 600;
+        }
+
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #2b6cb0;
+            color: white;
+        }
+
+        .library-section {
+            margin-top: 30px;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            margin-bottom: 14px;
+            color: #1e293b;
+        }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 16px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 18px;
+            padding: 18px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.06);
+            border: 1px solid #e2e8f0;
+        }
+
+        .resource-card h3 {
+            margin: 8px 0 8px;
+            font-size: 1rem;
+        }
+
+        .resource-card p {
+            color: #64748b;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        .resource-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .resource-meta span {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 0.8rem;
+            padding: 5px 8px;
+            border-radius: 999px;
+        }
+
+        .resource-card .btn {
+            display: inline-block;
+            margin-top: 4px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: #fef3c7;
+            color: #92400e;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .resource-card.hidden {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-card {
+                padding: 22px;
+            }
+
+            .hero-card h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="resourcelibrary.html" class="nav-link active">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="nav-link">Interactive Tools</a></li>
+                <li><a href="professionalTools.html" class="nav-link">Professional Service</a></li>
+                <li><a href="emergencyService.html" class="nav-link">Emergency Service</a></li>
+                <li><a href="user-account.html" class="nav-link">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="library-page">
+        <section class="hero-card">
+            <h1>Perpustakaan BloomWell</h1>
+            <p>Tempat untuk menjelajah buku, bacaan, dan sumber belajar yang membantu kamu memahami diri sendiri, mengelola emosi, dan menjaga kesehatan mental dengan lebih baik.</p>
+            <div class="hero-stats">
+                <span>📚 24 Koleksi</span>
+                <span>🗂️ 6 Topik</span>
+                <span>🌿 Cocok untuk Belajar Mandiri</span>
+            </div>
+            
+            <!-- Admin upload: tampilkan hanya jika ?admin=1 di URL -->
+            <div id="adminUpload" style="margin-top:18px; display:none;">
+                <h3>Admin Upload</h3>
+                <form id="uploadForm" enctype="multipart/form-data">
+                    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+                        <input type="text" name="title" placeholder="Judul" required style="flex:1;padding:8px;border-radius:8px;border:1px solid #d1d5db;" />
+                        <select name="category" required style="padding:8px;border-radius:8px;border:1px solid #d1d5db;">
+                            <option value="mindfulness">Mindfulness</option>
+                            <option value="anxiety">Kecemasan</option>
+                            <option value="relationship">Hubungan</option>
+                            <option value="selfcare">Self-Care</option>
+                            <option value="productivity">Produktivitas</option>
+                        </select>
+                    </div>
+                    <textarea name="description" placeholder="Deskripsi singkat" rows="2" style="width:100%;margin-top:8px;padding:8px;border-radius:8px;border:1px solid #d1d5db;"></textarea>
+                    <div style="margin-top:8px;display:flex;gap:8px;align-items:center;">
+                        <input type="file" name="pdf_file" accept="application/pdf" required />
+                        <button type="submit" style="padding:8px 12px;border-radius:8px;background:#2b6cb0;color:#fff;border:none;cursor:pointer;">Upload</button>
+                        <span id="uploadMsg" style="color:#475569;margin-left:8px;"></span>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <div class="filter-bar" id="filterBar">
+            <button class="filter-btn active" data-filter="all">Semua</button>
+            <button class="filter-btn" data-filter="mindfulness">Mindfulness</button>
+            <button class="filter-btn" data-filter="anxiety">Kecemasan</button>
+            <button class="filter-btn" data-filter="relationship">Hubungan</button>
+            <button class="filter-btn" data-filter="selfcare">Self-Care</button>
+            <button class="filter-btn" data-filter="productivity">Produktivitas</button>
+        </div>
+
+        <section class="library-section">
+            <h2 class="section-title">Rak buku berdasarkan topik</h2>
+            <div class="resource-grid" id="resourceGrid"></div>
+        </section>
+    </main>
+
+    <script>
+        const buttons = document.querySelectorAll('.filter-btn');
+        const resourceGrid = document.getElementById('resourceGrid');
+
+        // tampilkan admin upload jika ?admin=1
+        function isAdminMode() {
+            return new URLSearchParams(window.location.search).get('admin') === '1';
+        }
+
+        // API endpoint; tambahkan debug flag otomatis ketika admin mode aktif
+        const apiEndpoint = 'backend/api/resources.php' + (isAdminMode() ? '?debug=1' : '');
+
+        // client-side fallback mode when PHP backend is unavailable
+        let clientMode = false;
+        const LOCAL_KEY = 'bw_local_resources';
+
+        function loadLocalResources() {
+            try {
+                const raw = sessionStorage.getItem(LOCAL_KEY);
+                return raw ? JSON.parse(raw) : [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveLocalResources(list) {
+            sessionStorage.setItem(LOCAL_KEY, JSON.stringify(list));
+        }
+
+        function renderResources(list) {
+            if (!list || !list.length) {
+                resourceGrid.innerHTML = '<p>Belum ada buku PDF yang dipublikasikan.</p>';
+                return;
+            }
+
+            resourceGrid.innerHTML = list.map(item => `
+                <article class="resource-card" data-category="${item.category}">
+                    <div class="resource-meta"><span>${item.category_label || item.category}</span><span>${item.read_time || '5 menit baca'}</span></div>
+                    <h3>${item.title}</h3>
+                    <p>${item.description}</p>
+                    <a href="${item.file_path ? item.file_path : '#'}" class="btn" target="_blank" rel="noopener noreferrer">${item.file_path ? 'Baca PDF' : 'Segera tersedia'}</a>
+                </article>
+            `).join('');
+        }
+
+        async function loadResources() {
+            // Try server endpoint first
+            try {
+                const res = await fetch(apiEndpoint);
+                const text = await res.text();
+                let json = null;
+                try { json = JSON.parse(text); } catch(e) { json = null; }
+
+                if (res.ok && json && Array.isArray(json.resources)) {
+                    const serverResources = json.resources;
+                    // merge with any local session resources
+                    const local = loadLocalResources();
+                    const merged = serverResources.concat(local);
+                    renderResources(merged);
+                    return;
+                }
+
+                // If server returned non-JSON (e.g., PHP error HTML), fallthrough to local/static
+                clientMode = true;
+            } catch (err) {
+                clientMode = true;
+            }
+
+            // Try loading static JSON file as fallback
+            try {
+                const res2 = await fetch('backend/data/resources.json');
+                if (res2.ok) {
+                    const staticList = await res2.json();
+                    const local = loadLocalResources();
+                    renderResources(staticList.concat(local));
+                    return;
+                }
+            } catch (e) {
+                // ignore
+            }
+
+            // Final fallback: only local session items
+            const localOnly = loadLocalResources();
+            renderResources(localOnly);
+        }
+
+        buttons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const filter = btn.dataset.filter;
+                buttons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                document.querySelectorAll('.resource-card').forEach(card => {
+                    const category = card.dataset.category;
+                    const show = filter === 'all' || category === filter;
+                    card.classList.toggle('hidden', !show);
+                });
+            });
+        });
+
+        loadResources();
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const adminDiv = document.getElementById('adminUpload');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadMsg = document.getElementById('uploadMsg');
+
+            if (isAdminMode()) {
+                adminDiv.style.display = 'block';
+            }
+
+            if (uploadForm) {
+                const submitBtn = uploadForm.querySelector('button[type=submit]');
+                uploadForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    uploadMsg.style.color = '#475569';
+                    uploadMsg.textContent = 'Mengunggah...';
+                    const formData = new FormData(uploadForm);
+                    if (submitBtn) submitBtn.disabled = true;
+
+                    // If backend unavailable, operate in clientMode: create object URL and save metadata to sessionStorage
+                    if (clientMode) {
+                        try {
+                            const file = formData.get('pdf_file');
+                            const title = formData.get('title') || 'Untitled';
+                            const category = formData.get('category') || 'misc';
+                            const description = formData.get('description') || '';
+
+                            // read file as data URL so it persists in sessionStorage across reloads
+                            let dataUrl = '';
+                            if (file && file.size && file.type === 'application/pdf') {
+                                dataUrl = await new Promise((resolve, reject) => {
+                                    const reader = new FileReader();
+                                    reader.onload = () => resolve(reader.result);
+                                    reader.onerror = () => reject(new Error('Gagal membaca file'));
+                                    reader.readAsDataURL(file);
+                                });
+                            }
+
+                            const newItem = {
+                                id: Date.now(),
+                                title,
+                                category,
+                                category_label: (category && category[0]) ? category.charAt(0).toUpperCase() + category.slice(1) : category,
+                                description,
+                                read_time: '1 menit baca',
+                                type: 'pdf',
+                                status: 'published',
+                                file_path: dataUrl
+                            };
+
+                            const local = loadLocalResources();
+                            local.push(newItem);
+                            saveLocalResources(local);
+                            uploadMsg.style.color = 'green';
+                            uploadMsg.textContent = 'Berhasil (lokal, hanya di browser ini).';
+                        }
+                        catch (err) {
+                            uploadMsg.style.color = 'crimson';
+                            uploadMsg.textContent = 'Gagal membuat resource lokal.';
+                            console.error('Local upload error', err);
+                        } finally {
+                            if (submitBtn) submitBtn.disabled = false;
+                            uploadForm.reset();
+                            loadResources();
+                        }
+                        return;
+                    }
+
+                    try {
+                        const res = await fetch(apiEndpoint, {
+                            method: 'POST',
+                            body: formData
+                        });
+
+                        const text = await res.text();
+                        let json = null;
+                        try {
+                            json = JSON.parse(text);
+                        } catch (parseErr) {
+                            // non-JSON response (PHP error/notice), surface raw text
+                        }
+
+                        if (res.ok && json && json.success) {
+                            uploadMsg.style.color = 'green';
+                            uploadMsg.textContent = 'Berhasil diupload.';
+                            uploadForm.reset();
+                            loadResources();
+                        } else {
+                            uploadMsg.style.color = 'crimson';
+                            uploadMsg.textContent = (json && json.message) ? json.message : (text || 'Upload gagal.');
+                            console.error('Upload failed:', res.status, text);
+                            // if server returned HTML error, enable client fallback
+                            if (!json) {
+                                clientMode = true;
+                                uploadMsg.textContent += ' — beralih ke mode lokal.';
+                            }
+                        }
+                    } catch (err) {
+                        uploadMsg.style.color = 'crimson';
+                        uploadMsg.textContent = 'Terjadi kesalahan jaringan atau server. Beralih ke mode lokal.';
+                        console.error('Upload error', err);
+                        clientMode = true;
+                    } finally {
+                        if (submitBtn) submitBtn.disabled = false;
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Analisis AI | BloomWell</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/interactivetools.css">
+    <link rel="stylesheet" href="css/analisis.css">
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <nav class="nav">
+            <div class="logo">
+                <div class="img-div">
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
+                </div>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="resourcelibrary.html">Resources Library</a></li>
+                <li><a href="interactiveTools.html" class="active">Interactive Tools</a></li>
+                <li><a href="professionalTools.html">Professional Service</a></li>
+                <li><a href="emergencyService.html">Emergency Service</a></li>
+                <li><a href="user-account.html">Akun</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Layout -->
+    <div class="tools-layout">
+
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
+            <nav class="sidebar-nav">
+                <a href="interactiveTools.html#tool-moodmeter" class="sidebar-item" title="Mood Meter">
+                    <span class="sidebar-icon">🧪</span>
+                    <span class="sidebar-label">Mood Meter</span>
+                </a>
+                <a href="kalender.html" class="sidebar-item" title="Kalender Mood">
+                    <span class="sidebar-icon">📅</span>
+                    <span class="sidebar-label">Kalender Mood</span>
+                </a>
+                <a href="chat-ai.html" class="sidebar-item" title="Chat AI">
+                    <span class="sidebar-icon">💬</span>
+                    <span class="sidebar-label">Chat AI</span>
+                </a>
+                <a href="analisis.html" class="sidebar-item active" title="Analisis AI">
+                    <span class="sidebar-icon">📊</span>
+                    <span class="sidebar-label">Analisis AI</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Konten utama -->
+        <main class="tools-main">
+            <div class="analisis-container">
+
+                <div class="analisis-header">
+                    <h1>📊 Analisis Mood oleh AI</h1>
+                    <div class="period-selector">
+                        <button class="period-btn active" data-period="weekly">Mingguan</button>
+                        <button class="period-btn" data-period="monthly">Bulanan</button>
+                    </div>
+                </div>
+
+                <!-- Kontrol navigasi riwayat -->
+                <div class="analisis-controls">
+                    <div class="period-nav">
+                        <button class="period-nav-btn" id="prevPeriod" title="Periode sebelumnya">◀</button>
+                        <span class="period-range" id="periodRange">Minggu ini</span>
+                        <button class="period-nav-btn" id="nextPeriod" title="Periode berikutnya">▶</button>
+                    </div>
+                    <button class="generate-btn" id="generateBtn">🤖 Generate Analisis</button>
+                </div>
+
+                <!-- Tempat hasil -->
+                <div class="result-box" id="resultBox">
+                    <div class="empty-state">
+                        <span class="big-icon">🔮</span>
+                        <p>Pilih periode dan klik "Generate Analisis" untuk meminta AI menganalisis mood Anda.</p>
+                        <p style="font-size:0.9rem;color:#aaa;margin-top:0.5rem;">AI akan mendeteksi kesehatan mental, memberi solusi, dan kata-kata semangat.</p>
+                        <div class="nav-link-group" style="margin-top:1.5rem;">
+                            <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                            <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast-message" id="toast"></div>
+
+    <script>
+        // ====================== STATE ======================
+        let selectedPeriod = 'weekly';
+        let offset = 0;
+        let currentAnalysisResult = null;
+
+        // ====================== DOM refs ======================
+        const periodBtns = document.querySelectorAll('.period-btn');
+        const generateBtn = document.getElementById('generateBtn');
+        const resultBox = document.getElementById('resultBox');
+        const toast = document.getElementById('toast');
+        const periodRange = document.getElementById('periodRange');
+        const prevBtn = document.getElementById('prevPeriod');
+        const nextBtn = document.getElementById('nextPeriod');
+
+        // ====================== Sidebar ======================
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+        }
+
+        // ====================== Toast ======================
+        function showToast(msg, isError = false) {
+            toast.textContent = msg;
+            toast.className = 'toast-message' + (isError ? ' error' : '');
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 3000);
+        }
+
+        // ====================== Period Selector ======================
+        periodBtns.forEach(btn => {
+            btn.addEventListener('click', function() {
+                periodBtns.forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                selectedPeriod = this.dataset.period;
+                offset = 0;
+                updatePeriodRange();
+                resetResult();
+            });
+        });
+
+        // ====================== Navigasi Riwayat ======================
+        function updatePeriodRange() {
+            const now = new Date();
+            const weekOffset = offset * 7;
+            const monthOffset = offset * 30;
+
+            if (selectedPeriod === 'weekly') {
+                const start = new Date(now);
+                start.setDate(now.getDate() - now.getDay() + weekOffset);
+                const end = new Date(start);
+                end.setDate(start.getDate() + 6);
+                const fmt = d => d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short' });
+                const label = offset === 0 ? 'Minggu ini' :
+                              offset < 0 ? `Minggu lalu (${fmt(start)} - ${fmt(end)})` :
+                                           `Minggu depan (${fmt(start)} - ${fmt(end)})`;
+                periodRange.textContent = label;
+            } else {
+                const start = new Date(now.getFullYear(), now.getMonth() + monthOffset, 1);
+                const end = new Date(now.getFullYear(), now.getMonth() + 1 + monthOffset, 0);
+                const fmt = d => d.toLocaleDateString('id-ID', { month: 'long', year: 'numeric' });
+                const label = offset === 0 ? `Bulan ini (${fmt(start)})` :
+                              offset < 0 ? `Bulan lalu (${fmt(start)})` :
+                                           `Bulan depan (${fmt(start)})`;
+                periodRange.textContent = label;
+            }
+
+            prevBtn.disabled = offset <= -4;
+            nextBtn.disabled = offset >= 4;
+        }
+
+        prevBtn.addEventListener('click', () => {
+            offset--;
+            updatePeriodRange();
+            resetResult();
+        });
+
+        nextBtn.addEventListener('click', () => {
+            offset++;
+            updatePeriodRange();
+            resetResult();
+        });
+
+        function resetResult() {
+            resultBox.innerHTML = `
+                <div class="empty-state">
+                    <span class="big-icon">🔮</span>
+                    <p>Pilih periode dan klik "Generate Analisis" untuk melihat hasil.</p>
+                    <div class="nav-link-group" style="margin-top:1.5rem;">
+                        <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                        <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
+                    </div>
+                </div>
+            `;
+            currentAnalysisResult = null;
+        }
+
+        // ====================== Ambil data mood dari database ======================
+        async function fetchMoodData(period, offsetVal) {
+            const url = `backend/api/mood-meter.php`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) throw new Error('Gagal mengambil data mood');
+                const data = await response.json();
+                if (!data.success) throw new Error(data.message || 'Gagal mengambil data');
+                let entries = data.entries || [];
+
+                // Filter berdasarkan periode dan offset
+                const now = new Date();
+                let startDate, endDate;
+                if (period === 'weekly') {
+                    const start = new Date(now);
+                    start.setDate(now.getDate() - now.getDay() + (offsetVal * 7));
+                    startDate = new Date(start);
+                    startDate.setHours(0,0,0,0);
+                    endDate = new Date(start);
+                    endDate.setDate(startDate.getDate() + 6);
+                    endDate.setHours(23,59,59,999);
+                } else {
+                    const month = now.getMonth() + offsetVal * 30; // offset dalam bulan
+                    const year = now.getFullYear();
+                    startDate = new Date(year, month, 1);
+                    endDate = new Date(year, month + 1, 0);
+                    endDate.setHours(23,59,59,999);
+                }
+
+                entries = entries.filter(e => {
+                    const d = new Date(e.entry_date || e.logged_at);
+                    return d >= startDate && d <= endDate;
+                });
+
+                return entries;
+            } catch (err) {
+                console.warn('Gagal fetch data:', err);
+                return [];
+            }
+        }
+
+        // ====================== Hitung statistik ======================
+        function computeStats(entries) {
+            if (!entries || entries.length === 0) return null;
+            const total = entries.length;
+            const moodCounts = {};
+            entries.forEach(e => {
+                const mood = e.mood_label || 'Netral';
+                moodCounts[mood] = (moodCounts[mood] || 0) + 1;
+            });
+            const sorted = Object.entries(moodCounts).sort((a,b) => b[1]-a[1]);
+            const mostCommon = sorted.length > 0 ? sorted[0][0] : null;
+            const mostCommonCount = sorted.length > 0 ? sorted[0][1] : 0;
+
+            const positive = ['Senang', 'Tenang'];
+            const negative = ['Sedih', 'Marah', 'Cemas', 'Lelah'];
+            let posCount = 0, negCount = 0;
+            entries.forEach(e => {
+                const mood = e.mood_label || 'Netral';
+                if (positive.includes(mood)) posCount++;
+                else if (negative.includes(mood)) negCount++;
+            });
+            const totalMood = posCount + negCount;
+            const posRatio = totalMood > 0 ? posCount / totalMood : 0.5;
+
+            // Deteksi kesehatan mental sederhana
+            let mentalHealthStatus = 'good';
+            let mentalHealthLevel = 'Sehat';
+            let riskFactors = [];
+            if (negCount > 0) {
+                const negRatio = negCount / totalMood;
+                const sadCount = moodCounts['Sedih'] || 0;
+                const cemasCount = moodCounts['Cemas'] || 0;
+                const marahCount = moodCounts['Marah'] || 0;
+                const lelahCount = moodCounts['Lelah'] || 0;
+
+                if (sadCount > 3 && lelahCount > 2 && negRatio > 0.5) {
+                    mentalHealthStatus = 'severe';
+                    mentalHealthLevel = 'Kecenderungan Depresi';
+                    riskFactors.push('Mood sedih yang dominan disertai kelelahan');
+                } else if (cemasCount > 3 && negRatio > 0.4) {
+                    mentalHealthStatus = 'severe';
+                    mentalHealthLevel = 'Kecenderungan Kecemasan';
+                    riskFactors.push('Kecemasan yang dominan');
+                } else if (marahCount > 2 && sadCount > 2) {
+                    mentalHealthStatus = 'severe';
+                    mentalHealthLevel = 'Gangguan Suasana Hati';
+                    riskFactors.push('Perubahan mood dari marah ke sedih');
+                } else if (negRatio > 0.3 && negRatio < 0.6) {
+                    mentalHealthStatus = 'moderate';
+                    mentalHealthLevel = 'Perlu Perhatian';
+                    riskFactors.push('Cukup banyak momen negatif');
+                } else if (negRatio > 0.15) {
+                    mentalHealthStatus = 'moderate';
+                    mentalHealthLevel = 'Cukup Sehat dengan beberapa tantangan';
+                    riskFactors.push('Beberapa momen negatif');
+                }
+            }
+            if (posRatio > 0.7 && mentalHealthStatus === 'good') {
+                mentalHealthLevel = 'Sangat Sehat 🥰';
+            }
+
+            return {
+                total,
+                moodCounts,
+                mostCommon,
+                mostCommonCount,
+                posCount,
+                negCount,
+                posRatio,
+                mentalHealthStatus,
+                mentalHealthLevel,
+                riskFactors,
+                entries
+            };
+        }
+
+        // ====================== Panggil AI (server.js) ======================
+        async function callAI(entries, stats) {
+            // Buat ringkasan mood
+            let moodSummary = stats.moodCounts ? Object.entries(stats.moodCounts).map(([m,c]) => `${m}: ${c}x`).join(', ') : 'Tidak ada data';
+            let periodLabel = selectedPeriod === 'weekly' ? '1 minggu' : '1 bulan';
+            const prompt = `Saya adalah pengguna BloomWell. Berikut adalah ringkasan mood saya selama ${periodLabel} terakhir:
+- Total catatan: ${stats.total}
+- Mood tersering: ${stats.mostCommon} (${stats.mostCommonCount} kali)
+- Momen positif: ${stats.posCount} kali, negatif: ${stats.negCount} kali
+- Status kesehatan mental (deteksi awal): ${stats.mentalHealthLevel}
+
+Berdasarkan data ini, berikan:
+1. Saran praktis yang bisa saya lakukan untuk meningkatkan kesehatan mental.
+2. Kata-kata semangat yang personal dan menenangkan.
+
+Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darurat Sejiwa 119 ext 8 dan Halo Kemenkes 1500-567 jika diperlukan.`;
+
+            try {
+                const response = await fetch('http://localhost:3000/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: prompt })
+                });
+                if (!response.ok) {
+                    const errData = await response.json();
+                    throw new Error(errData.error || errData.detail || 'Gagal memanggil AI');
+                }
+                const data = await response.json();
+                return data.reply || 'Maaf, AI tidak memberikan respons.';
+            } catch (err) {
+                console.error('AI error:', err);
+                // Fallback: berikan saran generik
+                return `Maaf, saat ini AI sedang tidak dapat dihubungi. Tetapi berdasarkan data mood Anda, saya sarankan untuk tetap menjaga pola tidur, lakukan aktivitas fisik ringan, dan jangan ragu untuk berbicara dengan orang terdekat. Ingat, kesehatan mental itu penting. 💜\n\nJika Anda memerlukan bantuan profesional, hubungi Sejiwa di 119 ext 8 atau Halo Kemenkes di 1500-567.`;
+            }
+        }
+
+        // ====================== Tampilkan Hasil ======================
+        function displayResult(stats, aiSuggestion) {
+            const {
+                total,
+                moodCounts,
+                mostCommon,
+                mostCommonCount,
+                posCount,
+                negCount,
+                mentalHealthLevel,
+                riskFactors
+            } = stats;
+
+            const periodLabel = selectedPeriod === 'weekly' ? 'Mingguan' : 'Bulanan';
+            const offsetLabel = offset === 0 ? '' : (offset < 0 ? ` (${Math.abs(offset)} periode lalu)` : ` (${offset} periode depan)`);
+
+            let statusBadge = '';
+            if (stats.mentalHealthStatus === 'good') {
+                statusBadge = `<span class="health-status good">✅ ${mentalHealthLevel}</span>`;
+            } else if (stats.mentalHealthStatus === 'moderate') {
+                statusBadge = `<span class="health-status moderate">⚠️ ${mentalHealthLevel}</span>`;
+            } else if (stats.mentalHealthStatus === 'severe') {
+                statusBadge = `<span class="health-status severe">🔴 ${mentalHealthLevel}</span>`;
+            } else {
+                statusBadge = `<span class="health-status">❓ ${mentalHealthLevel}</span>`;
+            }
+
+            let moodList = '';
+            if (moodCounts && Object.keys(moodCounts).length > 0) {
+                const emojiMap = { 'Senang':'😊', 'Tenang':'😌', 'Sedih':'😢', 'Marah':'😠', 'Cemas':'😰', 'Lelah':'😴' };
+                moodList = '<ul style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:0.5rem;list-style:none;padding:0;">';
+                for (const [mood, count] of Object.entries(moodCounts)) {
+                    moodList += `<li style="background:#f0e8ff;padding:0.2rem 1rem;border-radius:30px;font-size:0.85rem;">${emojiMap[mood] || ''} ${mood}: ${count}x</li>`;
+                }
+                moodList += '</ul>';
+            }
+
+            let riskHtml = '';
+            if (riskFactors && riskFactors.length > 0) {
+                riskHtml = `<div style="margin-top:0.8rem;background:#fff5f5;border-radius:12px;padding:0.8rem 1.2rem;border:1px solid #fdd;">
+                    <strong>🔍 Faktor Risiko Terdeteksi:</strong>
+                    <ul style="margin:0.3rem 0 0 1.2rem;color:#721c24;">
+                        ${riskFactors.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>`;
+            }
+
+            const totalMood = posCount + negCount;
+            let moodBalance = '';
+            if (totalMood > 0) {
+                const posPct = Math.round((posCount / totalMood) * 100);
+                const negPct = Math.round((negCount / totalMood) * 100);
+                moodBalance = `
+                    <div style="display:flex;gap:1.5rem;margin:0.8rem 0;flex-wrap:wrap;">
+                        <span style="color:#1D9E75;">😊 Positif: ${posCount} (${posPct}%)</span>
+                        <span style="color:#D85A30;">😔 Negatif: ${negCount} (${negPct}%)</span>
+                        <span style="background:#ede6f5;padding:0.1rem 0.8rem;border-radius:30px;font-size:0.8rem;">
+                            Dominan: ${mostCommon || 'N/A'}
+                        </span>
+                    </div>
+                `;
+            }
+
+            const navLinks = `
+                <div class="nav-link-group">
+                    <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang analisis ini</a>
+                    <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
+                </div>
+            `;
+
+            resultBox.innerHTML = `
+                <div class="result-content">
+                    <div class="analysis-meta">
+                        <span class="tag">📆 ${periodLabel}${offsetLabel}</span>
+                        <span class="tag">📝 ${total} catatan</span>
+                        <span class="tag">🕐 ${new Date().toLocaleString()}</span>
+                    </div>
+
+                    ${statusBadge}
+
+                    <h2>📋 Ringkasan Statistik</h2>
+                    <div class="summary">
+                        <p>Total catatan: <strong>${total}</strong></p>
+                        <p>Mood paling sering: <strong>${mostCommon} (${mostCommonCount} kali)</strong></p>
+                        ${moodBalance}
+                    </div>
+
+                    ${moodList}
+
+                    ${riskHtml}
+
+                    <div class="ai-suggestions">
+                        <h3>🧠 Saran dari AI</h3>
+                        <div style="white-space:pre-line; line-height:1.8;">${aiSuggestion}</div>
+                    </div>
+
+                    <button class="save-rangkuman-btn" onclick="saveToRangkuman()">
+                        💾 Simpan ke Rangkuman
+                    </button>
+
+                    ${navLinks}
+                </div>
+            `;
+
+            // Simpan hasil untuk tombol simpan
+            currentAnalysisResult = { stats, aiSuggestion, period: selectedPeriod, offset, generatedAt: new Date().toISOString() };
+        }
+
+        // ====================== Generate Utama ======================
+        generateBtn.addEventListener('click', async function() {
+            this.disabled = true;
+            this.innerHTML = '⏳ Menganalisis...';
+
+            resultBox.innerHTML = `
+                <div class="result-box loading">
+                    <div class="spinner"></div>
+                    <p>🧠 AI sedang membaca mood Anda dan menganalisis kesehatan mental...</p>
+                </div>
+            `;
+
+            try {
+                const entries = await fetchMoodData(selectedPeriod, offset);
+                if (!entries || entries.length === 0) {
+                    throw new Error('Tidak ada data mood untuk periode ini. Silakan isi Mood Meter terlebih dahulu.');
+                }
+
+                const stats = computeStats(entries);
+                if (!stats) throw new Error('Gagal menghitung statistik mood.');
+
+                // Panggil AI
+                const aiSuggestion = await callAI(entries, stats);
+
+                displayResult(stats, aiSuggestion);
+                showToast('✅ Analisis selesai!');
+
+            } catch (error) {
+                console.error(error);
+                resultBox.innerHTML = `
+                    <div class="empty-state" style="color:#D85A30;">
+                        <span class="big-icon">⚠️</span>
+                        <p>${error.message || 'Terjadi kesalahan saat menganalisis.'}</p>
+                        <div class="nav-link-group" style="margin-top:1.5rem;">
+                            <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                            <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
+                        </div>
+                    </div>
+                `;
+                showToast('❌ ' + (error.message || 'Gagal menganalisis'), true);
+            } finally {
+                this.disabled = false;
+                this.innerHTML = '🤖 Generate Analisis';
+            }
+        });
+
+        // ====================== Simpan ke Rangkuman ======================
+        function saveToRangkuman() {
+            if (!currentAnalysisResult) {
+                showToast('⚠️ Tidak ada analisis untuk disimpan.', true);
+                return;
+            }
+            let history = JSON.parse(localStorage.getItem('rangkumanHistory')) || [];
+            const entry = {
+                id: Date.now(),
+                ...currentAnalysisResult,
+                savedAt: new Date().toISOString()
+            };
+            history.push(entry);
+            localStorage.setItem('rangkumanHistory', JSON.stringify(history));
+            showToast('✅ Berhasil disimpan ke Rangkuman!');
+        }
+        window.saveToRangkuman = saveToRangkuman;
+
+        // ====================== Inisialisasi ======================
+        updatePeriodRange();
+
+        // Jika ada parameter URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const periodParam = urlParams.get('period');
+        if (periodParam) {
+            const btn = document.querySelector(`.period-btn[data-period="${periodParam}"]`);
+            if (btn) btn.click();
+        }
+    </script>
+</body>
+</html>
