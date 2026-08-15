@@ -124,12 +124,12 @@
         // ============================================
         async function fetchMoodApi(url, options = {}) {
             const origin = window.location.origin && window.location.origin !== 'null' ? window.location.origin : 'http://localhost';
-            const normalizedUrl = url.startsWith('http') ? url : `${origin}/${url}`.replace(/([^:]\/\/)\/+/, '$1');
+            const normalizedUrl = url.startsWith('http') ? url : `${origin}/BloomWell/${url}`.replace(/([^:]\/\/)\/+/, '$1');
             const candidates = [
                 normalizedUrl,
-                url,
-                url.replace(/^backend\//, `${origin}/backend/`),
-                url.replace(/^backend\//, `/${url}`)
+                `/BloomWell/${url}`,
+                url.replace(/^backend\//, `${origin}/BloomWell/backend/`),
+                url.replace(/^backend\//, `/BloomWell/${url}`)
             ];
 
             let lastError = 'Tidak ada respons dari server mood';

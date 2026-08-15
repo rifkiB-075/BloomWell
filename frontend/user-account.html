@@ -22,7 +22,7 @@
         (function () {
             const session = localStorage.getItem('bw_session');
             if (!session) {
-                window.location.replace('auth.html?tab=signup');
+                window.location.replace('Auth.html?tab=signup');
             }
         })();
     </script>
@@ -145,7 +145,7 @@
         function handleLogout() {
             if (confirm('Apakah kamu yakin ingin keluar?')) {
                 localStorage.removeItem('bw_session');
-                window.location.href = 'auth.html';
+                window.location.href = 'Auth.html';
             }
         }
     </script>

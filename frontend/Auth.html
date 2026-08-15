@@ -18,11 +18,7 @@
         <nav class="nav">
             <div class="logo">
                 <div class="img-div">
-<<<<<<< HEAD
                     <img src="images/logo bloomwell.png" alt="BloomWell Logo">
-=======
-                    <!-- <img src="images/logo.png" alt="BloomWell Logo"> -->
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
                 </div>
                 <div>
                     <h2>BloomWell</h2>
@@ -34,7 +30,7 @@
                 <li><a href="interactiveTools.html">Interactive Tools</a></li>
                 <li><a href="professionalTools.html">Professional Service</a></li>
                 <li><a href="emergencyService.html">Emergency Service</a></li>
-                <li><a href="auth.html" class="active">Akun</a></li>
+                <li><a href="Auth.html" class="active">Akun</a></li>
             </ul>
         </nav>
     </header>
@@ -210,7 +206,9 @@
         }
 
         // ── URL API backend ───────────────────────────────────
-        const API_BASE = 'backend/api';
+        const API_BASE = (window.location.origin && window.location.origin !== 'null')
+          ? window.location.origin + '/BloomWell/backend/api'
+          : '/BloomWell/backend/api';
 
         // ── LOGIN ─────────────────────────────────────────────
         async function handleLogin() {

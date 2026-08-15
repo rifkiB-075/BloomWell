@@ -244,7 +244,7 @@
         }
 
         // API endpoint; tambahkan debug flag otomatis ketika admin mode aktif
-        const apiEndpoint = 'backend/api/resources.php' + (isAdminMode() ? '?debug=1' : '');
+        const apiEndpoint = '/BloomWell/backend/api/resources.php' + (isAdminMode() ? '?debug=1' : '');
 
         // client-side fallback mode when PHP backend is unavailable
         let clientMode = false;

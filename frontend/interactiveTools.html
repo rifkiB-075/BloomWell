@@ -189,7 +189,7 @@
         /* ===== API helper (optional server calls) ===== */
         async function fetchMoodApi(url, options = {}) {
             const origin = (window.location.origin && window.location.origin !== 'null') ? window.location.origin : 'http://localhost';
-            const baseCandidates = [url, `./${url}`, `${origin}/backend/api/mood-meter.php`, `/${url}`];
+            const baseCandidates = [url, `./${url}`, `${origin}/BloomWell/backend/api/mood-meter.php`, `/BloomWell/${url}`];
             const candidates = [...new Set(baseCandidates)].filter(Boolean);
             let lastError = 'Tidak ada respons dari server mood';
             for (const candidate of candidates) {

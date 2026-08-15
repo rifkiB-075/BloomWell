@@ -7,11 +7,21 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-$data     = json_decode(file_get_contents("php://input"), true);
-$name     = trim($data['name']     ?? '');
+// Ambil raw input data - handle berbagai cara pengiriman
+$raw = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : file_get_contents("php://input");
+
+// Coba parse sebagai JSON
+$data = json_decode($raw, true);
+
+// Jika gagal parse JSON, gunakan $_POST (untuk form-data)
+if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+    $data = $_POST;
+}
+
+$name     = trim($data['name'] ?? '');
 $username = trim($data['username'] ?? '');
-$email    = trim($data['email']    ?? '');
-$password =      $data['password'] ?? '';
+$email    = trim($data['email'] ?? '');
+$password = $data['password'] ?? '';
 
 // Validasi
 if (!$name || !$username || !$email || !$password) {

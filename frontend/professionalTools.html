@@ -24,19 +24,6 @@
 </head>
 
 <body>
-<<<<<<< HEAD
-    <header class="header">
-        <nav class="nav">
-            <div class="logo">
-                <div class="img-div">
-                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
-                </div>
-                <div>
-                    <h2>BloomWell</h2>
-                </div>
-            </div>
-=======
-
     <!-- ===== Auth Gate Modal ===== -->
     <div class="auth-gate-overlay" id="auth-gate-overlay">
         <div class="auth-gate-modal">
@@ -52,16 +39,15 @@
     </div>
 
     <header class="header">
-    <nav class="nav">
-        <div class="logo">
+        <nav class="nav">
+            <div class="logo">
                 <div class="img-div">
-                    <!-- <img src="images/logo.png" alt="BloomWell Logo"> -->
+                    <img src="images/logo bloomwell.png" alt="BloomWell Logo">
                 </div>
-            <div>
-                <h2>BloomWell</h2>
+                <div>
+                    <h2>BloomWell</h2>
+                </div>
             </div>
-        </div>
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 
         <ul class="nav-links">
             <li><a href="index.html" class="nav-link ">Home</a></li>
@@ -95,7 +81,7 @@
             <button class="pt-filter-btn" data-filter="Depresi">Depresi</button>
             <button class="pt-filter-btn" data-filter="Trauma">Trauma</button>
             <button class="pt-filter-btn" data-filter="Remaja">Remaja</button>
-            <button class="pt-filter-btn" data-filter="Pasangan">Pasangan &amp; Keluarga</button>
+            <button class="pt-filter-btn" data-filter="Pasangan">Pasangan & Keluarga</button>
             <button class="pt-filter-btn" data-filter="Stres Kerja">Stres Kerja</button>
         </div>
     </section>
@@ -128,8 +114,6 @@
 </div>
 
 <script>
-<<<<<<< HEAD
-=======
 /* ===== Auth Gate Logic ===== */
 function isLoggedIn() {
     try {
@@ -166,7 +150,6 @@ document.getElementById('auth-gate-signup').addEventListener('click', function (
     window.location.href = 'Auth.html?tab=signup';
 });
 
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 /* ==========================================================
    DATA DAFTAR PSIKOLOG
    Avatar memakai layanan DiceBear (ilustrasi kartun, bukan
@@ -351,10 +334,7 @@ function renderMessages(history) {
 }
 
 function openChat(id) {
-<<<<<<< HEAD
-=======
     if (!requireLogin()) return;
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     currentDoctor = doctors.find(d => d.id === id);
     if (!currentDoctor) return;
 

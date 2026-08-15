@@ -7,9 +7,19 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     exit();
 }
 
-$data     = json_decode(file_get_contents("php://input"), true);
-$email    = trim($data['email']    ?? '');
-$password =      $data['password'] ?? '';
+// Ambil raw input
+$raw = file_get_contents("php://input");
+
+// Coba parse JSON
+$data = json_decode($raw, true);
+
+// Jika gagal, coba dari $_POST
+if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+    $data = $_POST;
+}
+
+$email    = trim($data['email'] ?? '');
+$password = $data['password'] ?? '';
 
 // Validasi input
 if (!$email || !$password) {

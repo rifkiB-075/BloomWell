@@ -79,7 +79,7 @@
         const idInput = document.getElementById('resourceId');
 
         async function loadResources() {
-            const res = await fetch('backend/api/resources.php');
+            const res = await fetch('/BloomWell/backend/api/resources.php');
             const data = await res.json();
             const resources = data.resources || [];
 
@@ -121,7 +121,7 @@
 
         async function deleteResource(id) {
             if (!confirm('Yakin ingin menghapus buku ini?')) return;
-            const res = await fetch('backend/api/resources.php', {
+            const res = await fetch('/BloomWell/backend/api/resources.php', {
                 method: 'DELETE',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ id })
@@ -137,7 +137,7 @@
             messageBox.innerHTML = '<div class="message">Memproses...</div>';
 
             try {
-                const res = await fetch('backend/api/resources.php', {
+                const res = await fetch('/BloomWell/backend/api/resources.php', {
                     method: 'POST',
                     body: data
                 });

@@ -200,7 +200,7 @@
 
         // ====================== Ambil data mood dari database ======================
         async function fetchMoodData(period, offsetVal) {
-            const url = `backend/api/mood-meter.php`;
+            const url = `/BloomWell/backend/api/mood-meter.php`;
             try {
                 const response = await fetch(url);
                 if (!response.ok) throw new Error('Gagal mengambil data mood');
@@ -333,7 +333,7 @@ Berdasarkan data ini, berikan:
 Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darurat Sejiwa 119 ext 8 dan Halo Kemenkes 1500-567 jika diperlukan.`;
 
             try {
-                const response = await fetch('http://localhost:3000/api/chat', {
+                const response = await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ message: prompt })
