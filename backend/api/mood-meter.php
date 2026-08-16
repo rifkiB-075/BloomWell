@@ -147,7 +147,9 @@ $moodMap = [
 ];
 
 $mood_score = $moodMap[$mood] ?? 3;
-$ai_analysis = ''; // Default kosong
+
+// Generate AI analysis
+$ai_analysis = buildAnalysis($mood, $note);
 
 // Simpan mood ke mood_entries
 $stmt = mysqli_prepare($conn, "INSERT INTO mood_entries (user_id, mood, mood_score, note, ai_analysis, entry_date) VALUES (?, ?, ?, ?, ?, ?)");
@@ -174,7 +176,8 @@ if (mysqli_stmt_execute($stmt)) {
             'mood' => $mood,
             'mood_score' => $mood_score,
             'note' => $note,
-            'date' => $date
+            'date' => $date,
+            'ai_analysis' => $ai_analysis
         ]
     ]);
 } else {
@@ -187,4 +190,52 @@ if (mysqli_stmt_execute($stmt)) {
 
 mysqli_stmt_close($stmt);
 mysqli_close($conn);
+
+// Fungsi untuk generate analisis AI
+function buildAnalysis($mood, $note) {
+    $text = strtolower($note);
+    $score = 0;
+
+    $moodMap = [
+        'very-sad' => 1,
+        'sad' => 2,
+        'neutral' => 3,
+        'happy' => 4,
+        'very-happy' => 5
+    ];
+
+    $score = $moodMap[$mood] ?? 3;
+
+    $positiveWords = ['senang', 'bahagia', 'bersemangat', 'sukses', 'tenang', 'syukur', 'baik', 'puas', 'ceria', 'nyaman', 'gembira', 'optimis'];
+    $negativeWords = ['sedih', 'stres', 'cemas', 'khawatir', 'lelah', 'bingung', 'frustrasi', 'depresi', 'takut', 'susah', 'marah', 'putus asa', 'kecewa'];
+
+    $positiveHits = 0;
+    $negativeHits = 0;
+    foreach ($positiveWords as $word) {
+        if (strpos($text, $word) !== false) $positiveHits++;
+    }
+    foreach ($negativeWords as $word) {
+        if (strpos($text, $word) !== false) $negativeHits++;
+    }
+
+    // Tentukan summary berdasarkan kata-kata
+    if ($negativeHits > $positiveHits) {
+        $summary = 'Catatan Anda menunjukkan adanya beban emosional yang cukup kuat. Cobalah untuk beristirahat, berbicara dengan orang terdekat, atau luangkan waktu untuk aktivitas yang menenangkan.';
+    } elseif ($positiveHits > 0) {
+        $summary = 'Catatan Anda menunjukkan suasana yang cukup positif. Pertahankan kebiasaan baik ini dan lanjutkan aktivitas yang memberi Anda energi.';
+    } else {
+        $summary = 'Catatan Anda cukup seimbang. Tetap jaga rutinitas dan perhatikan pola emosi Anda dari waktu ke waktu.';
+    }
+
+    // Tentukan rekomendasi berdasarkan mood score
+    if ($score >= 4) {
+        $recommendation = 'Kebiasaan Anda saat ini baik. Pertahankan rutinitas yang membuat Anda merasa nyaman. Coba tulis 3 hal yang Anda syukuri hari ini.';
+    } elseif ($score <= 2) {
+        $recommendation = 'Anda mungkin sedang membutuhkan dukungan. Pertimbangkan istirahat, kontak dengan orang yang Anda percaya, atau bantuan profesional jika diperlukan. Ingat, tidak apa-apa untuk meminta bantuan.';
+    } else {
+        $recommendation = 'Hari Anda sedang cukup seimbang. Luangkan waktu untuk aktivitas yang membantu mengurangi stres, seperti olahraga ringan, meditasi, atau menikmati hobi Anda.';
+    }
+
+    return "Ringkasan emosi: $summary\n\nRekomendasi: $recommendation";
+}
 ?>

@@ -28,10 +28,10 @@ if (!$user_id) {
     exit();
 }
 
-$query = "SELECT DATE(date) as mood_date, mood, mood_value, note 
-          FROM mood_logs 
-          WHERE user_id = ? AND MONTH(date) = ? AND YEAR(date) = ?
-          ORDER BY date DESC";
+$query = "SELECT DATE(entry_date) as mood_date, mood, mood_score as mood_value, note 
+          FROM mood_entries 
+          WHERE user_id = ? AND MONTH(entry_date) = ? AND YEAR(entry_date) = ?
+          ORDER BY entry_date DESC";
 
 $stmt = mysqli_prepare($conn, $query);
 mysqli_stmt_bind_param($stmt, "iii", $user_id, $month, $year);

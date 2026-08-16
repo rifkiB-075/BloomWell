@@ -161,7 +161,11 @@
         </div><!-- .auth-container -->
     </main>
 
+    <script src="js/api-config.js"></script>
     <script>
+        // ── URL API backend (otomatis dari js/api-config.js) ──
+        const API_BASE = getApiBaseURL();
+
         // ── Tab switch ────────────────────────────────────────
         function switchTab(tab) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
@@ -204,9 +208,6 @@
             document.getElementById(inputId).classList.add('input-error');
             document.getElementById(errId).classList.add('visible');
         }
-
-        // ── URL API backend ───────────────────────────────────
-        const API_BASE = 'http://bloomwell.test/backend/api';
 
         // ── LOGIN ─────────────────────────────────────────────
         async function handleLogin() {

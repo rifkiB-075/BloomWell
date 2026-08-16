@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Interactive Tools | BloomWell</title>
+    <title>Mood Meter | BloomWell</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/interactivetools.css">
     <link rel="stylesheet" href="css/style.css">
@@ -203,7 +203,6 @@
             .bottle-section { flex: 0 0 200px; }
             .meter-bottom { flex: 1; }
         }
-        /* Debug panel */
         .debug-panel {
             margin-top: 20px;
             padding: 12px;
@@ -269,10 +268,10 @@
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-toggle" onclick="toggleSidebar()">☰</button>
             <nav class="sidebar-nav">
-                <a href="#" class="sidebar-item active" onclick="if(!requireLogin())return false; showTool('moodmeter', this); return false;">
+                <a href="moodmeter.html" class="sidebar-item active" onclick="showTool('moodmeter', this); return false;">
                     <span class="sidebar-icon">🧪</span><span class="sidebar-label">Mood Meter</span>
                 </a>
-                <a href="kalender.html" class="sidebar-item" onclick="return requireLogin();">
+                <a href="kalender.html" class="sidebar-item" onclick="if(!requireLogin()) return false;">
                     <span class="sidebar-icon">📅</span><span class="sidebar-label">Kalender Mood</span>
                 </a>
                 <a href="chat-ai.html" class="sidebar-item" onclick="return requireLogin();">
@@ -280,9 +279,6 @@
                 </a>
                 <a href="analisis.html" class="sidebar-item" onclick="return requireLogin();">
                     <span class="sidebar-icon">📊</span><span class="sidebar-label">Analisis AI</span>
-                </a>
-                <a href="riwayat.html" class="sidebar-item" onclick="return requireLogin();">
-                    <span class="sidebar-icon">📈</span><span class="sidebar-label">Riwayat Analisis</span>
                 </a>
             </nav>
         </aside>
@@ -356,7 +352,6 @@
         </main>
     </div>
 
-    <script src="js/api-config.js"></script>
     <script>
         // ============================================================
         // AUTH GATE
@@ -406,8 +401,10 @@
         // ============================================================
         // API HELPER
         // ============================================================
+        const API_BASE = 'http://localhost/BloomWell/backend/api';
+
         async function fetchMoodApi(endpoint, options = {}) {
-            const url = `${getApiBaseURL()}/${endpoint}`;
+            const url = `${API_BASE}/${endpoint}`;
             console.log('[mood-meter] Fetching:', url);
             
             try {
@@ -681,13 +678,11 @@
             
             let html = `<div class="${className}">[${timestamp}] ${message}</div>`;
             
-            // Tampilkan data records
             if (records.length > 0) {
                 html += `<div style="margin-top:8px;"><strong>📊 Data Tersimpan (${records.length}):</strong></div>`;
                 html += `<pre>${JSON.stringify(records, null, 2)}</pre>`;
             }
             
-            // Tampilkan selected mood
             if (selectedMood !== null) {
                 html += `<div style="margin-top:8px;"><strong>✅ Mood Dipilih:</strong> ${moods[selectedMood].emoji} ${moods[selectedMood].display}</div>`;
             }
@@ -696,7 +691,7 @@
         }
 
         // ============================================================
-        // SAVE MOOD - DIPERBAIKI
+        // SAVE MOOD
         // ============================================================
         async function saveMood() {
             if (!requireLogin()) return;
@@ -718,12 +713,10 @@
             const userId = user.id;
             const todayDate = new Date().toISOString().split('T')[0];
             
-            // PERBAIKAN: Kirim mood sebagai string, bukan angka
+            // PERBAIKAN: Kirim mood sebagai string
             const payload = {
                 user_id: userId,
-                mood: selectedMoodObj.label,  // <-- PASTIKAN INI STRING: 'very-happy', 'happy', dll
-                mood_display: selectedMoodObj.display,
-                mood_value: selectedMoodObj.value,
+                mood: selectedMoodObj.label,  // 'very-happy', 'happy', dll
                 note: note,
                 date: todayDate
             };
@@ -796,33 +789,7 @@
         }
 
         // ============================================================
-        // NORMALISASI DATA LAMA
-        // ============================================================
-        // Data lama bisa tersimpan sebagai "0" padahal mood_value (1-5) benar.
-        // Normalisasi agar botol & analisis membaca mood dengan benar.
-        function normalizeSavedMood(rawMood, moodValue) {
-            const valid = ['very-happy', 'happy', 'neutral', 'sad', 'very-sad'];
-            const raw = String(rawMood || '').toLowerCase().trim();
-            if (valid.includes(raw)) return raw;
-
-            const num = parseInt(moodValue);
-            if (!isNaN(num) && num >= 1 && num <= 5) {
-                // mood_score: 1=very-sad, 2=sad, 3=neutral, 4=happy, 5=very-happy
-                return ['very-sad', 'sad', 'neutral', 'happy', 'very-happy'][num - 1];
-            }
-            if (!isNaN(num)) {
-                // Skala 0-100 (mood_meter_logs)
-                if (num >= 80) return 'very-happy';
-                if (num >= 60) return 'happy';
-                if (num >= 40) return 'neutral';
-                if (num >= 20) return 'sad';
-                return 'very-sad';
-            }
-            return 'neutral';
-        }
-
-        // ============================================================
-        // LOAD SAVED MOODS - DIPERBAIKI
+        // LOAD SAVED MOODS
         // ============================================================
         async function loadSavedMoods() {
             const user = getCurrentUser();
@@ -840,7 +807,7 @@
                 
                 if (result.success && result.data) {
                     records = result.data.map(item => ({
-                        mood: normalizeSavedMood(item.mood, item.mood_value),
+                        mood: item.mood || 'neutral',
                         note: item.note || '',
                         date: item.date || ''
                     }));

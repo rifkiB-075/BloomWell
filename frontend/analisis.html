@@ -41,7 +41,7 @@
         <aside class="sidebar" id="sidebar">
             <button class="sidebar-toggle" onclick="toggleSidebar()" title="Toggle menu">☰</button>
             <nav class="sidebar-nav">
-                <a href="interactiveTools.html#tool-moodmeter" class="sidebar-item" title="Mood Meter">
+                <a href="interactiveTools.html" class="sidebar-item" title="Mood Meter">
                     <span class="sidebar-icon">🧪</span>
                     <span class="sidebar-label">Mood Meter</span>
                 </a>
@@ -56,6 +56,10 @@
                 <a href="analisis.html" class="sidebar-item active" title="Analisis AI">
                     <span class="sidebar-icon">📊</span>
                     <span class="sidebar-label">Analisis AI</span>
+                </a>
+                <a href="riwayat.html" class="sidebar-item" title="Riwayat Analisis">
+                    <span class="sidebar-icon">📈</span>
+                    <span class="sidebar-label">Riwayat Analisis</span>
                 </a>
             </nav>
         </aside>
@@ -102,7 +106,27 @@
     <!-- Toast -->
     <div class="toast-message" id="toast"></div>
 
+    <script src="js/api-config.js"></script>
     <script>
+        // ====================== AUTH GUARD ======================
+        (function () {
+            const session = localStorage.getItem('bw_session');
+            if (!session) {
+                window.location.replace('Auth.html?tab=login&redirect=analisis.html');
+                return;
+            }
+            try {
+                const bwSession = JSON.parse(session);
+                if (!bwSession.id) {
+                    window.location.replace('Auth.html?tab=login&redirect=analisis.html');
+                    return;
+                }
+            } catch (e) {
+                window.location.replace('Auth.html?tab=login&redirect=analisis.html');
+                return;
+            }
+        })();
+
         // ====================== STATE ======================
         let selectedPeriod = 'weekly';
         let offset = 0;
@@ -198,44 +222,131 @@
             currentAnalysisResult = null;
         }
 
+        // ====================== NORMALISASI MOOD ======================
+        function normalizeMood(moodValue) {
+            // Konversi ke string untuk pengecekan
+            const val = String(moodValue).toLowerCase().trim();
+            
+            // Mapping untuk semua kemungkinan format
+            const moodMap = {
+                // Nilai mood_value 1-5 (mood_score) dari mood_entries
+                '1': 'very-sad',
+                '2': 'sad',
+                '3': 'neutral',
+                '4': 'happy',
+                '5': 'very-happy',
+                
+                // Nilai 0-100 dari mood_meter_logs (versi lama)
+                '100': 'very-happy',
+                '85': 'very-happy',
+                '72': 'happy',
+                '50': 'neutral',
+                '34': 'sad',
+                '20': 'very-sad',
+                
+                // String bahasa Inggris
+                'very-happy': 'very-happy',
+                'happy': 'happy',
+                'neutral': 'neutral',
+                'sad': 'sad',
+                'very-sad': 'very-sad',
+                
+                // String bahasa Indonesia
+                'sangat bahagia': 'very-happy',
+                'bahagia': 'happy',
+                'netral': 'neutral',
+                'sedih': 'sad',
+                'sangat sedih': 'very-sad'
+            };
+            
+            // Coba mapping langsung
+            if (moodMap[val]) return moodMap[val];
+            
+            // Coba parsing sebagai angka untuk range
+            const num = parseInt(val);
+            if (!isNaN(num)) {
+                if (num >= 80) return 'very-happy';
+                if (num >= 60) return 'happy';
+                if (num >= 40) return 'neutral';
+                if (num >= 20) return 'sad';
+                return 'very-sad';
+            }
+            
+            return 'neutral';
+        }
+
         // ====================== Ambil data mood dari database ======================
         async function fetchMoodData(period, offsetVal) {
-            const url = `/BloomWell/backend/api/mood-meter.php`;
+            const bwSession = JSON.parse(localStorage.getItem('bw_session') || '{}');
+            if (!bwSession || !bwSession.id) {
+                throw new Error('User ID tidak ditemukan. Silakan login terlebih dahulu.');
+            }
+            const userId = bwSession.id;
+            
+            const now = new Date();
+            let startDate, endDate;
+            if (period === 'weekly') {
+                const start = new Date(now);
+                start.setDate(now.getDate() - now.getDay() + (offsetVal * 7));
+                startDate = new Date(start);
+                startDate.setHours(0,0,0,0);
+                endDate = new Date(start);
+                endDate.setDate(startDate.getDate() + 6);
+                endDate.setHours(23,59,59,999);
+            } else {
+                const month = now.getMonth() + offsetVal * 30;
+                const year = now.getFullYear();
+                startDate = new Date(year, month, 1);
+                endDate = new Date(year, month + 1, 0);
+                endDate.setHours(23,59,59,999);
+            }
+            
+            const baseUrl = getApiBaseURL();
+            const url = `${baseUrl}/get-mood.php?user_id=${userId}&limit=1000`;
+            
+            console.log('[analisis] Fetching mood data from:', url);
+            
             try {
                 const response = await fetch(url);
-                if (!response.ok) throw new Error('Gagal mengambil data mood');
+                if (!response.ok) throw new Error('Gagal mengambil data mood (HTTP ' + response.status + ')');
                 const data = await response.json();
                 if (!data.success) throw new Error(data.message || 'Gagal mengambil data');
-                let entries = data.entries || [];
+                let entries = data.data || [];
 
-                // Filter berdasarkan periode dan offset
-                const now = new Date();
-                let startDate, endDate;
-                if (period === 'weekly') {
-                    const start = new Date(now);
-                    start.setDate(now.getDate() - now.getDay() + (offsetVal * 7));
-                    startDate = new Date(start);
-                    startDate.setHours(0,0,0,0);
-                    endDate = new Date(start);
-                    endDate.setDate(startDate.getDate() + 6);
-                    endDate.setHours(23,59,59,999);
-                } else {
-                    const month = now.getMonth() + offsetVal * 30; // offset dalam bulan
-                    const year = now.getFullYear();
-                    startDate = new Date(year, month, 1);
-                    endDate = new Date(year, month + 1, 0);
-                    endDate.setHours(23,59,59,999);
-                }
-
+                // Filter berdasarkan periode
                 entries = entries.filter(e => {
-                    const d = new Date(e.entry_date || e.logged_at);
-                    return d >= startDate && d <= endDate;
+                    const entryDate = new Date(e.date || e.entry_date);
+                    return entryDate >= startDate && entryDate <= endDate;
                 });
 
+                // NORMALISASI MOOD untuk setiap entry
+                entries = entries.map(e => {
+                    const raw = String(e.mood || '').toLowerCase().trim();
+                    const validLabels = ['very-happy', 'happy', 'neutral', 'sad', 'very-sad', 'sangat bahagia', 'bahagia', 'netral', 'sedih', 'sangat sedih'];
+                    let moodSource = raw;
+
+                    // Jika mood string tidak dikenali (mis. data lama '0'),
+                    // gunakan mood_value (1-5) sebagai sumber kebenaran.
+                    if (!validLabels.includes(raw)) {
+                        moodSource = e.mood_value;
+                        console.log('[analisis] mood tidak dikenali "' + raw + '", fallback ke mood_value:', e.mood_value);
+                    }
+
+                    const normalizedMood = normalizeMood(moodSource);
+                    console.log('[analisis] Normalizing mood:', moodSource, '->', normalizedMood);
+                    return {
+                        ...e,
+                        mood: normalizedMood,
+                        original_mood: e.mood // simpan original untuk debugging
+                    };
+                });
+
+                console.log('[analisis] Found ' + entries.length + ' entries for period');
+                console.log('[analisis] Entries after normalization:', entries);
                 return entries;
             } catch (err) {
                 console.warn('Gagal fetch data:', err);
-                return [];
+                throw err;
             }
         }
 
@@ -243,67 +354,103 @@
         function computeStats(entries) {
             if (!entries || entries.length === 0) return null;
             const total = entries.length;
+            
+            // Mapping mood ke label dan emoji
+            const moodLabelMap = {
+                'very-happy': 'Sangat Bahagia',
+                'happy': 'Bahagia',
+                'neutral': 'Netral',
+                'sad': 'Sedih',
+                'very-sad': 'Sangat Sedih'
+            };
+            
+            const moodEmojiMap = {
+                'very-happy': '😊',
+                'happy': '😌',
+                'neutral': '😐',
+                'sad': '😢',
+                'very-sad': '😭'
+            };
+            
+            // Hitung frekuensi mood
             const moodCounts = {};
             entries.forEach(e => {
-                const mood = e.mood_label || 'Netral';
-                moodCounts[mood] = (moodCounts[mood] || 0) + 1;
+                const moodKey = e.mood || 'neutral';
+                if (!moodCounts[moodKey]) {
+                    moodCounts[moodKey] = 0;
+                }
+                moodCounts[moodKey]++;
             });
-            const sorted = Object.entries(moodCounts).sort((a,b) => b[1]-a[1]);
-            const mostCommon = sorted.length > 0 ? sorted[0][0] : null;
+            
+            console.log('[analisis] Mood counts:', moodCounts);
+            
+            // Cari mood yang paling sering
+            const sorted = Object.entries(moodCounts).sort((a, b) => b[1] - a[1]);
+            const mostCommonKey = sorted.length > 0 ? sorted[0][0] : null;
             const mostCommonCount = sorted.length > 0 ? sorted[0][1] : 0;
-
-            const positive = ['Senang', 'Tenang'];
-            const negative = ['Sedih', 'Marah', 'Cemas', 'Lelah'];
+            
+            // Dapatkan label dan emoji untuk mood yang paling sering
+            const mostCommonLabel = mostCommonKey ? (moodLabelMap[mostCommonKey] || mostCommonKey) : 'Tidak ada';
+            const mostCommonEmoji = mostCommonKey ? (moodEmojiMap[mostCommonKey] || '') : '';
+            const mostCommonDisplay = mostCommonEmoji + ' ' + mostCommonLabel;
+            
+            // Hitung positif dan negatif
+            const positive = ['very-happy', 'happy'];
+            const negative = ['sad', 'very-sad'];
             let posCount = 0, negCount = 0;
             entries.forEach(e => {
-                const mood = e.mood_label || 'Netral';
+                const mood = e.mood || '';
                 if (positive.includes(mood)) posCount++;
                 else if (negative.includes(mood)) negCount++;
             });
             const totalMood = posCount + negCount;
             const posRatio = totalMood > 0 ? posCount / totalMood : 0.5;
 
-            // Deteksi kesehatan mental sederhana
+            // Deteksi kesehatan mental
             let mentalHealthStatus = 'good';
             let mentalHealthLevel = 'Sehat';
             let riskFactors = [];
-            if (negCount > 0) {
-                const negRatio = negCount / totalMood;
-                const sadCount = moodCounts['Sedih'] || 0;
-                const cemasCount = moodCounts['Cemas'] || 0;
-                const marahCount = moodCounts['Marah'] || 0;
-                const lelahCount = moodCounts['Lelah'] || 0;
-
-                if (sadCount > 3 && lelahCount > 2 && negRatio > 0.5) {
+            
+            const sadCount = entries.filter(e => e.mood === 'sad').length;
+            const verySadCount = entries.filter(e => e.mood === 'very-sad').length;
+            const negTotal = sadCount + verySadCount;
+            
+            if (totalMood > 0) {
+                const negRatio = negTotal / totalMood;
+                
+                if (negTotal > 3 && negRatio > 0.5) {
                     mentalHealthStatus = 'severe';
                     mentalHealthLevel = 'Kecenderungan Depresi';
-                    riskFactors.push('Mood sedih yang dominan disertai kelelahan');
-                } else if (cemasCount > 3 && negRatio > 0.4) {
-                    mentalHealthStatus = 'severe';
-                    mentalHealthLevel = 'Kecenderungan Kecemasan';
-                    riskFactors.push('Kecemasan yang dominan');
-                } else if (marahCount > 2 && sadCount > 2) {
-                    mentalHealthStatus = 'severe';
-                    mentalHealthLevel = 'Gangguan Suasana Hati';
-                    riskFactors.push('Perubahan mood dari marah ke sedih');
+                    riskFactors.push('Mood sedih yang dominan (' + negTotal + ' dari ' + totalMood + ' catatan)');
                 } else if (negRatio > 0.3 && negRatio < 0.6) {
                     mentalHealthStatus = 'moderate';
                     mentalHealthLevel = 'Perlu Perhatian';
-                    riskFactors.push('Cukup banyak momen negatif');
+                    riskFactors.push('Cukup banyak momen negatif (' + Math.round(negRatio * 100) + '%)');
                 } else if (negRatio > 0.15) {
                     mentalHealthStatus = 'moderate';
                     mentalHealthLevel = 'Cukup Sehat dengan beberapa tantangan';
-                    riskFactors.push('Beberapa momen negatif');
+                    riskFactors.push('Beberapa momen negatif terdeteksi');
                 }
             }
+            
             if (posRatio > 0.7 && mentalHealthStatus === 'good') {
                 mentalHealthLevel = 'Sangat Sehat 🥰';
             }
 
-            return {
+            // Buat object untuk ditampilkan
+            const displayCounts = {};
+            for (const [key, count] of Object.entries(moodCounts)) {
+                const label = moodLabelMap[key] || key;
+                const emoji = moodEmojiMap[key] || '';
+                displayCounts[emoji + ' ' + label] = count;
+            }
+
+            const result = {
                 total,
-                moodCounts,
-                mostCommon,
+                moodCounts: displayCounts,
+                moodCountsRaw: moodCounts,
+                mostCommon: mostCommonDisplay,
+                mostCommonKey: mostCommonKey,
                 mostCommonCount,
                 posCount,
                 negCount,
@@ -313,16 +460,47 @@
                 riskFactors,
                 entries
             };
+            
+            console.log('[analisis] Stats result:', result);
+            return result;
         }
 
         // ====================== Panggil AI (server.js) ======================
         async function callAI(entries, stats) {
             // Buat ringkasan mood
-            let moodSummary = stats.moodCounts ? Object.entries(stats.moodCounts).map(([m,c]) => `${m}: ${c}x`).join(', ') : 'Tidak ada data';
+            let moodSummary = '';
+            if (stats.moodCountsRaw) {
+                const moodLabelMap = {
+                    'very-happy': 'Sangat Bahagia',
+                    'happy': 'Bahagia',
+                    'neutral': 'Netral',
+                    'sad': 'Sedih',
+                    'very-sad': 'Sangat Sedih'
+                };
+                const moodEmojiMap = {
+                    'very-happy': '😊',
+                    'happy': '😌',
+                    'neutral': '😐',
+                    'sad': '😢',
+                    'very-sad': '😭'
+                };
+                const items = Object.entries(stats.moodCountsRaw).map(([key, count]) => {
+                    const label = moodLabelMap[key] || key;
+                    const emoji = moodEmojiMap[key] || '';
+                    return `${emoji} ${label}: ${count}x`;
+                });
+                moodSummary = items.join(', ');
+            } else {
+                moodSummary = 'Tidak ada data';
+            }
+            
             let periodLabel = selectedPeriod === 'weekly' ? '1 minggu' : '1 bulan';
+            
+            // Buat prompt yang lebih baik dengan data yang sudah dinormalisasi
             const prompt = `Saya adalah pengguna BloomWell. Berikut adalah ringkasan mood saya selama ${periodLabel} terakhir:
 - Total catatan: ${stats.total}
 - Mood tersering: ${stats.mostCommon} (${stats.mostCommonCount} kali)
+- Rincian mood: ${moodSummary}
 - Momen positif: ${stats.posCount} kali, negatif: ${stats.negCount} kali
 - Status kesehatan mental (deteksi awal): ${stats.mentalHealthLevel}
 
@@ -332,22 +510,46 @@ Berdasarkan data ini, berikan:
 
 Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darurat Sejiwa 119 ext 8 dan Halo Kemenkes 1500-567 jika diperlukan.`;
 
+            const baseUrl = getApiBaseURL();
+            
             try {
-                const response = await fetch('/api/chat', {
+                const response = await fetch(`${baseUrl}/analyze-mood.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: prompt })
+                    body: JSON.stringify({ 
+                        mood: stats.mostCommonKey || 'neutral',
+                        note: moodSummary 
+                    })
                 });
+                
                 if (!response.ok) {
                     const errData = await response.json();
                     throw new Error(errData.error || errData.detail || 'Gagal memanggil AI');
                 }
                 const data = await response.json();
-                return data.reply || 'Maaf, AI tidak memberikan respons.';
+                return data.analysis || 'Maaf, AI tidak memberikan respons.';
             } catch (err) {
                 console.error('AI error:', err);
-                // Fallback: berikan saran generik
-                return `Maaf, saat ini AI sedang tidak dapat dihubungi. Tetapi berdasarkan data mood Anda, saya sarankan untuk tetap menjaga pola tidur, lakukan aktivitas fisik ringan, dan jangan ragu untuk berbicara dengan orang terdekat. Ingat, kesehatan mental itu penting. 💜\n\nJika Anda memerlukan bantuan profesional, hubungi Sejiwa di 119 ext 8 atau Halo Kemenkes di 1500-567.`;
+                // Fallback dengan data yang lebih informatif
+                return `Berdasarkan data mood Anda selama periode ini:
+
+📊 Ringkasan:
+- Total ${stats.total} catatan mood
+- Dominan: ${stats.mostCommon}
+- ${stats.posCount} momen positif, ${stats.negCount} momen negatif
+- Status: ${stats.mentalHealthLevel}
+
+💡 Saran saya:
+1. Tetap jaga pola tidur yang teratur (7-8 jam per hari)
+2. Lakukan aktivitas fisik ringan seperti jalan kaki atau yoga
+3. Luangkan waktu untuk hobi yang Anda sukai
+4. Jangan ragu untuk berbicara dengan orang terdekat
+
+💜 Ingat, kesehatan mental itu penting dan Anda tidak sendirian.
+
+📞 Jika Anda memerlukan bantuan profesional:
+- Sejiwa: 119 ext 8
+- Halo Kemenkes: 1500-567`;
             }
         }
 
@@ -380,10 +582,9 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
 
             let moodList = '';
             if (moodCounts && Object.keys(moodCounts).length > 0) {
-                const emojiMap = { 'Senang':'😊', 'Tenang':'😌', 'Sedih':'😢', 'Marah':'😠', 'Cemas':'😰', 'Lelah':'😴' };
                 moodList = '<ul style="margin-top:0.5rem;display:flex;flex-wrap:wrap;gap:0.5rem;list-style:none;padding:0;">';
                 for (const [mood, count] of Object.entries(moodCounts)) {
-                    moodList += `<li style="background:#f0e8ff;padding:0.2rem 1rem;border-radius:30px;font-size:0.85rem;">${emojiMap[mood] || ''} ${mood}: ${count}x</li>`;
+                    moodList += `<li style="background:#f0e8ff;padding:0.3rem 1rem;border-radius:30px;font-size:0.85rem;">${mood}: ${count}x</li>`;
                 }
                 moodList += '</ul>';
             }
@@ -407,34 +608,36 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
                     <div style="display:flex;gap:1.5rem;margin:0.8rem 0;flex-wrap:wrap;">
                         <span style="color:#1D9E75;">😊 Positif: ${posCount} (${posPct}%)</span>
                         <span style="color:#D85A30;">😔 Negatif: ${negCount} (${negPct}%)</span>
-                        <span style="background:#ede6f5;padding:0.1rem 0.8rem;border-radius:30px;font-size:0.8rem;">
-                            Dominan: ${mostCommon || 'N/A'}
+                        <span style="background:#ede6f5;padding:0.2rem 1rem;border-radius:30px;font-size:0.8rem;">
+                            🏆 Dominan: ${mostCommon}
                         </span>
                     </div>
                 `;
             }
 
             const navLinks = `
-                <div class="nav-link-group">
+                <div class="nav-link-group" style="margin-top:1.5rem;">
                     <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang analisis ini</a>
                     <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
                 </div>
             `;
 
             resultBox.innerHTML = `
-                <div class="result-content">
-                    <div class="analysis-meta">
-                        <span class="tag">📆 ${periodLabel}${offsetLabel}</span>
-                        <span class="tag">📝 ${total} catatan</span>
-                        <span class="tag">🕐 ${new Date().toLocaleString()}</span>
+                <div class="result-content" style="padding:1.5rem;background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.08);">
+                    <div class="analysis-meta" style="display:flex;flex-wrap:wrap;gap:0.8rem;margin-bottom:1rem;font-size:0.85rem;color:#666;">
+                        <span class="tag" style="background:#f0e8ff;padding:0.2rem 0.8rem;border-radius:20px;">📆 ${periodLabel}${offsetLabel}</span>
+                        <span class="tag" style="background:#f0e8ff;padding:0.2rem 0.8rem;border-radius:20px;">📝 ${total} catatan</span>
+                        <span class="tag" style="background:#f0e8ff;padding:0.2rem 0.8rem;border-radius:20px;">🕐 ${new Date().toLocaleString()}</span>
                     </div>
 
-                    ${statusBadge}
+                    <div style="margin-bottom:1rem;">
+                        ${statusBadge}
+                    </div>
 
-                    <h2>📋 Ringkasan Statistik</h2>
-                    <div class="summary">
-                        <p>Total catatan: <strong>${total}</strong></p>
-                        <p>Mood paling sering: <strong>${mostCommon} (${mostCommonCount} kali)</strong></p>
+                    <h2 style="font-size:1.2rem;color:#5a3e7a;margin-bottom:0.8rem;">📋 Ringkasan Statistik</h2>
+                    <div class="summary" style="background:#f8f4ff;padding:1rem;border-radius:12px;margin-bottom:1rem;">
+                        <p style="margin:0.3rem 0;"><strong>Total catatan:</strong> ${total}</p>
+                        <p style="margin:0.3rem 0;"><strong>Mood paling sering:</strong> ${mostCommon} (${mostCommonCount} kali)</p>
                         ${moodBalance}
                     </div>
 
@@ -442,12 +645,12 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
 
                     ${riskHtml}
 
-                    <div class="ai-suggestions">
-                        <h3>🧠 Saran dari AI</h3>
+                    <div class="ai-suggestions" style="margin-top:1.5rem;background:#f8f9fa;padding:1.2rem;border-radius:12px;border-left:4px solid #7c5a9e;">
+                        <h3 style="font-size:1rem;color:#5a3e7a;margin-bottom:0.8rem;">🧠 Saran dari AI</h3>
                         <div style="white-space:pre-line; line-height:1.8;">${aiSuggestion}</div>
                     </div>
 
-                    <button class="save-rangkuman-btn" onclick="saveToRangkuman()">
+                    <button class="save-rangkuman-btn" onclick="saveToRangkuman()" style="margin-top:1.2rem;padding:0.8rem 2rem;border:none;border-radius:50px;background:linear-gradient(135deg,#7c5a9e,#9b7bb5);color:white;font-weight:600;cursor:pointer;transition:all 0.3s;">
                         💾 Simpan ke Rangkuman
                     </button>
 
@@ -465,10 +668,16 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
             this.innerHTML = '⏳ Menganalisis...';
 
             resultBox.innerHTML = `
-                <div class="result-box loading">
-                    <div class="spinner"></div>
+                <div class="result-box loading" style="text-align:center;padding:3rem;">
+                    <div class="spinner" style="width:40px;height:40px;border:4px solid #f3f3f3;border-top:4px solid #7c5a9e;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto 1rem;"></div>
                     <p>🧠 AI sedang membaca mood Anda dan menganalisis kesehatan mental...</p>
                 </div>
+                <style>
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                </style>
             `;
 
             try {
@@ -489,9 +698,9 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
             } catch (error) {
                 console.error(error);
                 resultBox.innerHTML = `
-                    <div class="empty-state" style="color:#D85A30;">
-                        <span class="big-icon">⚠️</span>
-                        <p>${error.message || 'Terjadi kesalahan saat menganalisis.'}</p>
+                    <div class="empty-state" style="color:#D85A30;text-align:center;padding:2rem;">
+                        <span class="big-icon" style="font-size:3rem;">⚠️</span>
+                        <p style="margin-top:1rem;">${error.message || 'Terjadi kesalahan saat menganalisis.'}</p>
                         <div class="nav-link-group" style="margin-top:1.5rem;">
                             <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
                             <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
@@ -505,26 +714,88 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
             }
         });
 
-        // ====================== Simpan ke Rangkuman ======================
+        // ====================== Simpan ke Riwayat ======================
         function saveToRangkuman() {
             if (!currentAnalysisResult) {
                 showToast('⚠️ Tidak ada analisis untuk disimpan.', true);
                 return;
             }
-            let history = JSON.parse(localStorage.getItem('rangkumanHistory')) || [];
+            const { stats, aiSuggestion, period, offset, generatedAt } = currentAnalysisResult;
+
+            // Bangun ringkasan teks untuk halaman Riwayat
+            const summaryLines = [
+                `Total catatan: ${stats.total}`,
+                `Mood paling sering: ${stats.mostCommon} (${stats.mostCommonCount} kali)`,
+                `Momen positif: ${stats.posCount}, negatif: ${stats.negCount}`,
+                `Status kesehatan mental: ${stats.mentalHealthLevel}`
+            ];
+            if (stats.riskFactors && stats.riskFactors.length > 0) {
+                summaryLines.push('Faktor risiko: ' + stats.riskFactors.join('; '));
+            }
+
             const entry = {
                 id: Date.now(),
-                ...currentAnalysisResult,
-                savedAt: new Date().toISOString()
+                period: period || 'weekly',
+                offset: offset || 0,
+                generatedAt: generatedAt || new Date().toISOString(),
+                savedAt: new Date().toISOString(),
+                mentalHealthStatus: stats.mentalHealthStatus || 'unknown',
+                mentalHealthLevel: stats.mentalHealthLevel || 'Tidak diketahui',
+                moodCounts: stats.moodCounts || {},
+                summary: summaryLines.join('\n'),
+                suggestions: aiSuggestion || ''
             };
+
+            // Simpan ke key yang dibaca halaman riwayat.html
+            const history = JSON.parse(localStorage.getItem('riwayatHistory')) || [];
             history.push(entry);
-            localStorage.setItem('rangkumanHistory', JSON.stringify(history));
-            showToast('✅ Berhasil disimpan ke Rangkuman!');
+            localStorage.setItem('riwayatHistory', JSON.stringify(history));
+
+            // Migrasi data lama dari 'rangkumanHistory' agar tidak hilang
+            migrateRangkumanHistory();
+
+            showToast('✅ Analisis tersimpan ke Riwayat!');
         }
-        window.saveToRangkuman = saveToRangkuman;
+
+        // Migrasi data lama dari 'rangkumanHistory' ke format 'riwayatHistory'
+        function migrateRangkumanHistory() {
+            const oldHistory = JSON.parse(localStorage.getItem('rangkumanHistory')) || [];
+            if (oldHistory.length === 0) return;
+
+            const currentHistory = JSON.parse(localStorage.getItem('riwayatHistory')) || [];
+            const existingIds = new Set(currentHistory.map(e => e.id));
+            let migrated = 0;
+
+            oldHistory.forEach(item => {
+                if (existingIds.has(item.id)) return;
+                const stats = item.stats || {};
+                const entry = {
+                    id: item.id || Date.now() + migrated,
+                    period: item.period || 'weekly',
+                    offset: item.offset || 0,
+                    generatedAt: item.generatedAt || '',
+                    savedAt: item.savedAt || new Date().toISOString(),
+                    mentalHealthStatus: stats.mentalHealthStatus || 'unknown',
+                    mentalHealthLevel: stats.mentalHealthLevel || 'Tidak diketahui',
+                    moodCounts: stats.moodCounts || {},
+                    summary: stats.mentalHealthLevel ? `Status kesehatan mental: ${stats.mentalHealthLevel}` : 'Analisis mood (data lama)',
+                    suggestions: item.aiSuggestion || ''
+                };
+                currentHistory.push(entry);
+                migrated++;
+            });
+
+            if (migrated > 0) {
+                localStorage.setItem('riwayatHistory', JSON.stringify(currentHistory));
+            }
+            localStorage.removeItem('rangkumanHistory');
+        }
 
         // ====================== Inisialisasi ======================
         updatePeriodRange();
+
+        // Migrasi data lama dari 'rangkumanHistory' sekali saat halaman dimuat
+        migrateRangkumanHistory();
 
         // Jika ada parameter URL
         const urlParams = new URLSearchParams(window.location.search);

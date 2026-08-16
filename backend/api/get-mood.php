@@ -44,11 +44,13 @@ if (!$user_id) {
     exit();
 }
 
-// Ambil data mood
-$query = "SELECT id, mood, mood_value, note, date 
-          FROM mood_logs 
+// Ambil data mood.
+// entry_date diubah ke format YYYY-MM-DD agar konsisten dipakai
+// kalender (key tanggal harian), mood meter, dan analisis.
+$query = "SELECT id, mood, mood_score as mood_value, note, DATE(entry_date) as date 
+          FROM mood_entries 
           WHERE user_id = ? 
-          ORDER BY date DESC 
+          ORDER BY entry_date DESC 
           LIMIT ?";
 
 $stmt = mysqli_prepare($conn, $query);
