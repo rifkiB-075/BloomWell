@@ -50,6 +50,17 @@ function getApiBaseURL() {
     return `${protocol}//${host}/backend/api`;
 }
 
+/**
+ * Mendapatkan base URL server AI Node.js (server.js).
+ * Chat AI dan analisis memakai server Express di port 3000,
+ * sedangkan backend PHP dihandle Apache (port 80).
+ */
+function getChatAPIBase() {
+    const override = API_CONFIG.chatAIURL;
+    if (override) return override.replace(/\/+$/, '');
+    return 'http://localhost:3000';
+}
+
 // Fungsi helper untuk fetch API
 async function apiFetch(endpoint, options = {}) {
     const url = `${getApiBaseURL()}/${endpoint}`;

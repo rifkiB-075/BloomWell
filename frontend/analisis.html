@@ -107,8 +107,10 @@
     <div class="toast-message" id="toast"></div>
 
     <script src="js/api-config.js"></script>
+    <script src="js/mood-utils.js"></script>
     <script>
         // ====================== AUTH GUARD ======================
+        let CURRENT_USER_ID = null;
         (function () {
             const session = localStorage.getItem('bw_session');
             if (!session) {
@@ -121,6 +123,7 @@
                     window.location.replace('Auth.html?tab=login&redirect=analisis.html');
                     return;
                 }
+                CURRENT_USER_ID = bwSession.id;
             } catch (e) {
                 window.location.replace('Auth.html?tab=login&redirect=analisis.html');
                 return;
@@ -222,59 +225,6 @@
             currentAnalysisResult = null;
         }
 
-        // ====================== NORMALISASI MOOD ======================
-        function normalizeMood(moodValue) {
-            // Konversi ke string untuk pengecekan
-            const val = String(moodValue).toLowerCase().trim();
-            
-            // Mapping untuk semua kemungkinan format
-            const moodMap = {
-                // Nilai mood_value 1-5 (mood_score) dari mood_entries
-                '1': 'very-sad',
-                '2': 'sad',
-                '3': 'neutral',
-                '4': 'happy',
-                '5': 'very-happy',
-                
-                // Nilai 0-100 dari mood_meter_logs (versi lama)
-                '100': 'very-happy',
-                '85': 'very-happy',
-                '72': 'happy',
-                '50': 'neutral',
-                '34': 'sad',
-                '20': 'very-sad',
-                
-                // String bahasa Inggris
-                'very-happy': 'very-happy',
-                'happy': 'happy',
-                'neutral': 'neutral',
-                'sad': 'sad',
-                'very-sad': 'very-sad',
-                
-                // String bahasa Indonesia
-                'sangat bahagia': 'very-happy',
-                'bahagia': 'happy',
-                'netral': 'neutral',
-                'sedih': 'sad',
-                'sangat sedih': 'very-sad'
-            };
-            
-            // Coba mapping langsung
-            if (moodMap[val]) return moodMap[val];
-            
-            // Coba parsing sebagai angka untuk range
-            const num = parseInt(val);
-            if (!isNaN(num)) {
-                if (num >= 80) return 'very-happy';
-                if (num >= 60) return 'happy';
-                if (num >= 40) return 'neutral';
-                if (num >= 20) return 'sad';
-                return 'very-sad';
-            }
-            
-            return 'neutral';
-        }
-
         // ====================== Ambil data mood dari database ======================
         async function fetchMoodData(period, offsetVal) {
             const bwSession = JSON.parse(localStorage.getItem('bw_session') || '{}');
@@ -319,21 +269,11 @@
                     return entryDate >= startDate && entryDate <= endDate;
                 });
 
-                // NORMALISASI MOOD untuk setiap entry
+                // NORMALISASI MOOD untuk setiap entry — pakai fungsi terpusat
+                // (js/mood-utils.js) yang konsisten dengan mood meter & kalender.
                 entries = entries.map(e => {
-                    const raw = String(e.mood || '').toLowerCase().trim();
-                    const validLabels = ['very-happy', 'happy', 'neutral', 'sad', 'very-sad', 'sangat bahagia', 'bahagia', 'netral', 'sedih', 'sangat sedih'];
-                    let moodSource = raw;
-
-                    // Jika mood string tidak dikenali (mis. data lama '0'),
-                    // gunakan mood_value (1-5) sebagai sumber kebenaran.
-                    if (!validLabels.includes(raw)) {
-                        moodSource = e.mood_value;
-                        console.log('[analisis] mood tidak dikenali "' + raw + '", fallback ke mood_value:', e.mood_value);
-                    }
-
-                    const normalizedMood = normalizeMood(moodSource);
-                    console.log('[analisis] Normalizing mood:', moodSource, '->', normalizedMood);
+                    const normalizedMood = normalizeMood(e.mood, e.mood_value);
+                    console.log('[analisis] Normalizing mood:', e.mood, e.mood_value, '->', normalizedMood);
                     return {
                         ...e,
                         mood: normalizedMood,
@@ -518,7 +458,8 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ 
                         mood: stats.mostCommonKey || 'neutral',
-                        note: moodSummary 
+                        note: moodSummary,
+                        prompt: prompt
                     })
                 });
                 
@@ -527,11 +468,16 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
                     throw new Error(errData.error || errData.detail || 'Gagal memanggil AI');
                 }
                 const data = await response.json();
-                return data.analysis || 'Maaf, AI tidak memberikan respons.';
+                if (!data.analysis) {
+                    throw new Error('AI tidak memberikan respons.');
+                }
+                return data.analysis;
             } catch (err) {
                 console.error('AI error:', err);
-                // Fallback dengan data yang lebih informatif
-                return `Berdasarkan data mood Anda selama periode ini:
+                // Fallback dengan data yang lebih informatif — dan tandai
+                // di dalam teksnya bahwa ini fallback lokal, bukan jawaban AI asli,
+                // supaya tidak membingungkan saat dilihat lagi di Riwayat.
+                return `⚠️ (Catatan otomatis — AI sedang tidak dapat dihubungi, ini saran umum berdasarkan data Anda)
 
 📊 Ringkasan:
 - Total ${stats.total} catatan mood
@@ -715,6 +661,10 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
         });
 
         // ====================== Simpan ke Riwayat ======================
+        // PERBAIKAN: entri sekarang ditandai dengan user_id supaya halaman
+        // Riwayat bisa memfilter dan hanya menampilkan analisis milik user
+        // yang sedang login (sebelumnya semua data tercampur di satu
+        // localStorage key tanpa pemisahan per-user).
         function saveToRangkuman() {
             if (!currentAnalysisResult) {
                 showToast('⚠️ Tidak ada analisis untuk disimpan.', true);
@@ -735,6 +685,7 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
 
             const entry = {
                 id: Date.now(),
+                user_id: CURRENT_USER_ID,
                 period: period || 'weekly',
                 offset: offset || 0,
                 generatedAt: generatedAt || new Date().toISOString(),
@@ -771,6 +722,7 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
                 const stats = item.stats || {};
                 const entry = {
                     id: item.id || Date.now() + migrated,
+                    user_id: item.user_id || CURRENT_USER_ID,
                     period: item.period || 'weekly',
                     offset: item.offset || 0,
                     generatedAt: item.generatedAt || '',

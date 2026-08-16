@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=1.0, user-scalable=no" />
     <title>Chat AI | BloomWell</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -101,6 +101,7 @@
 
     </div>
 
+    <script src="js/api-config.js"></script>
     <script>
         // ============================================================
         //  ELEMEN
@@ -168,10 +169,15 @@
 
         // ============================================================
         //  PANGGIL BACKEND
+        //  PERBAIKAN: sebelumnya halaman ini memanggil '/api/chat' (URL relatif
+        //  ke origin saat ini) dan TIDAK memuat js/api-config.js sama sekali,
+        //  jadi request selalu salah alamat / gagal koneksi. Sekarang memakai
+        //  getApiBaseURL() yang sama seperti halaman lain (mood meter, analisis).
         // ============================================================
         async function getAIResponse(userMessage) {
             try {
-                const res = await fetch('/api/chat', {
+                const baseUrl = getApiBaseURL();
+                const res = await fetch(`${baseUrl}/chat.php`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
@@ -180,19 +186,29 @@
                     })
                 });
 
-                if (!res.ok) {
-                    const errData = await res.json().catch(() => ({}));
-                    throw new Error(errData.error || 'Gagal mendapat respons AI');
+                const text = await res.text();
+                let data = null;
+                try {
+                    data = text ? JSON.parse(text) : null;
+                } catch (parseErr) {
+                    throw new Error('Server response tidak valid: ' + text.slice(0, 150));
                 }
 
-                const data = await res.json();
+                if (!res.ok || !data || data.success === false) {
+                    throw new Error((data && (data.error || data.message)) || `Gagal mendapat respons AI (HTTP ${res.status})`);
+                }
+
+                const reply = data.reply || data.response || data.message;
+                if (!reply) {
+                    throw new Error('Respons AI kosong.');
+                }
 
                 conversationHistory.push({ role: 'user', content: userMessage });
-                conversationHistory.push({ role: 'assistant', content: data.reply });
+                conversationHistory.push({ role: 'assistant', content: reply });
 
-                return data.reply;
+                return reply;
             } catch (err) {
-                console.error(err);
+                console.error('[chat-ai] Error:', err);
                 return 'Maaf, aku sedang mengalami gangguan koneksi ke server AI. Coba beberapa saat lagi ya. 🙏';
             }
         }

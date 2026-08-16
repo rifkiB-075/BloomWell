@@ -455,6 +455,7 @@
     </div>
 
     <script src="js/api-config.js"></script>
+    <script src="js/mood-utils.js"></script>
     <script>
         // ============================================================
         // AUTH GATE
@@ -729,29 +730,6 @@
         // ============================================================
         // HELPERS
         // ============================================================
-        // Normalisasi label mood. Data lama bisa tersimpan korup ("0")
-        // padahal mood_value (1-5) benar — pakai mood_value sebagai fallback.
-        function normalizeCalendarMood(rawMood, moodValue) {
-            const valid = ['very-happy', 'happy', 'neutral', 'sad', 'very-sad'];
-            const raw = String(rawMood || '').toLowerCase().trim();
-            if (valid.includes(raw)) return raw;
-
-            const num = parseInt(moodValue);
-            if (!isNaN(num) && num >= 1 && num <= 5) {
-                // mood_score: 1=very-sad, 2=sad, 3=neutral, 4=happy, 5=very-happy
-                return ['very-sad', 'sad', 'neutral', 'happy', 'very-happy'][num - 1];
-            }
-            if (!isNaN(num)) {
-                // Skala 0-100 (mood_meter_logs)
-                if (num >= 80) return 'very-happy';
-                if (num >= 60) return 'happy';
-                if (num >= 40) return 'neutral';
-                if (num >= 20) return 'sad';
-                return 'very-sad';
-            }
-            return 'neutral';
-        }
-
         // Potong tanggal ke YYYY-MM-DD (menangani data dengan timestamp)
         function normalizeDateKey(dateStr) {
             return String(dateStr || '').slice(0, 10);
@@ -779,8 +757,11 @@
                     calendarData = {};
                     result.data.forEach(item => {
                         const dateKey = normalizeDateKey(item.date);
+                        // Pakai fungsi normalisasi terpusat (js/mood-utils.js) - konsisten
+                        // dengan mood meter & analisis, dan sudah memperbaiki bug batas
+                        // angka (nilai 20 = Sangat Sedih, bukan Sedih).
                         calendarData[dateKey] = {
-                            mood: normalizeCalendarMood(item.mood, item.mood_value),
+                            mood: normalizeMood(item.mood, item.mood_value),
                             mood_value: item.mood_value,
                             note: item.note || ''
                         };

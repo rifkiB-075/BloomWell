@@ -357,6 +357,7 @@
     </div>
 
     <script src="js/api-config.js"></script>
+    <script src="js/mood-utils.js"></script>
     <script>
         // ============================================================
         // AUTH GATE
@@ -696,7 +697,7 @@
         }
 
         // ============================================================
-        // SAVE MOOD - DIPERBAIKI
+        // SAVE MOOD
         // ============================================================
         async function saveMood() {
             if (!requireLogin()) return;
@@ -718,10 +719,12 @@
             const userId = user.id;
             const todayDate = new Date().toISOString().split('T')[0];
             
-            // PERBAIKAN: Kirim mood sebagai string, bukan angka
+            // Kirim mood sebagai string ('very-happy', 'happy', dll) DAN mood_value
+            // numeriknya, supaya normalizeMood() di halaman lain punya dua sumber
+            // data untuk saling memverifikasi.
             const payload = {
                 user_id: userId,
-                mood: selectedMoodObj.label,  // <-- PASTIKAN INI STRING: 'very-happy', 'happy', dll
+                mood: selectedMoodObj.label,
                 mood_display: selectedMoodObj.display,
                 mood_value: selectedMoodObj.value,
                 note: note,
@@ -796,33 +799,7 @@
         }
 
         // ============================================================
-        // NORMALISASI DATA LAMA
-        // ============================================================
-        // Data lama bisa tersimpan sebagai "0" padahal mood_value (1-5) benar.
-        // Normalisasi agar botol & analisis membaca mood dengan benar.
-        function normalizeSavedMood(rawMood, moodValue) {
-            const valid = ['very-happy', 'happy', 'neutral', 'sad', 'very-sad'];
-            const raw = String(rawMood || '').toLowerCase().trim();
-            if (valid.includes(raw)) return raw;
-
-            const num = parseInt(moodValue);
-            if (!isNaN(num) && num >= 1 && num <= 5) {
-                // mood_score: 1=very-sad, 2=sad, 3=neutral, 4=happy, 5=very-happy
-                return ['very-sad', 'sad', 'neutral', 'happy', 'very-happy'][num - 1];
-            }
-            if (!isNaN(num)) {
-                // Skala 0-100 (mood_meter_logs)
-                if (num >= 80) return 'very-happy';
-                if (num >= 60) return 'happy';
-                if (num >= 40) return 'neutral';
-                if (num >= 20) return 'sad';
-                return 'very-sad';
-            }
-            return 'neutral';
-        }
-
-        // ============================================================
-        // LOAD SAVED MOODS - DIPERBAIKI
+        // LOAD SAVED MOODS
         // ============================================================
         async function loadSavedMoods() {
             const user = getCurrentUser();
@@ -839,8 +816,10 @@
                 console.log('[mood-meter] Load result:', result);
                 
                 if (result.success && result.data) {
+                    // Pakai fungsi normalisasi terpusat (js/mood-utils.js), konsisten
+                    // dengan kalender & analisis, dan sudah memperbaiki bug batas angka.
                     records = result.data.map(item => ({
-                        mood: normalizeSavedMood(item.mood, item.mood_value),
+                        mood: normalizeMood(item.mood, item.mood_value),
                         note: item.note || '',
                         date: item.date || ''
                     }));

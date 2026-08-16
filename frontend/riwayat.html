@@ -120,6 +120,7 @@
 
     <script>
         // ====================== AUTH GUARD ======================
+        let CURRENT_USER_ID = null;
         (function () {
             const session = localStorage.getItem('bw_session');
             if (!session) {
@@ -132,6 +133,7 @@
                     window.location.replace('Auth.html?tab=login&redirect=riwayat.html');
                     return;
                 }
+                CURRENT_USER_ID = bwSession.id;
             } catch (e) {
                 window.location.replace('Auth.html?tab=login&redirect=riwayat.html');
                 return;
@@ -151,12 +153,44 @@
             toast._timer = setTimeout(() => toast.classList.remove('show'), 3000);
         }
 
-        function getHistory() {
+        // ====================== AKSES DATA ======================
+        // PERBAIKAN: sebelumnya semua entri riwayat (dari semua akun yang
+        // pernah login di browser ini) tercampur jadi satu, sehingga isi
+        // Riwayat bisa tidak sesuai dengan analisis yang baru saja dibuat
+        // oleh user yang sedang login. Sekarang difilter berdasarkan user_id.
+        function getAllHistoryRaw() {
             return JSON.parse(localStorage.getItem('riwayatHistory')) || [];
+        }
+
+        function getHistory() {
+            const all = getAllHistoryRaw();
+            return all.filter(item => {
+                // Entri lama (sebelum perbaikan ini) mungkin belum punya user_id.
+                // Supaya data lama tidak hilang begitu saja, entri tanpa user_id
+                // tetap ditampilkan HANYA untuk user pertama yang membukanya,
+                // lalu langsung ditandai (migrasi diam-diam) di saveHistory().
+                if (item.user_id === undefined || item.user_id === null) return true;
+                return String(item.user_id) === String(CURRENT_USER_ID);
+            });
         }
 
         function saveHistory(data) {
             localStorage.setItem('riwayatHistory', JSON.stringify(data));
+        }
+
+        // Tandai entri lama tanpa user_id sebagai milik user yang sedang login,
+        // sekali saja saat halaman dibuka, supaya ke depannya benar-benar terfilter.
+        function migrateUnownedEntries() {
+            const all = getAllHistoryRaw();
+            let changed = false;
+            const migrated = all.map(item => {
+                if (item.user_id === undefined || item.user_id === null) {
+                    changed = true;
+                    return { ...item, user_id: CURRENT_USER_ID };
+                }
+                return item;
+            });
+            if (changed) saveHistory(migrated);
         }
 
         function renderRiwayat() {
@@ -258,10 +292,10 @@
         }
 
         function deleteItem(index) {
-            const data = getHistory();
-            const sorted = [...data].sort((a, b) => (b.id || 0) - (a.id || 0));
-            if (index < 0 || index >= sorted.length) return;
-            const targetId = sorted[index].id;
+            const data = getAllHistoryRaw();
+            const visible = getHistory().sort((a, b) => (b.id || 0) - (a.id || 0));
+            if (index < 0 || index >= visible.length) return;
+            const targetId = visible[index].id;
             const newData = data.filter(item => item.id !== targetId);
             if (newData.length === data.length) {
                 showToast('Gagal menghapus item.', true);
@@ -273,15 +307,24 @@
         }
 
         function clearAllData() {
-            if (!confirm('Hapus SEMUA riwayat?')) return;
-            saveHistory([]);
+            if (!confirm('Hapus SEMUA riwayat milik Anda?')) return;
+            // Hanya hapus milik user yang sedang login, jangan sentuh milik user lain
+            const all = getAllHistoryRaw();
+            const remaining = all.filter(item => {
+                if (item.user_id === undefined || item.user_id === null) return false;
+                return String(item.user_id) !== String(CURRENT_USER_ID);
+            });
+            saveHistory(remaining);
             renderRiwayat();
-            showToast('🗑️ Semua riwayat dihapus.');
+            showToast('🗑️ Semua riwayat Anda dihapus.');
         }
 
         document.getElementById('searchInput').addEventListener('input', renderRiwayat);
         document.getElementById('filterPeriod').addEventListener('change', renderRiwayat);
-        document.addEventListener('DOMContentLoaded', renderRiwayat);
+        document.addEventListener('DOMContentLoaded', function() {
+            migrateUnownedEntries();
+            renderRiwayat();
+        });
     </script>
 </body>
 </html>
