@@ -25,10 +25,10 @@ if (!GEMINI_API_KEY) {
 }
 
 // ===== Ambil data mood =====
-const MOOD_API_URL = process.env.MOOD_API_URL || 'http://localhost/BloomWell/backend/api/mood-meter.php';
+const MOOD_API_URL = process.env.MOOD_API_URL || 'http://localhost:3000/api/backend/mood-meter.php';
 
 // ===== Proxy untuk backend PHP =====
-const PHP_BACKEND_URL = process.env.PHP_BACKEND_URL || 'http://localhost/BloomWell/backend/api';
+const PHP_BACKEND_URL = process.env.PHP_BACKEND_URL || 'http://localhost:3000/api/backend';
 
 // Proxy endpoint untuk login.php, register.php, dll.
 app.use('/api/backend/*', async (req, res) => {
@@ -67,11 +67,17 @@ app.use('/api/backend/*', async (req, res) => {
 
 async function fetchMoodHistory() {
     try {
+        console.log(`📤 Fetching mood history from: ${MOOD_API_URL}`);
         const response = await axios.get(MOOD_API_URL);
+        console.log(`📥 Mood history response status: ${response.status}`);
+        console.log(`📥 Mood history response data:`, response.data);
         if (response.data?.success) return response.data.entries || [];
         return [];
     } catch (error) {
         console.warn('⚠️ Gagal ambil data mood:', error.message);
+        if (error.response) {
+            console.warn('⚠️ Mood history error response:', error.response.status, error.response.data);
+        }
         return [];
     }
 }
@@ -132,17 +138,21 @@ Gunakan gaya bicara yang alami, seperti sedang ngobrol dengan teman yang peduli.
 
 // ===== Panggil Gemini dengan retry & fallback =====
 async function callGeminiWithRetry(prompt) {
-    // Daftar model prioritas
+    // Daftar model prioritas per Agustus 2026.
+    // PENTING: seluruh keluarga gemini-2.5-* dan lebih lama TIDAK BISA diakses oleh
+    // API key baru (Google membatasinya ke project yang sudah pernah pakai model itu).
+    // Untuk API key baru, WAJIB pakai model generasi 3.x.
     const modelPriority = [
-        'gemini-flash-latest',
-        'gemini-pro'   // fallback lama
+        'gemini-flash-latest',   // alias resmi, otomatis ikut model flash terbaru
+        'gemini-3.5-flash',
+        'gemini-3.1-flash-lite'
     ];
     let lastError = null;
 
     for (const model of modelPriority) {
         let attempts = 0;
-        const maxAttempts = (model === 'gemini-flash-latest') ? 5 : 2; // flash: 5 kali, pro: 2 kali
-        let delay = 3000;
+        const maxAttempts = 2; // turunkan supaya cepat pindah ke model berikutnya saat overload
+        let delay = 1500;
 
         while (attempts < maxAttempts) {
             try {
@@ -158,25 +168,28 @@ async function callGeminiWithRetry(prompt) {
                 attempts++;
                 const status = error.response?.status;
                 const is503 = status === 503 || error.message.includes('503');
-                const is404 = status === 404;
+                const is404 = status === 404 || error.message.includes('404');
+                const is429 = status === 429 || error.message.includes('429'); // rate limit
 
-                if (is503 && attempts < maxAttempts) {
-                    console.log(`⏳ Model ${model} sibuk (503), coba ulang ${attempts}/${maxAttempts}...`);
+                if ((is503 || is429) && attempts < maxAttempts) {
+                    console.log(`⏳ Model ${model} sibuk (${status}), coba ulang ${attempts}/${maxAttempts}...`);
                     await new Promise(resolve => setTimeout(resolve, delay));
                     delay *= 2; // exponential backoff
                 } else if (is404) {
                     console.warn(`⚠️ Model ${model} tidak ditemukan (404), lanjut ke model berikutnya.`);
                     break; // keluar dari while, lanjut ke model berikutnya
                 } else {
-                    // error lain, log dan lanjut ke model berikutnya
-                    console.warn(`⚠️ Model ${model} error: ${error.message}`);
+                    // error lain (400, 500, dll), log dan lanjut ke model berikutnya
+                    console.warn(`⚠️ Model ${model} error: ${status || 'unknown'} - ${error.message}`);
                     break;
                 }
             }
         }
     }
 
-    // Jika semua gagal, lempar error
+    // Jika semua gagal, lempar error dengan info status terakhir supaya log lebih jelas
+    const lastStatus = lastError?.response?.status || 'unknown';
+    console.error(`❌ Semua model Gemini gagal dipanggil. Status terakhir: ${lastStatus}`);
     throw lastError || new Error('Semua model gagal dipanggil. Coba lagi nanti.');
 }
 
@@ -188,28 +201,10 @@ app.post('/api/chat', async (req, res) => {
 
         console.log(`📤 Pesan: "${message}"`);
 
-        // Ambil data mood
-        const moodEntries = await fetchMoodHistory();
-        let moodContext = '';
-        if (moodEntries.length > 0) {
-            const sorted = moodEntries.sort((a, b) => new Date(b.date) - new Date(a.date));
-            const last7 = sorted.slice(0, 7);
-            const summary = last7.map(e =>
-                `- ${e.entry_date || e.date || '?'}: ${e.mood_label || e.mood || 'Netral'}${e.note ? ' ('+e.note+')' : ''}`
-            ).join('\n');
-            moodContext = `\n\nRiwayat mood user 7 hari terakhir:\n${summary}`;
-            const counts = {};
-            last7.forEach(e => {
-                const label = e.mood_label || e.mood || 'Netral';
-                counts[label] = (counts[label] || 0) + 1;
-            });
-            const most = Object.entries(counts).sort((a,b) => b[1]-a[1])[0];
-            if (most) moodContext += `\n\nMood yang paling sering muncul: ${most[0]} (${most[1]} kali).`;
-        } else {
-            moodContext = '\n\n(Tidak ada data mood tersimpan.)';
-        }
+        // Ambil data mood (dinonaktifkan sementara)
+        const moodContext = '\n\n(Tidak ada data mood tersimpan.)';
 
-        const fullPrompt = `${SYSTEM_PROMPT}\n\nUser: ${message}${moodContext}\n\nBloomWell AI:`;
+        const fullPrompt = `${SYSTEM_PROMPT}\n\nUser: ${message}\n\nBloomWell AI:`;
         let reply = await callGeminiWithRetry(fullPrompt);
 
         // Tambahkan disclaimer jika AI lupa
