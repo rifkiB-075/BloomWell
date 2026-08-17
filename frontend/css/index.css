@@ -3,11 +3,7 @@
    =========================== */
 
 /* ===========================
-<<<<<<< HEAD
-   GLOBAL RESET
-=======
    GLOBAL RESET — pastikan tidak ada overflow tersembunyi
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
    =========================== */
 
 html, body {
@@ -15,11 +11,7 @@ html, body {
     overflow-x: hidden;
 }
 
-<<<<<<< HEAD
-/* Override full width */
-=======
 /* Override jika style.css punya max-width pada body atau wrapper */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 body > .hero-swiper,
 body > .swiper,
 .mySwiper.hero-swiper {
@@ -31,7 +23,6 @@ body > .swiper,
     right: 0 !important;
 }
 
-<<<<<<< HEAD
 /* Container Global */
 .container {
     width: min(1200px, 100%);
@@ -39,8 +30,6 @@ body > .swiper,
     padding: 0 20px;
 }
 
-=======
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 /* ===========================
    HERO SWIPER — TRUE FULL WIDTH
    =========================== */
@@ -66,10 +55,7 @@ body > .swiper,
     overflow: hidden;
 }
 
-<<<<<<< HEAD
-=======
 /* Container dalam setiap slide */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 .hero-swiper .swiper-slide .container {
     width: 100%;
     height: 100%;
@@ -80,12 +66,8 @@ body > .swiper,
 /* Gambar background */
 .hero-swiper .swiper-slide .img-div {
     position: absolute;
-<<<<<<< HEAD
     top: 0;
     left: 0;
-=======
-    top: 0; left: 0;
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     width: 100%;
     height: 100%;
     z-index: 1;
@@ -109,35 +91,23 @@ body > .swiper,
 /* Teks overlay */
 .hero-swiper .swiper-slide .content-container {
     position: absolute;
-<<<<<<< HEAD
     top: 0;
     left: 0;
-=======
-    top: 0; left: 0;
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     width: 100%;
     height: 100%;
     z-index: 10;
     display: flex;
     align-items: center;
     justify-content: center;
-<<<<<<< HEAD
     padding: 0 15px;
-=======
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 }
 
 .hero-swiper .swiper-slide .content-container .content {
     color: white;
     text-align: center;
-<<<<<<< HEAD
     width: min(520px, 90%);
     max-width: 90%;
     padding: 0 10px;
-=======
-    max-width: 600px;
-    padding: 0 20px;
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 }
 
 .hero-swiper .swiper-slide .content-container .content h2 {
@@ -174,17 +144,8 @@ body > .swiper,
     transition: background-color 0.3s, color 0.3s;
 }
 
-<<<<<<< HEAD
-.hero-swiper-button-next {
-    right: 1.5rem;
-}
-.hero-swiper-button-prev {
-    left: 1.5rem;
-}
-=======
 .hero-swiper-button-next { right: 1.5rem; }
 .hero-swiper-button-prev { left: 1.5rem; }
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 
 .hero-swiper-button-next:hover,
 .hero-swiper-button-prev:hover {
@@ -272,13 +233,8 @@ body > .swiper,
     gap: 8px;
     padding: 8px 14px;
     border-radius: 999px;
-<<<<<<< HEAD
     border: 1px solid rgba(255, 255, 255, 0.3);
     background: rgba(255, 255, 255, 0.14);
-=======
-    border: 1px solid rgba(255,255,255,0.3);
-    background: rgba(255,255,255,0.14);
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     color: white;
     font-size: 0.85rem;
     font-weight: 700;
@@ -438,11 +394,7 @@ body > .swiper,
     flex-shrink: 0;
     cursor: pointer;
     transition: transform 0.25s ease, box-shadow 0.25s ease;
-<<<<<<< HEAD
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.12);
-=======
-    box-shadow: 0 3px 10px rgba(0,0,0,0.12);
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     text-decoration: none;
     color: inherit;
     display: block;
@@ -450,11 +402,7 @@ body > .swiper,
 
 .scroll-card:hover {
     transform: translateY(-5px);
-<<<<<<< HEAD
     box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
-=======
-    box-shadow: 0 10px 24px rgba(0,0,0,0.2);
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 }
 
 .scroll-card .card-thumbnail {
@@ -494,21 +442,13 @@ body > .swiper,
 }
 
 /* ===========================
-<<<<<<< HEAD
-   CARD SWIPER
-=======
    CARD SWIPER (artikel & podcast)
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
    =========================== */
 
 .cards-swiper {
     width: 100%;
     overflow: hidden;
-<<<<<<< HEAD
-    padding-bottom: 36px;
-=======
     padding-bottom: 36px; /* ruang untuk pagination */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     cursor: grab;
 }
 
@@ -533,19 +473,13 @@ body > .swiper,
     height: auto;
 }
 
-<<<<<<< HEAD
-=======
 /* scroll-card mengisi penuh slide */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 .cards-swiper .scroll-card {
     width: 100%;
     height: 100%;
 }
 
-<<<<<<< HEAD
-=======
 /* Pagination dots untuk card swiper */
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 .cards-pagination.swiper-pagination {
     bottom: 6px;
 }
@@ -565,8 +499,6 @@ body > .swiper,
 }
 
 /* ===========================
-<<<<<<< HEAD
-=======
    RESPONSIVE — TABLET
    =========================== */
 
@@ -617,7 +549,6 @@ body > .swiper,
 }
 
 /* ===========================
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
    ACCOUNT PAGE STYLES
    =========================== */
 
@@ -641,9 +572,7 @@ body > .swiper,
     margin-bottom: 26px;
 }
 
-<<<<<<< HEAD
-=======
-.streak-badge {
+.account-hero .streak-badge {
     display: inline-flex;
     align-items: center;
     gap: 10px;
@@ -656,11 +585,10 @@ body > .swiper,
     font-size: 0.92rem;
 }
 
-.streak-badge i {
+.account-hero .streak-badge i {
     font-size: 1rem;
 }
 
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
 .account-hero-card {
     background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
     border-radius: 24px;
@@ -866,82 +794,39 @@ body > .swiper,
     line-height: 1.8;
 }
 
-<<<<<<< HEAD
 /* ===========================
-   RESPONSIVE
+   RESPONSIVE — ACCOUNT PAGE
    =========================== */
 
 @media (max-width: 1024px) {
-    .home-wrapper {
-        padding: 24px 24px 48px;
-    }
-=======
-@media (max-width: 1024px) {
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     .account-hero,
     .account-body-grid {
         grid-template-columns: 1fr;
     }
-<<<<<<< HEAD
+
     .account-stats-grid {
         grid-template-columns: repeat(2, minmax(0, 1fr));
     }
+
     .hero-swiper {
         height: 65vh;
     }
 }
 
 @media (max-width: 768px) {
-    .hero-swiper {
-        height: 50vw;
-        min-height: 200px;
-        margin-top: 60px;
-    }
-    .hero-swiper .swiper-slide .content-container .content h2 {
-        font-size: 1.4rem;
-    }
-    .hero-swiper .swiper-slide .content-container .content p {
-        font-size: 0.8rem;
-    }
-    .home-wrapper {
-        padding: 16px 16px 40px;
-    }
-    .dashboard-grid {
-        grid-template-columns: 1fr 1fr;
-    }
-    .welcome-card {
-        grid-column: 1 / -1;
-    }
-    .scroll-card {
-        width: 145px;
-    }
-    .scroll-card .card-thumbnail {
-        height: 110px;
-    }
-    .account-stat {
-        padding: 20px;
-    }
-=======
-
-    .account-stats-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-}
-
-@media (max-width: 768px) {
     .account-stat {
         padding: 20px;
     }
 
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
     .form-group input,
     .form-group textarea {
         padding: 12px 14px;
     }
-<<<<<<< HEAD
+
     .hero-swiper {
         height: 55vh;
     }
+
     .hero-swiper-button-next,
     .hero-swiper-button-prev {
         top: auto;
@@ -949,6 +834,3 @@ body > .swiper,
         transform: translateY(0);
     }
 }
-=======
-}
->>>>>>> 07b9f5ffa7a3dcbc56e93d9b9e566221a1ab64f3
