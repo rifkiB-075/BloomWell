@@ -821,7 +821,7 @@
                     records = result.data.map(item => ({
                         mood: normalizeMood(item.mood, item.mood_value),
                         note: item.note || '',
-                        date: item.date || ''
+                        date: item.date || item.entry_date || ''
                     }));
                     
                     console.log('[mood-meter] Loaded records:', records);

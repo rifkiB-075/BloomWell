@@ -93,7 +93,7 @@
                         <p>Pilih periode dan klik "Generate Analisis" untuk meminta AI menganalisis mood Anda.</p>
                         <p style="font-size:0.9rem;color:#aaa;margin-top:0.5rem;">AI akan mendeteksi kesehatan mental, memberi solusi, dan kata-kata semangat.</p>
                         <div class="nav-link-group" style="margin-top:1.5rem;">
-                            <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                            <a href="#" onclick="window.location.href=buildChatLink(defaultMoodQuestion()); return false;" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
                             <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
                         </div>
                     </div>
@@ -169,6 +169,25 @@
             });
         });
 
+        // ====================== Helper: Link ke Chat AI dengan pesan otomatis ======================
+        // Sebelumnya tombol "Tanya AI tentang mood-mu" cuma <a href="chat-ai.html">
+        // biasa tanpa membawa konteks apa pun, jadi di halaman Chat AI cuma
+        // muncul sapaan default dan pengguna harus ngetik sendiri dari nol.
+        // Sekarang kita kirim pesan lewat query param supaya chat-ai.html bisa
+        // langsung mengirim pertanyaan ke AI secara otomatis.
+        function buildChatLink(message) {
+            return `chat-ai.html?prefill=${encodeURIComponent(message)}&autosend=1`;
+        }
+
+        function defaultMoodQuestion() {
+            return 'Aku mau ngobrol soal mood-ku belakangan ini. Bisa bantu aku refleksi?';
+        }
+
+        function statsBasedQuestion(stats) {
+            if (!stats) return defaultMoodQuestion();
+            return `Aku baru lihat analisis mood-ku: mood tersering aku ${stats.mostCommon} (${stats.mostCommonCount} kali dari ${stats.total} catatan), status kesehatan mental "${stats.mentalHealthLevel}". Bisa bantu aku ngobrolin ini?`;
+        }
+
         // ====================== Navigasi Riwayat ======================
         function updatePeriodRange() {
             const now = new Date();
@@ -217,7 +236,7 @@
                     <span class="big-icon">🔮</span>
                     <p>Pilih periode dan klik "Generate Analisis" untuk melihat hasil.</p>
                     <div class="nav-link-group" style="margin-top:1.5rem;">
-                        <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                        <a href="#" onclick="window.location.href=buildChatLink(defaultMoodQuestion()); return false;" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
                         <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
                     </div>
                 </div>
@@ -563,7 +582,7 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
 
             const navLinks = `
                 <div class="nav-link-group" style="margin-top:1.5rem;">
-                    <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang analisis ini</a>
+                    <a href="#" onclick="window.location.href=buildChatLink(statsBasedQuestion(currentAnalysisResult && currentAnalysisResult.stats)); return false;" class="nav-link-btn chat">💬 Tanya AI tentang analisis ini</a>
                     <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
                 </div>
             `;
@@ -648,7 +667,7 @@ Jawab dengan gaya yang hangat, empati, dan tidak menggurui. Sertakan nomor darur
                         <span class="big-icon" style="font-size:3rem;">⚠️</span>
                         <p style="margin-top:1rem;">${error.message || 'Terjadi kesalahan saat menganalisis.'}</p>
                         <div class="nav-link-group" style="margin-top:1.5rem;">
-                            <a href="chat-ai.html" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
+                            <a href="#" onclick="window.location.href=buildChatLink(defaultMoodQuestion()); return false;" class="nav-link-btn chat">💬 Tanya AI tentang mood-mu</a>
                             <a href="riwayat.html" class="nav-link-btn history">📈 Lihat Riwayat Analisis</a>
                         </div>
                     </div>

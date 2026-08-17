@@ -301,6 +301,32 @@
             // Scroll ke bawah untuk pesan awal (paksa sekali)
             chatMessages.scrollTop = chatMessages.scrollHeight;
             chatInput.focus();
+
+            // ========================================================
+            //  TERIMA PESAN DARI HALAMAN LAIN (mis. tombol "Tanya AI
+            //  tentang mood-mu" di analisis.html). Sebelumnya tombol
+            //  itu cuma pindah ke chat-ai.html tanpa membawa konteks,
+            //  jadi tidak ada yang terkirim ke AI sama sekali.
+            // ========================================================
+            const urlParams = new URLSearchParams(window.location.search);
+            const prefill = urlParams.get('prefill');
+            const autosend = urlParams.get('autosend');
+
+            if (prefill) {
+                chatInput.value = prefill;
+                chatInput.style.height = 'auto';
+                chatInput.style.height = Math.min(chatInput.scrollHeight, 120) + 'px';
+
+                // Bersihkan URL supaya kalau halaman di-refresh nggak
+                // otomatis kirim ulang pesan yang sama.
+                const cleanUrl = window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+
+                if (autosend === '1') {
+                    // Beri jeda sedikit supaya terasa natural, lalu kirim otomatis.
+                    setTimeout(() => sendMessage(), 400);
+                }
+            }
         });
 
         // ============================================================

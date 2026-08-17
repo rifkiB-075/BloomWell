@@ -206,6 +206,38 @@
             font-size: 12px;
         }
 
+        .mood-indicator-multi {
+            width: 100%;
+            height: auto;
+            max-height: 34px;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            font-size: 12px;
+            line-height: 1.3;
+            overflow-y: auto;
+            overscroll-behavior: contain;
+            flex-shrink: 1;
+            min-height: 0;
+            /* biar scrollbar kecil dan nggak mengganggu tampilan */
+            scrollbar-width: thin;
+        }
+
+        .mood-indicator-multi::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .mood-indicator-multi::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.5);
+            border-radius: 4px;
+        }
+
+        .calendar-day:not(.has-mood) .mood-indicator-multi::-webkit-scrollbar-thumb {
+            background: rgba(124,90,158,0.4);
+        }
+
         .calendar-legend {
             display: flex;
             flex-wrap: wrap;
@@ -254,6 +286,9 @@
             border-radius: 24px;
             max-width: 500px;
             width: 90%;
+            max-height: 80vh;
+            display: flex;
+            flex-direction: column;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
             animation: fadeInUp 0.3s ease;
             position: relative;
@@ -276,12 +311,28 @@
             color: #5a3e7a;
             margin-bottom: 16px;
             text-align: center;
+            flex-shrink: 0;
         }
 
         .mood-detail-info {
             display: flex;
             flex-direction: column;
             gap: 16px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .mood-detail-info::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .mood-detail-info::-webkit-scrollbar-thumb {
+            background: #d4c4e8;
+            border-radius: 6px;
+        }
+
+        .mood-detail-info::-webkit-scrollbar-track {
+            background: transparent;
         }
 
         .mood-detail-item {
@@ -589,7 +640,7 @@
             for (let day = 1; day <= daysInMonth; day++) {
                 const dateStr = formatDateKey(year, month, day);
                 const isToday = isCurrentMonth && day === today.getDate();
-                const hasMood = calendarData[dateStr];
+                const hasMood = calendarData[dateStr] && calendarData[dateStr].length > 0;
                 const dayElement = createDayElement(day, dateStr, false, isToday, hasMood);
                 daysContainer.appendChild(dayElement);
             }
@@ -620,18 +671,21 @@
                 dayElement.classList.add('has-mood');
             }
             
-            // Get mood emoji if available
-            let moodEmoji = '';
-            if (hasMood && calendarData[dateStr]) {
-                const mood = moods.find(m => m.label === calendarData[dateStr].mood);
-                if (mood) {
-                    moodEmoji = mood.emoji;
-                }
+            // Get mood emojis if available — sekarang semua mood di hari itu
+            // ditampilkan dalam container yang bisa di-scroll (bukan dipotong ke 3)
+            let moodEmojiHtml = '';
+            if (hasMood && calendarData[dateStr] && calendarData[dateStr].length > 0) {
+                const dayMoods = calendarData[dateStr];
+                const emojiLines = dayMoods.map(entry => {
+                    const mood = moods.find(m => m.label === entry.mood);
+                    return `<span>${mood ? mood.emoji : '😐'}</span>`;
+                }).join('');
+                moodEmojiHtml = `<div class="mood-indicator mood-indicator-multi">${emojiLines}</div>`;
             }
             
             dayElement.innerHTML = `
                 <span class="calendar-day-number">${day}</span>
-                ${hasMood ? `<span class="mood-indicator">${moodEmoji}</span>` : ''}
+                ${hasMood ? moodEmojiHtml : ''}
             `;
             
             if (!isOtherMonth) {
@@ -654,23 +708,27 @@
             const dateDisplay = `${day} ${monthNames[date.getMonth()]} ${year}`;
             document.getElementById('mood-detail-date').textContent = dateDisplay;
             
-            const moodInfo = calendarData[dateStr];
+            const dayMoods = calendarData[dateStr];
             const infoContainer = document.getElementById('mood-detail-info');
             
-            if (moodInfo) {
-                const mood = moods.find(m => m.label === moodInfo.mood) || { display: moodInfo.mood, emoji: '😐' };
-                infoContainer.innerHTML = `
-                    <div class="mood-detail-item">
-                        <span class="mood-detail-label">Mood:</span>
-                        <span class="mood-detail-value">${mood.emoji} ${mood.display}</span>
-                    </div>
-                    ${moodInfo.note ? `
-                    <div class="mood-detail-item">
-                        <span class="mood-detail-label">Catatan:</span>
-                        <div class="mood-detail-note">${moodInfo.note}</div>
-                    </div>
-                    ` : ''}
-                `;
+            if (dayMoods && dayMoods.length > 0) {
+                infoContainer.innerHTML = dayMoods.map((moodInfo, idx) => {
+                    const mood = moods.find(m => m.label === moodInfo.mood) || { display: moodInfo.mood, emoji: '😐' };
+                    return `
+                        <div class="mood-detail-entry" style="${idx > 0 ? 'margin-top:14px;padding-top:14px;border-top:1px solid #eee;' : ''}">
+                            <div class="mood-detail-item">
+                                <span class="mood-detail-label">Mood${moodInfo.time ? ' • ' + moodInfo.time.slice(0,5) : ''}:</span>
+                                <span class="mood-detail-value">${mood.emoji} ${mood.display}</span>
+                            </div>
+                            ${moodInfo.note ? `
+                            <div class="mood-detail-item">
+                                <span class="mood-detail-label">Catatan:</span>
+                                <div class="mood-detail-note">${moodInfo.note}</div>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                }).join('');
             } else {
                 infoContainer.innerHTML = `
                     <div class="mood-detail-item">
@@ -753,22 +811,30 @@
                 console.log('[calendar] Load result:', result);
                 
                 if (result.success && result.data) {
-                    // Convert array to object with date as key
+                    // Convert array to object with date as key, tapi sekarang
+                    // NILAINYA ADALAH ARRAY berisi SEMUA mood di hari itu
+                    // (sebelumnya cuma menyimpan satu mood per hari).
+                    // Data dari get-mood.php sudah terurut DESC (terbaru dulu),
+                    // jadi array per tanggal juga otomatis terurut terbaru dulu.
                     calendarData = {};
                     result.data.forEach(item => {
-                        const dateKey = normalizeDateKey(item.date);
+                        const dateKey = normalizeDateKey(item.date || item.entry_date);
+                        if (!calendarData[dateKey]) calendarData[dateKey] = [];
                         // Pakai fungsi normalisasi terpusat (js/mood-utils.js) - konsisten
                         // dengan mood meter & analisis, dan sudah memperbaiki bug batas
                         // angka (nilai 20 = Sangat Sedih, bukan Sedih).
-                        calendarData[dateKey] = {
+                        calendarData[dateKey].push({
                             mood: normalizeMood(item.mood, item.mood_value),
                             mood_value: item.mood_value,
-                            note: item.note || ''
-                        };
+                            note: item.note || '',
+                            time: item.time || ''
+                        });
                     });
                     
+                    const totalDays = Object.keys(calendarData).length;
+                    const totalEntries = Object.values(calendarData).reduce((sum, arr) => sum + arr.length, 0);
                     console.log('[calendar] Loaded calendar data:', calendarData);
-                    updateDebug('✅ Berhasil memuat ' + Object.keys(calendarData).length + ' data mood di kalender');
+                    updateDebug('✅ Berhasil memuat ' + totalEntries + ' catatan mood di ' + totalDays + ' hari');
                     
                     renderCalendar();
                 } else {

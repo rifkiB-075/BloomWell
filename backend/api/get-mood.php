@@ -47,7 +47,9 @@ if (!$user_id) {
 // Ambil data mood.
 // entry_date diubah ke format YYYY-MM-DD agar konsisten dipakai
 // kalender (key tanggal harian), mood meter, dan analisis.
-$query = "SELECT id, mood, mood_score as mood_value, note, DATE(entry_date) as date 
+// 'time' ditambahkan supaya kalender bisa menampilkan beberapa
+// mood dalam satu hari secara berurutan waktu.
+$query = "SELECT id, mood, mood_score as mood_value, note, DATE(entry_date) as date, TIME(entry_date) as time 
           FROM mood_entries 
           WHERE user_id = ? 
           ORDER BY entry_date DESC 
@@ -65,7 +67,8 @@ while ($row = mysqli_fetch_assoc($result)) {
         'mood' => $row['mood'],
         'mood_value' => $row['mood_value'] ?? 50,
         'note' => $row['note'] ?? '',
-        'date' => $row['date']
+        'date' => $row['date'],
+        'time' => $row['time']
     ];
 }
 
